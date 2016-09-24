@@ -30,7 +30,12 @@ var demo = new Vue({
 	methods: {
 		fetchData: function() {
 			var self = this;
-			$.get()
+			var url = apiUrl + self.currentBranch;
+			$.ajax({
+			  url: url
+			}).done(function(data) {
+				self.commits = data;
+			});
 		}
 	}
 });
