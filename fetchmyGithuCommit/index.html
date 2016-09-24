@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+	<div id="demo">
+		<h1>Latest myVueStudy Commits</h1>
+		<template v-for="branch in branches">
+			<input type="radio" 
+				   name="branch"
+				   :id="branch"
+				   :value="branch"
+				   v-model="currentBranch">
+			<label :for="branch">{{branch}}</label>
+		</template>
+		<p>myVueStudy@{{currentBranch}}</p>
+		<ul>
+			<li v-for="record in commits">
+				<a :href="record.html_url" target="_blank" class="commit">{{record.sha.slice(0, 7)}}- <span class="message">{{record.commit.message | truncate}}</span><br>
+				by <span class="author">{{record.commit.author.name}}</span>
+				at <span class="date">{{record.commit.author.date | formatDate}}</span>
+			</li>
+		</ul>
+	</div>
+
+	<script type="text/javascript" src="../vue.js"></script>
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="./app.js"></script>
+</body>
+</html>
