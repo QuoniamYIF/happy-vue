@@ -7,27 +7,37 @@
 </head>
 <body>
 	<script type="text/x-template" id="item-template">
-		<li>
-			<div :class="{bold: isFolder}"
-				@click="toggle"
-				@dbclick="changeType">
-				{{model.name}}
-				<span v-if="isFolder">[{{open ? '-' : '+'}}]</span>
-			</div>
-			<ul v-show="open" v-if="isFolder">
-				
-			</ul>
-		</li>
+	  <li>
+	    <div
+	      :class="{bold: isFolder}"
+	      @click="toggle"
+	      @dblclick="changeType">
+	      {{model.name}}
+	      <span v-if="isFolder">[{{open ? '-' : '+'}}]</span>
+	    </div>
+	    <ul v-show="open" v-if="isFolder">
+	      <item
+	        class="item"
+	        v-for="model in model.children"
+	        :model="model">
+	      </item>
+	      <li @click="addChild">+</li>
+	    </ul>
+	  </li>
 	</script>
 
+	<p>(You can double click on an item to turn it into a folder.)</p>
+
+	<!-- the demo root element -->
 	<ul id="demo">
-		<item class="item" "
-			:model="treeData"">			
-		</item>
+	  <item
+	    class="item"
+	    :model="treeData">
+	  </item>
 	</ul>
 
-	<script type="text/javascript" src="../vue.js"></script>
 	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="../vue.js"></script>
 	<script type="text/javascript" src="./app.js"></script>
 </body>
 </html>
