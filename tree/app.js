@@ -28,18 +28,21 @@ var data = {
 }
 
 Vue.component('item', {
-  template: "#item-template", 
+  template: "#item-template",
   props: {
     model: Object
   },
   data: function() {
-
+    return {
+      open: false
+    }
   },
+  //
   computed: {
 
   },
   methods: {
-    
+
   }
 });
 
