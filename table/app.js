@@ -1,5 +1,5 @@
 Vue.component('demo-grid', {
-  template: '#grid-template', 
+  template: "#grid-template",
   props: {
     data: Array,
     columns: Array,
@@ -7,9 +7,8 @@ Vue.component('demo-grid', {
   },
   data: function() {
     var sortOrders = {}
-    this.columns.forEach(function(key){
-      console.log(key);
-      sortOrders[key] = 1
+    this.columns.forEach(function(key) {
+      sortOrders[key] = 1;
     })
     return {
       sortKey: '',
@@ -18,15 +17,14 @@ Vue.component('demo-grid', {
   },
   methods: {
     sortBy: function(key) {
-      console.log(key);
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
+      this.sortKey = key;
+      this.sortOrders[key] = this.sortOrders[key] * -1;
     }
   }
-})
+});
 
 var demo = new Vue({
-  el: '#demo',
+  el: "#demo",
   data: {
     searchQuery: '',
     gridColumns: ['name', 'power'],
@@ -38,4 +36,3 @@ var demo = new Vue({
     ]
   }
 })
-
