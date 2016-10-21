@@ -7,6 +7,4 @@ import { createListView } from '../views/CreateListView'
 import ItemView from '../views/ItemView.vue'
 import UserView from '../views/UserView.vue'
 
-export default new Router({
-    
-})
+export default new Router({})
