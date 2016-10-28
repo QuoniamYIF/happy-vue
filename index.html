@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <!-- v-if v-for v-bind: v-on:click {{message}} el: data: methods filters-->
+    <div id="app">
+        {{ message }} <br>
+        <span :title="quoniammm">like a rolling stone</span>
+        <p v-if="seen">this is us</p>
+        <ul>
+          <li v-for="todo in todos">{{todo.text}}</li>
+        </ul>
+        <P>{{ message }}</P>
+        <p>{{ reverseMessage }}
+        <button @click="reverse">倒置</button>
+        <input type="text" v-model="message">
+        <ol>
+          <gyf v-for="todo in todos" :todo="todo"></gyf>
+        </ol>
+
+        <p> {{ message }} <p>
+        <p> <span :title="message">like arooling stone</span></p>
+
+        <p>{{ message }}</p>
+        <button v-on:click="reverse">倒置</button>
+        <input type="text" v-model="message">
+        <ol>
+          <gyf v-for="todo in todos" :todo="todo"></gyf>
+          <gyf v-for="todo in todos" :todo="todo"></gyf>
+        </ol>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')
+    </script>
+    <script src="js/vendor/vue.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
