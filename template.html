@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container">
+        <div id="demo">
+            <form id="search">
+                Search <input name="query" v-model="searchQuery">
+            </form>
+            <vuetable api-Url="http://ofht327si.bkt.clouddn.com/one.json" :data="gridData" :columns="gridColumns" :filter-key="searchQuery">
+            </vuetable>
+        </div>
+    </div>
+
+    <script type="text/x-template" id="vuetable">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+            <thead>
+                <tr>
+                    <th v-for="item in columns" @click="sortBy(item.label)" :class="sortOrders[item.label] > 0 ? 'mdl-data-table__header--sorted-ascending' : '  mdl-data-table__header--sorted-descending'">
+                        {{ item.name }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="entry in filteredData">
+                    <td v-for="item in columns">
+                        {{entry[item.label]}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')
+    </script>
+    <script src="js/vendor/vue.min.js"></script>
+    <script src="js/plugins/vue-resource.js"></script>
+    <script defer src="js/vendor/material.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        Vue.component('vuetable', {
+            template: '#vuetable',
+            replace: true,
+            props: {
+                data: Array,
+                columns: Array,
+                filterKey: String,
+                apiUrl: String
+            },
+            data: function() {
+                var sortOrders = {}
+                this.columns.forEach(function(item) {
+                    sortOrders[item.label] = 1
+                })
+                return {
+                    sortKey: '',
+                    sortOrders: sortOrders
+                }
+            },
+            computed: {
+                filteredData: function() {
+                    var sortKey = this.sortKey
+                    var filterKey = this.filterKey && this.filterKey.toLowerCase()
+                    var order = this.sortOrders[sortKey] || 1
+                    var data = this.data
+                    console.log(data)                  
+                    if (filterKey) {
+                        data = data.filter(function(row) {
+                            return Object.keys(row).some(function(key) {
+                                return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                            })
+                        })
+                    }
+                    if (sortKey) {
+                        data = data.slice().sort(function(a, b) {
+                            a = a[sortKey]
+                            b = b[sortKey]
+                            return (a === b ? 0 : a > b ? 1 : -1) * order
+                        })
+                    }
+                    return data
+                }
+            },
+            filters: {
+                capitalize: function(str) {
+                    return str.charAt(0).toUpperCase() + str.slice(1)
+                }
+            },
+            methods: {
+                sortBy: function(key) {
+                    this.sortKey = key
+                    this.sortOrders[key] = this.sortOrders[key] * -1
+                }
+            }
+        })
+
+        var demo = new Vue({
+            el: '#demo',
+            data: {
+                searchQuery: '',
+                gridColumns: [{
+                    label: "name",
+                    name: "名字"
+                }, {
+                    label: "power",
+                    name: "力量"
+                }],
+                gridData: [{
+                    name: 'Chuck Norris',
+                    power: Infinity
+                }, {
+                    name: 'Bruce Lee',
+                    power: 9000
+                }, {
+                    name: 'Jackie Chan',
+                    power: 7000
+                }, {
+                    name: 'Jet Li',
+                    power: 8000
+                }]
+            }
+        })
+    </script>
+</body>
+
+</html>
