@@ -9,5 +9,11 @@
     "power": 7000
 }, {
     "name": "Jet Li",
-    "power": 8000
+    "power": 6000
+},{
+    "name": "Jackie Chan",
+    "power": 3000
+}, {
+    "name": "Jet Li",
+    "power": 9999
 }]

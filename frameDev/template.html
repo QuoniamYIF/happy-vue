@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container">
+        <div id="demo">
+            <form action="#">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
+                      <i class="material-icons">search</i>
+                    </label>
+                    <div class="mdl-textfield__expandable-holder">
+                        <input class="mdl-textfield__input" type="text" name="query" v-model="searchQuery" id="sample6">
+                        <label class="mdl-textfield__label" for="sample-expandable">Expandable Input</label>
+                    </div>
+                </div>
+            </form>
+            <vuetable api-Url="http://ofht327si.bkt.clouddn.com/two.json" :columns="gridColumns" :filter-key="searchQuery">
+            </vuetable>
+        </div>
+    </div>
+
+    <script type="text/x-template" id="vuetable">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--3dp mdl-hover">
+            <thead>
+                <tr>
+                    <th v-for="item in columns" @click="sortBy(item.label)" :class="sortOrders[item.label] > 0 ? 'mdl-data-table__header--sorted-ascending' : '  mdl-data-table__header--sorted-descending'">
+                        {{ item.name }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="entry in filteredData">
+                    <td v-for="item in columns">
+                        {{ entry[item.label] }}
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <section class="paginate">
+                    <div class="{{isOnFirstPage ? disabledClass : ''}}" class="one">
+                        <a @click="loadPage('prev')"><i class="material-icons mdl-gray">keyboard_arrow_left</i></i></a>
+                    </div>
+                    <div class="{{isOnLastPage ? disabledClass : ''}}" class="two">
+                        <a @click="loadPage('next')"><i class="material-icons mdl-gray">keyboard_arrow_right</i></a>
+                    </div>
+                </section>
+            </tfoot>
+        </table>
+    </script>
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')
+    </script>
+    <script src="js/vendor/vue.min.js"></script>
+    <script src="js/plugins/vue-resource.js"></script>
+    <script defer src="js/vendor/material.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        Vue.component('vuetable', {
+            template: '#vuetable',
+            replace: true,
+            props: {
+                data: Array,
+                columns: Array,
+                filterKey: String,
+                apiUrl: String,
+                colData: Array,
+            },
+            data: function() {
+                var sortOrders = {}
+                this.columns.forEach(function(item) {
+                    sortOrders[item.label] = 1
+                })
+                return {
+                    sortKey: '',
+                    sortOrders: sortOrders,
+                    currenttableData: null,
+                }
+            },
+            computed: {
+                filteredData: function() {
+                    var self = this
+
+                    var sortKey = this.sortKey
+                    var filterKey = this.filterKey && this.filterKey.toLowerCase()
+                    var order = this.sortOrders[sortKey] || 1
+                    var data = this.currenttableData
+                    self.colData = this.currenttableData
+
+                    if (filterKey) {
+                        data = data.filter(function(row) {
+                            return Object.keys(row).some(function(key) {
+                                return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                            })
+                        })
+                    }
+                    if (sortKey) {
+                        data = data.slice().sort(function(a, b) {
+                            a = a[sortKey]
+                            b = b[sortKey]
+                            return (a === b ? 0 : a > b ? 1 : -1) * order
+                        })
+                    }
+                    return data
+                }
+            },
+            filters: {
+                capitalize: function(str) {
+
+                }
+            },
+            methods: {
+                sortBy: function(key) {
+                    this.sortKey = key
+                    this.sortOrders[key] = this.sortOrders[key] * -1
+                },
+                //获取数据，并实现数据分页
+                fetchData: function() {
+                    var self = this;
+                    this.$http.get(self.apiUrl).then((response) => {
+                        // success callback
+                        // self.currenttableData = response.body;
+                        self.allData = response.body;
+                        // console.log(self.allData);
+                        var temp = [];
+
+                        self.currentPage = 0;
+                        self.perPage = 2;
+                        self.lastPage = response.body.length / 2 - 1;
+                        self.totalPage = self.lastPage;
+                        console.log(self.lastPage);
+                        var dealData = self.allData;
+                        // console.log(dealData);
+                        // console.log(temp);
+                        var currentIndex = 0;
+                        for(var i = 0;i <= self.totalPage; i ++) {
+                          // console.log("执行此处");
+                          temp[i] = dealData.splice(currentIndex, currentIndex + self.perPage);
+
+                          console.log(temp[i]);
+                          // console.log()
+                        }
+                        self.temp = temp;
+
+                        currentIndex = 0;
+                        // self.tableData = temp;
+                        self.currenttableData = temp[0];
+                        // console.log(self.tabelData);
+
+                    }, (response) => {
+                        console.log("fetch: " + self.apiUrl + " failed")
+                    });
+                },
+                //用来加载分页数据
+
+                //分发切换table页事件
+                loadPage: function(page) {
+                    if(page == "prev") {
+                      console.log("上一页")
+                      if(this.currentPage >= 1) {
+                        this.currenttableData = this.temp[this.currentPage - 1];
+                        this.currentPage --
+                      }
+
+
+                      console.log(self.currenttableData)
+                    } else if( page == "next") {
+                      console.log("下一页")
+                      if(this.currentPage < this.lastPage) {
+                        this.currenttableData = this.temp[this.currentPage + 1];
+                        this.currentPage ++
+                      }
+
+
+                      console.log(self.currenttableData)
+                    }
+                }
+            },
+            created: function() {
+                this.fetchData();
+            }
+        })
+
+        var demo = new Vue({
+            el: '#demo',
+            data: {
+                searchQuery: '',
+                gridColumns: [{
+                    label: "name",
+                    name: "名字"
+                }, {
+                    label: "power",
+                    name: "力量"
+                }]
+            }
+        });
+    </script>
+</body>
+
+</html>
