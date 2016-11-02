@@ -62,6 +62,7 @@
                     </div>
                 </section>
             </tfoot>
+            <button @click="changePerpage">tick</button>
         </table>
     </script>
 
@@ -148,17 +149,12 @@
                         self.lastPage = response.body.length / 2 - 1;
                         self.totalPage = self.lastPage;
                         console.log(self.lastPage);
-                        var dealData = self.allData;
+                        self.dealData = self.allData;
                         // console.log(dealData);
                         // console.log(temp);
                         var currentIndex = 0;
-                        for(var i = 0;i <= self.totalPage; i ++) {
-                          // console.log("执行此处");
-                          temp[i] = dealData.splice(currentIndex, currentIndex + self.perPage);
-
-                          console.log(temp[i]);
-                          // console.log()
-                        }
+                        self.fenye();
+                        console.log(temp);
                         self.temp = temp;
 
                         currentIndex = 0;
@@ -193,6 +189,23 @@
 
                       console.log(self.currenttableData)
                     }
+                },
+                changePerpage: function() {
+                  console.log(this.temp);
+                  console.log("lalala");
+                  this.perPage = 3;
+                  // this.fenye();
+                  console.log(this.perPage);
+                },
+                fenye: function() {
+                  var currentIndex = 0;
+                  for(var i = 0;i <= this.totalPage; i ++) {
+                    // console.log("执行此处");
+                    this.temp[i] = this.dealData.splice(currentIndex, currentIndex + this.perPage);
+
+                    console.log(this.temp[i]);
+                    // console.log()
+                  }
                 }
             },
             created: function() {
