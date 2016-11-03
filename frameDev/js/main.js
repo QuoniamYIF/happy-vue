@@ -1,6 +1,6 @@
 Vue.component('gyf', {
   props: ['todo'],
-  template: '<li> {{ todo.text }} </li>'
+  template: '<div><li> {{ todo.text }} sdsds</li></div>'
 });
 
 var app = new Vue({
