@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </form>
-            <vuetable api-Url="http://ofht327si.bkt.clouddn.com/two.json" :columns="gridColumns" :filter-key="searchQuery">
+            <vuetable api-Url="http://ofht327si.bkt.clouddn.com/two.json" :columns="gridColumns" :filter-key="searchQuery" :pages="config">
             </vuetable>
         </div>
     </div>
@@ -54,6 +54,10 @@
             </tbody>
             <tfoot>
                 <section class="paginate">
+                    <select name="select" v-on:change="assign">
+                      <option v-for="page in pages" :value="page">{{page}}</option>
+                    </select>
+                    {{ from }} - {{ to }} of {{ total }}
                     <div class="{{isOnFirstPage ? disabledClass : ''}}" class="one">
                         <a @click="loadPage('prev')"><i class="material-icons mdl-gray">keyboard_arrow_left</i></i></a>
                     </div>
@@ -62,7 +66,7 @@
                     </div>
                 </section>
             </tfoot>
-            <button @click="changePerpage">tick</button>
+            <!-- <button @click="changePerpage">tick</button> -->
         </table>
     </script>
 
@@ -85,6 +89,7 @@
                 filterKey: String,
                 apiUrl: String,
                 colData: Array,
+                pages: Array,
             },
             data: function() {
                 var sortOrders = {}
@@ -95,6 +100,12 @@
                     sortKey: '',
                     sortOrders: sortOrders,
                     currenttableData: null,
+                    perPage: undefined,
+                    allData: null,
+                    from: undefined,
+                    to: undefined,
+                    total: undefined,
+                    currentPage: undefined
                 }
             },
             computed: {
@@ -106,7 +117,6 @@
                     var order = this.sortOrders[sortKey] || 1
                     var data = this.currenttableData
                     self.colData = this.currenttableData
-
                     if (filterKey) {
                         data = data.filter(function(row) {
                             return Object.keys(row).some(function(key) {
@@ -125,9 +135,7 @@
                 }
             },
             filters: {
-                capitalize: function(str) {
-
-                }
+                capitalize: function(str) {}
             },
             methods: {
                 sortBy: function(key) {
@@ -142,26 +150,33 @@
                         // self.currenttableData = response.body;
                         self.allData = response.body;
                         // console.log(self.allData);
-                        var temp = [];
-
+                        self.total = response.body.length;
+                        // console.log(self.allData);
+                        self.temp = [];
                         self.currentPage = 0;
                         self.perPage = 2;
-                        self.lastPage = response.body.length / 2 - 1;
+                        self.from = 1;
+                        self.to = self.perPage;
+                        self.lastPage = Number( Math.floor(this.total % this.perPage) == 0 ? Math.floor(this.total / this.perPage) - 1 :Math.floor(this.total / this.perPage))
+                        // console.log(self.lastPage);
                         self.totalPage = self.lastPage;
-                        console.log(self.lastPage);
-                        self.dealData = self.allData;
+                        // console.log(self.lastPage);
+                        self.dealData = Object.assign([], self.allData);
+                        // self.count1 = "111"
                         // console.log(dealData);
                         // console.log(temp);
                         var currentIndex = 0;
-                        self.fenye();
-                        console.log(temp);
-                        self.temp = temp;
-
+                        // console.log(self.dealData);
+                        for(var i = 0;i <= self.totalPage; i ++) {
+                          // console.log("执行此处");
+                          self.temp[i] = self.dealData.splice(currentIndex, currentIndex + self.perPage);
+                          console.log(this.temp[i]);
+                          // console.log()
+                        }
                         currentIndex = 0;
                         // self.tableData = temp;
-                        self.currenttableData = temp[0];
+                        self.currenttableData = self.temp[0];
                         // console.log(self.tabelData);
-
                     }, (response) => {
                         console.log("fetch: " + self.apiUrl + " failed")
                     });
@@ -171,48 +186,73 @@
                 //分发切换table页事件
                 loadPage: function(page) {
                     if(page == "prev") {
-                      console.log("上一页")
+                      // console.log("上一页")
                       if(this.currentPage >= 1) {
                         this.currenttableData = this.temp[this.currentPage - 1];
                         this.currentPage --
+                        +(this.from -= this.perPage)
+                        +(this.to -= this.perPage)
                       }
-
-
-                      console.log(self.currenttableData)
+                      // console.log(this.currenttableData)
                     } else if( page == "next") {
-                      console.log("下一页")
+                      // console.log("下一页")
                       if(this.currentPage < this.lastPage) {
+                        // console.log("from:" + this.from)
+                        // console.log("to:" + this.to)
+                        // console.log("perpage:" + this.perPage)
+                        // console.log("currentPage:" + this.currentPage);
+                        // console.log("lastPage: " + this.lastPage);
+                        // console.log("此时的数据分组: " + this.temp);
                         this.currenttableData = this.temp[this.currentPage + 1];
                         this.currentPage ++
+                        this.from += Number(this.perPage)
+                        this.to = (this.to + Number(this.perPage) > this.total ? this.total : (this.to + Number(this.perPage)))
+                        // console.log("to:" + this.to)
                       }
-
-
-                      console.log(self.currenttableData)
+                      // console.log(this.currenttableData)
                     }
                 },
-                changePerpage: function() {
-                  console.log(this.temp);
-                  console.log("lalala");
-                  this.perPage = 3;
-                  // this.fenye();
-                  console.log(this.perPage);
-                },
-                fenye: function() {
+                assign: function(event) {
+                  // console.log("被选中了");
+                  // console.log(event.target.value);
+                  this.perPage = event.target.value;
+                  // this.dealData = this.allData
+                  // console.log(this.perPage)
+
+                  this.from = 1;
+                  this.to = Number(this.perPage)
+
+                  this.dealData = Object.assign([], this.allData);
                   var currentIndex = 0;
+                  // console.log(self.dealData);
+                  console.log("最后:" + this.totalPage);
+                  console.log("数据:" + this.dealData);
+                  console.log("分页:" + this.perPage);
+                  this.lastPage = Number( Math.floor(this.total % this.perPage) == 0 ? Math.floor(this.total / this.perPage) - 1 : Math.floor(this.total / this.perPage))
+                  this.totalPage = this.lastPage
                   for(var i = 0;i <= this.totalPage; i ++) {
                     // console.log("执行此处");
                     this.temp[i] = this.dealData.splice(currentIndex, currentIndex + this.perPage);
-
-                    console.log(this.temp[i]);
+                    // console.log(this.temp[i]);
                     // console.log()
+                    console.log("第" + i + "次：" + this.dealData)
                   }
+
+                  console.log("总数据:" + this.temp);
+
+                  console.log(this.temp[0])
+
+                  this.currenttableData = this.temp[0]
+
+                  console.log("最后一页:" + this.lastPage)
+                  this.currentPage = Number(0)
                 }
             },
             created: function() {
                 this.fetchData();
             }
         })
-
+        
         var demo = new Vue({
             el: '#demo',
             data: {
@@ -223,7 +263,8 @@
                 }, {
                     label: "power",
                     name: "力量"
-                }]
+                }],
+                config: [2,3,4,5]
             }
         });
     </script>
