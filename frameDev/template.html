@@ -24,6 +24,7 @@
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
                     <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
                       <i class="material-icons">search</i>
+                      
                     </label>
                     <div class="mdl-textfield__expandable-holder">
                         <input class="mdl-textfield__input" type="text" name="query" v-model="searchQuery" id="sample6">
@@ -75,7 +76,7 @@
         window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')
     </script>
     <script src="js/vendor/vue.min.js"></script>
-    <script src="js/plugins/vue-resource.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script defer src="js/vendor/material.min.js"></script>
     <script src="js/main.js"></script>
 
@@ -145,12 +146,13 @@
                 //获取数据，并实现数据分页
                 fetchData: function() {
                     var self = this;
-                    this.$http.get(self.apiUrl).then((response) => {
+                    axios.get(self.apiUrl).then((response) => {
                         // success callback
                         // self.currenttableData = response.body;
-                        self.allData = response.body;
+                        console.log(response)
+                        self.allData = response.data
                         // console.log(self.allData);
-                        self.total = response.body.length;
+                        self.total = response.data.length
                         // console.log(self.allData);
                         self.temp = [];
                         self.currentPage = 0;
@@ -177,8 +179,8 @@
                         // self.tableData = temp;
                         self.currenttableData = self.temp[0];
                         // console.log(self.tabelData);
-                    }, (response) => {
-                        console.log("fetch: " + self.apiUrl + " failed")
+                    }).then((error) => {
+                        console.log(error)
                     });
                 },
                 //用来加载分页数据
@@ -252,7 +254,7 @@
                 this.fetchData();
             }
         })
-        
+
         var demo = new Vue({
             el: '#demo',
             data: {
