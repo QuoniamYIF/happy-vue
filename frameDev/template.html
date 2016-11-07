@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -20,7 +19,7 @@
     <![endif]-->
     <div class="container">
         <div id="demo">
-            <form action="#">
+            <!--<form action="#">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
                     <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
                       <i class="material-icons">search</i>
@@ -31,14 +30,13 @@
                         <label class="mdl-textfield__label" for="sample-expandable">Expandable Input</label>
                     </div>
                 </div>
-            </form>
-            <vuetable api-Url="http://ofht327si.bkt.clouddn.com/two.json" :columns="gridColumns" :filter-key="searchQuery" :pages="config">
+            </form>-->
+            <vuetable api-Url="./data/one.json" :columns="gridColumns" :filter-key="searchQuery" :pages="config">
             </vuetable>
         </div>
     </div>
-
     <script type="text/x-template" id="vuetable">
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--3dp mdl-hover">
+        <table>
             <thead>
                 <tr>
                     <th v-for="item in columns" @click="sortBy(item.label)" :class="sortOrders[item.label] > 0 ? 'mdl-data-table__header--sorted-ascending' : '  mdl-data-table__header--sorted-descending'">
@@ -47,8 +45,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="entry in filteredData">
-                    <td v-for="item in columns">
+                <tr v-for="entry in filteredData" :id="entry['parentId']">
+                    <td v-for="item in columns" @click="test">
                         {{ entry[item.label] }}
                     </td>
                 </tr>
@@ -57,7 +55,7 @@
                 <section class="paginate">
                     <select name="select" v-on:change="assign">
                       <option v-for="page in pages" :value="page">{{page}}</option>
-                    </select>
+                    </select>                    
                     {{ from }} - {{ to }} of {{ total }}
                     <div class="{{isOnFirstPage ? disabledClass : ''}}" class="one">
                         <a @click="loadPage('prev')"><i class="material-icons mdl-gray">keyboard_arrow_left</i></i></a>
@@ -68,19 +66,22 @@
                 </section>
             </tfoot>
             <!-- <button @click="changePerpage">tick</button> -->
-        </table>
+        </table>        
     </script>
-
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script>
+    <!--<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>-->
+    <!--<script>
         window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')
-    </script>
+    </script>-->
+    <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/vue.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script defer src="js/vendor/material.min.js"></script>
-    <script src="js/main.js"></script>
-
     <script>
+        $(function(){
+            $("#test").click(function(){
+                console.log($('vuetable').attr());
+            })
+        })
+
         Vue.component('vuetable', {
             template: '#vuetable',
             replace: true,
@@ -149,7 +150,7 @@
                     axios.get(self.apiUrl).then((response) => {
                         // success callback
                         // self.currenttableData = response.body;
-                        console.log(response)
+                        // console.log(response)
                         self.allData = response.data
                         // console.log(self.allData);
                         self.total = response.data.length
@@ -248,6 +249,9 @@
 
                   console.log("最后一页:" + this.lastPage)
                   this.currentPage = Number(0)
+                },
+                test: function() {
+                    console.log("此处有点击事件")
                 }
             },
             created: function() {
