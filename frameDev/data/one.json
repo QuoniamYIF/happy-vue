@@ -1,19 +1,17 @@
 [{
+    "parentId": "one",
     "name": "Chuck Norris",
     "power": "Infinity"
 }, {
+    "parentId": "two",    
     "name": "Bruce Lee",
     "power": 9000
 }, {
+    "parentId": "three",    
     "name": "Jackie Chan",
     "power": 7000
 }, {
+    "parentId": "four",    
     "name": "Jet Li",
     "power": 6000
-},{
-    "name": "Jackie Chan",
-    "power": 3000
-}, {
-    "name": "Jet Li",
-    "power": 9999
 }]
