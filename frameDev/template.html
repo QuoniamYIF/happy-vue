@@ -9,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">-->
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -18,6 +19,7 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div class="container">
+        <h1></h1>
         <div id="demo">
             <!--<form action="#">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
@@ -31,42 +33,197 @@
                     </div>
                 </div>
             </form>-->
-            <vuetable api-Url="./data/one.json" :columns="gridColumns" :filter-key="searchQuery" :pages="config">
+            <vuetable api-Url="./data/one.json" url-one="./data/test1-1.json" url-two="./data/test2-1.json" url-three="./data/test3-1.json"
+                :columns="gridColumns" :filter-key="searchQuery" :pages="config">
             </vuetable>
         </div>
     </div>
     <script type="text/x-template" id="vuetable">
-        <table>
-            <thead>
-                <tr>
-                    <th v-for="item in columns" @click="sortBy(item.label)" :class="sortOrders[item.label] > 0 ? 'mdl-data-table__header--sorted-ascending' : '  mdl-data-table__header--sorted-descending'">
-                        {{ item.name }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="entry in filteredData" :id="entry['parentId']">
-                    <td v-for="item in columns" @click="test">
-                        {{ entry[item.label] }}
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <section class="paginate">
-                    <select name="select" v-on:change="assign">
-                      <option v-for="page in pages" :value="page">{{page}}</option>
-                    </select>                    
-                    {{ from }} - {{ to }} of {{ total }}
-                    <div class="{{isOnFirstPage ? disabledClass : ''}}" class="one">
-                        <a @click="loadPage('prev')"><i class="material-icons mdl-gray">keyboard_arrow_left</i></i></a>
+    <div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">        
+                    <div class="panel-heading">规则计算结果</div>
+
+                        <!-- Table -->
+                    <table class="table table-bordered table-hover table-condensed table-responsive">
+                        <thead>
+                            <tr>
+                                <th v-for="item in columns" @click="sortBy(item.label)" :class="sortOrders[item.label] > 0 ? 'mdl-data-table__header--sorted-ascending' : '  mdl-data-table__header--sorted-descending'">
+                                    {{ item.name }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="entry in filteredData" :id="entry['parentId']">
+                                <td v-for="item in columns" @click="test">
+                                    {{ entry[item.label] }}
+                                </td>
+                            </tr>                                    
+                        </tbody> 
+                                        
+                        <!--<span class="{{isOnFirstPage ? disabledClass : ''}}" class="one">
+                            <a ><i class="material-icons mdl-gray">keyboard_arrow_left</i></i></a>
+                        </span>
+                        <span class="{{isOnLastPage ? disabledClass : ''}}" class="two">
+                            <a @click="loadPage('next')"><i class="material-icons mdl-gray">keyboard_arrow_right</i></a>
+                        </span> -->                                       
+                    </table>               
+                </div>
+                <div class="btn-toolbar">                    
+                    <div class="btn-group" style="height:34px;line-height:34px;">
+                        <div>{{ from }} - {{ to }} of {{ total }}</div>
                     </div>
-                    <div class="{{isOnLastPage ? disabledClass : ''}}" class="two">
-                        <a @click="loadPage('next')"><i class="material-icons mdl-gray">keyboard_arrow_right</i></a>
+
+                    <div class="btn-group">
+                        <p style="height:34px;line-height:34px;">每页行数：</p> 
                     </div>
-                </section>
-            </tfoot>
-            <!-- <button @click="changePerpage">tick</button> -->
-        </table>        
+
+                    <div class="btn-group">                                            
+                        <select name="select" v-on:change="assign" class="form-control">
+                            <option v-for="page in pages" :value="page">{{page}}</option>
+                        </select> 
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" @click="loadPage('prev')">上一页</button>
+                        <button type="button" class="btn btn-default" @click="loadPage('next')">下一页</button>
+                    </div>
+                </div>
+            </div>
+
+              <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"> 规则计算结果明细表 </div>
+
+                    <ul :id="testTwo['sonid']">
+                        <div class="panel panel-default" style="margin-top:20px">
+                            <div class="panel-heading">基本信息</div>
+                            <li v-for="(item, key) in testOne['sonparams']" v-if="!isStr(item) && !isJson(item)">                               
+                                <p style="padding: 5px 0 0 5px">{{ key }} : {{ item }}</p>           
+                            </li>
+                        </div>
+
+                        <li v-for="(item, key) in testTwo['sonparams']" v-if="isStr(item)">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{{ key }}</div>
+                                <p class="">{{ item }}</p>
+                            </div>
+                        </li>
+
+                        <div class="row">
+                            <li v-for="(item, key) in testTwo['sonparams']" v-if="isJson(item)" class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">{{ key }}</div>
+                                    <table class="table table-bordered table-hover table-responsive table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>参数名</th>
+                                                <th>参数值</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="ite in item">
+                                                <td>{{ Object.keys(ite)[0] }}</td>
+                                                <td>{{ ite[Object.keys(ite)[0]] }}</td>
+                                            </tr>
+                                        </tody>
+                                    </table>
+                                </div>                           
+                            </li> 
+                        </div>       
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">规则计算结果语句</div>            
+                    <ul :id="testOne['sonid']">
+                        <div class="panel panel-default" style="margin-top:20px">
+                            <div class="panel-heading">基本信息</div>
+                            <li v-for="(item, key) in testOne['sonparams']" v-if="!isStr(item) && !isJson(item)">                               
+                                <p style="padding: 5px 0 0 5px">{{ key }} : {{ item }}</p>           
+                            </li>
+                        </div>
+
+                        <li v-for="(item, key) in testOne['sonparams']" v-if="isStr(item)">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{{ key }}</div>
+                                <p class="">{{ item }}</p>
+                            </div>
+                        </li>
+
+                        <div class="row">
+                            <li v-for="(item, key) in testOne['sonparams']" v-if="isJson(item)" class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">{{ key }}</div>
+                                    <table class="table table-bordered table-hover table-responsive table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>参数名</th>
+                                                <th>参数值</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="ite in item">
+                                                <td>{{ Object.keys(ite)[0] }}</td>
+                                                <td>{{ ite[Object.keys(ite)[0]] }}</td>
+                                            </tr>
+                                        </tody>
+                                    </table>
+                                </div>                           
+                            </li> 
+                        </div>       
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">            
+                <div class="panel panel-default">
+                    <div class="panel-heading">规则计算结果明细语句</div>
+
+                    <ul :id="testOne['sonid']">
+                        <div class="panel panel-default" style="margin-top:20px">
+                            <div class="panel-heading">基本信息</div>
+                            <li v-for="(item, key) in testOne['sonparams']" v-if="!isStr(item) && !isJson(item)">                               
+                                <p style="padding: 5px 0 0 5px">{{ key }} : {{ item }}</p>           
+                            </li>
+                        </div>
+
+                        <li v-for="(item, key) in testOne['sonparams']" v-if="isStr(item)">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{{ key }}</div>
+                                <p class="">{{ item }}</p>
+                            </div>
+                        </li>
+
+                        <div class="row">
+                            <li v-for="(item, key) in testOne['sonparams']" v-if="isJson(item)" class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">{{ key }}</div>
+                                    <table class="table table-bordered table-hover table-responsive table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>参数名</th>
+                                                <th>参数值</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="ite in item">
+                                                <td>{{ Object.keys(ite)[0] }}</td>
+                                                <td>{{ ite[Object.keys(ite)[0]] }}</td>
+                                            </tr>
+                                        </tody>
+                                    </table>
+                                </div>                           
+                            </li> 
+                        </div>       
+                    </ul>
+                </div>
+            </div>                    
+        </div>
+    </div>
     </script>
     <!--<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>-->
     <!--<script>
@@ -74,7 +231,9 @@
     </script>-->
     <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/vue.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="//cdn.bootcss.com/axios/0.15.2/axios.min.js"></script>
+    <script src="js/plugins/bootstrap.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>-->
     <script>
         $(function(){
             $("#test").click(function(){
@@ -92,6 +251,8 @@
                 apiUrl: String,
                 colData: Array,
                 pages: Array,
+                urlOne: String,
+                urlTwo: String
             },
             data: function() {
                 var sortOrders = {}
@@ -107,7 +268,9 @@
                     from: undefined,
                     to: undefined,
                     total: undefined,
-                    currentPage: undefined
+                    currentPage: undefined,
+                    testOne: null,
+                    testTwo: null
                 }
             },
             computed: {
@@ -157,7 +320,7 @@
                         // console.log(self.allData);
                         self.temp = [];
                         self.currentPage = 0;
-                        self.perPage = 2;
+                        self.perPage = self.pages[0];
                         self.from = 1;
                         self.to = self.perPage;
                         self.lastPage = Number( Math.floor(this.total % this.perPage) == 0 ? Math.floor(this.total / this.perPage) - 1 :Math.floor(this.total / this.perPage))
@@ -173,7 +336,7 @@
                         for(var i = 0;i <= self.totalPage; i ++) {
                           // console.log("执行此处");
                           self.temp[i] = self.dealData.splice(currentIndex, currentIndex + self.perPage);
-                          console.log(this.temp[i]);
+                          //console.log(this.temp[i]);
                           // console.log()
                         }
                         currentIndex = 0;
@@ -181,8 +344,18 @@
                         self.currenttableData = self.temp[0];
                         // console.log(self.tabelData);
                     }).then((error) => {
-                        console.log(error)
-                    });
+                        //console.log(error)
+                    })
+                    axios.get(self.urlOne).then((response) => {
+                        self.testOne = response.data
+                    }).then((error) => {
+                        //console.log(error)
+                    })
+                    axios.get(self.urlTwo).then((response) => {
+                        self.testTwo = response.data
+                    }).then((error) => {
+                        //console.log(error)
+                    })
                 },
                 //用来加载分页数据
 
@@ -252,6 +425,29 @@
                 },
                 test: function() {
                     console.log("此处有点击事件")
+                    axios.get('./data/test1-2.json').then((response) => {
+                        this.testOne = response.data
+                    }).then((error) => {
+                        //console.log(error)
+                    })
+                },
+                isJson: function(item) {                    
+                    //console.log(item)
+                    if(Array.isArray(item)) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                isStr: function(item) {
+                    console.log(item)
+                    if(!Array.isArray(item) && item.length > 50) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
             },
             created: function() {
@@ -269,8 +465,17 @@
                 }, {
                     label: "power",
                     name: "力量"
+                },{
+                    label: "level",
+                    name: "水平"
+                },{
+                    label: "age",
+                    name: "年龄"
+                },{
+                    label: "sex",
+                    name: "男"
                 }],
-                config: [2,3,4,5]
+                config: [20,30,40]
             }
         });
     </script>

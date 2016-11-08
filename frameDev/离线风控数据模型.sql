@@ -443,7 +443,7 @@ CREATE UNIQUE INDEX uidx_ruleCmpRst ON ruleCmpRst(`cmpDte`,`ruleSetId`,`ruleId`,
 
 
 
--- 规则计算结果语句表
+规则计算结果语句表
 DROP TABLE IF EXISTS `ruleCmpRstSql`;
 
 CREATE TABLE `ruleCmpRstSql` (
