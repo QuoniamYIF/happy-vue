@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container" style="margin-top:20px;">
+        <div>
+            <table id="jqGrid"></table>
+            <div id="jqGridPager"></div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')
+    </script>
+    <script type="text/ecmascript" src="js/plugins/i18n/grid.locale-cn.js"></script>
+    <script type="text/ecmascript" src="js/plugins/jquery.jqGrid.min.js"></script>
+    <script>
+		$.jgrid.defaults.width = 780;
+		$.jgrid.defaults.responsive = true;
+		$.jgrid.defaults.styleUI = 'Bootstrap';
+	</script>
+    <script src="js/plugins/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+			var template = "<div style='margin-left:15px;'><div> Customer ID <sup>*</sup>:</div><div> {CustomerID} </div>";
+			template += "<div> 参数变量名称: </div><div>{CompanyName} </div>";
+			template += "<div> 参数变量中文名称: </div><div>{Phone} </div>";
+			template += "<div> 输入类型: </div><div>{PostalCode} </div>";
+			template += "<div> 多选标识:</div><div> {City} </div>";
+			template += "<div> 必输标识:</div><div> {City} </div>";
+			template += "<div> 缺省值:</div><div> {City} </div>";
+			template += "<div> 最小值(长度):</div><div> {City} </div>";
+			template += "<div> 最大值(长度):</div><div>  {City} </div>";    
+			template += "<div> 选择资源:</div><div>  {City} </div>";  
+			template += "<div> 生效标识:</div><div>  {City} </div>";                                                                          
+			template += "<hr style='width:100%;'/>";
+			template += "<div> {sData} {cData}  </div></div>";
+
+            $("#jqGrid").jqGrid({
+                url: 'data/data.json',
+				// we set the changes to be made at client side using predefined word clientArray
+                editurl: 'clientArray',
+                datatype: "json",
+                caption: "风控事件规则参数属性定义表",
+                colModel: [
+                    {
+						name: 'CustomerID',
+                        label: '参数变量名称',
+                        width: 150,
+						key: true,
+						editable: true,
+						editrules : { required: true}
+                    },
+                    {
+						name: 'CompanyName',
+                        label: '参数变量中文名称',
+                        width: 170,
+                        editable: true // must set editable to true if you want to make the field editable
+                    },
+                    {
+						name : 'Phone',
+                        label: '输入类型',
+                        width: 100,
+                        editable: true
+                    },
+                    {
+						name: 'PostalCode',
+                        label: '多选标识',
+                        width: 100,
+                        editable: true
+                    },
+                    {
+						name: 'City',
+                        label: '必输标识',
+                        width: 140,
+                        editable: true
+                    },
+                    {
+                        name: 'one',
+                        label: '缺省值',
+                        width: 140,
+                        editable: true
+                    },
+                    {
+                        name: 'two',
+                        label: '最小值(长度)',
+                        width: 160,
+                        editable: true
+                    },
+                    {
+                        name: 'three',
+                        label: '最大值(长度)',
+                        width: 140,
+                        editable: true
+                    },
+                    {
+                        name: 'four',
+                        label: '选择资源',
+                        width: 140,
+                        editable: true
+                    },
+                    {
+                        name: 'four',
+                        label: '生效标识',
+                        width: 140,
+                        editable: true
+                    },
+                ],
+				sortname: 'CustomerID',
+				sortorder : 'asc',                
+				loadonce: true,
+				viewrecords: true,
+                width: 1050,
+                height: 500,
+                rowNum: 10,
+                pager: "#jqGridPager"
+            });
+
+            $('#jqGrid').navGrid('#jqGridPager',
+
+
+                // the buttons to appear on the toolbar of the grid
+                { edit: true, add: true, del: true, search: true, refresh: false, view: false, position: "left", cloneToTop: false },
+                // options for the Edit Dialog
+                {
+                    editCaption: "风控事件规则参数属性定义",
+					template: template,
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+                },
+                // options for the Add Dialog
+                {
+					template: template,
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+                },
+                // options for the Delete Dailog
+                {
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+            });
+
+            
+        });
+
+    </script>
+</body>
+
+</html>
