@@ -1,0 +1,15 @@
+{
+    "sonid": "one",
+    "sonparams": {        
+        "规则溯源SQL": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium totam ea nemo repellendus dolore harum d dipisicing elit. Laudantium totam ea nemo repellendus dolore harum d dipisicing elit. Laudantium totam ea nemo repellendus dolore harum d dipisicing elit. Laudantium  Laudantium totam ea nemo repellendus dolore harum d dipisicing elit. Laudantium totam ea nemo repellendus dolore harum d dipisicing elit. Laudantiu totam ea nemo repellendus dolore harum d",
+        "参数内容配置": [{
+            "one": "1"
+        }, {
+            "two": "2"
+        }, {
+            "three": "3"
+        }, {
+            "four": "4"
+        }]
+    }
+}

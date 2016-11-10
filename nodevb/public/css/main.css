@@ -1,0 +1,42 @@
+/*默认样式定义*/
+
+ul {
+    list-style: none;
+}
+
+.paginate {
+    width: 100%;
+    display: flex;
+}
+
+.paginate a {
+    cursor: pointer;
+}
+
+
+/*table 按钮配置*/
+
+.material-icons.mdl-gray {
+    color: rgb(140, 152, 150);
+}
+
+.material-icons.mdl-red {
+    color: rgb(240, 90, 16);
+}
+
+
+/*辅助类*/
+
+.mdl-hover {
+    transition: box-shadow .5s;
+    box-shadow: 0;
+}
+
+.mdl-hover:hover {
+    transition: box-shadow .5s;
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel {
+    margin-right: 30px;
+}
