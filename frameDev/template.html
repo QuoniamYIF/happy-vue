@@ -45,7 +45,7 @@
                 <div class="panel panel-default">        
                     <div class="panel-heading">规则计算结果</div>
 
-                        <!-- Table -->
+                    <!-- Table -->
                     <table class="table table-bordered table-hover table-condensed table-responsive">
                         <thead>
                             <tr>
@@ -276,7 +276,6 @@
             computed: {
                 filteredData: function() {
                     var self = this
-
                     var sortKey = this.sortKey
                     var filterKey = this.filterKey && this.filterKey.toLowerCase()
                     var order = this.sortOrders[sortKey] || 1
@@ -310,10 +309,7 @@
                 //获取数据，并实现数据分页
                 fetchData: function() {
                     var self = this;
-                    axios.get(self.apiUrl).then((response) => {
-                        // success callback
-                        // self.currenttableData = response.body;
-                        // console.log(response)
+                    axios.get(self.apiUrl).then((response) => {                        
                         self.allData = response.data
                         // console.log(self.allData);
                         self.total = response.data.length
@@ -401,9 +397,9 @@
                   this.dealData = Object.assign([], this.allData);
                   var currentIndex = 0;
                   // console.log(self.dealData);
-                  console.log("最后:" + this.totalPage);
-                  console.log("数据:" + this.dealData);
-                  console.log("分页:" + this.perPage);
+                  //console.log("最后:" + this.totalPage);
+                  //console.log("数据:" + this.dealData);
+                  //console.log("分页:" + this.perPage);
                   this.lastPage = Number( Math.floor(this.total % this.perPage) == 0 ? Math.floor(this.total / this.perPage) - 1 : Math.floor(this.total / this.perPage))
                   this.totalPage = this.lastPage
                   for(var i = 0;i <= this.totalPage; i ++) {
@@ -411,16 +407,16 @@
                     this.temp[i] = this.dealData.splice(currentIndex, currentIndex + this.perPage);
                     // console.log(this.temp[i]);
                     // console.log()
-                    console.log("第" + i + "次：" + this.dealData)
+                    //console.log("第" + i + "次：" + this.dealData)
                   }
 
-                  console.log("总数据:" + this.temp);
+                  //console.log("总数据:" + this.temp);
 
-                  console.log(this.temp[0])
+                  //console.log(this.temp[0])
 
                   this.currenttableData = this.temp[0]
 
-                  console.log("最后一页:" + this.lastPage)
+                  //console.log("最后一页:" + this.lastPage)
                   this.currentPage = Number(0)
                 },
                 test: function() {
