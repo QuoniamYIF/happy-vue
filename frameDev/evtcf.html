@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container">
+        <div>
+            <table id="jqGrid"></table>
+            <div id="jqGridPager"></div>
+        </div>
+
+        <div class="panel panel-default" style="width:1050px;margin-top:20px;">
+            <div class="panel-heading">事件基本参数内容配置表</div>
+            <div class="panel-body">
+                <p id="evtp"></p>
+
+                <div id="pa">
+                    <patable pa-url='data/pa.json'></patable>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script type="text/x-template" id="patable">
+        <div>
+            <div class="row">
+                <div class="col-md-4"  v-for="item in paa">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>参数名</th>
+                                <th>参数值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(val, key) in item">
+                                <td>{{ val }}</td>
+                                <td>{{ key }}</td>
+                            </tr>                                    
+                        </tbody>                                                                                                   
+                    </table>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+    <script src="js/vendor/jquery.min.js"></script>
+    <script type="text/ecmascript" src="js/plugins/i18n/grid.locale-cn.js"></script>
+    <script type="text/ecmascript" src="js/plugins/jquery.jqGrid.min.js"></script>
+    <script src="js/vendor/vue.min.js"></script>
+    <script src="http://cdn.bootcss.com/axios/0.15.2/axios.min.js"></script>
+    <script>
+		$.jgrid.defaults.width = 780;
+		$.jgrid.defaults.responsive = true;
+		$.jgrid.defaults.styleUI = 'Bootstrap';
+	</script>
+    <script src="js/plugins/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+			var template = "<div style='margin-left:15px;'><div> Customer ID <sup>*</sup>:</div><div> {CustomerID} </div>";
+                template += "<div> 事件编号: </div><div>{CompanyName} </div>";
+                template += "<div> 事件中文名称: </div><div>{Phone} </div>";
+                template += "<div> 事件大类: </div><div>{PostalCode} </div>";
+                template += "<div> 事件类型:</div><div> {City} </div>";
+                template += "<div> 事件计算周期:</div><div> {City} </div>";
+                template += "<div> 事件维度类型:</div><div> {City} </div>";
+                template += "<div> 事件计算公式描述:</div><div> {City} </div>";
+                template += "<div> 聚合SQL:</div><div> <textarea class='form-control' name='MSG' cols=40 rows=4> {City} </textarea></div>";    
+                template += "<div> 溯源SQL:</div><div> <textarea class='form-control' name='MSG' cols=40 rows=4> {City} </textarea></div>";                                
+                template += "<hr style='width:100%;'/>";
+                template += "<div> {sData} {cData}  </div></div>";
+
+
+
+
+
+            $("#jqGrid").jqGrid({
+                url: 'data/data.json',
+				// we set the changes to be made at client side using predefined word clientArray
+                editurl: 'clientArray',
+                datatype: "json",
+                caption: "事件配置表",
+                colModel: [
+                    {
+						name: 'CustomerID',
+                        label: '事件编号',
+                        width: 100,
+						key: true,
+						editable: true,
+						editrules : { required: true}
+                    },
+                    {
+						name: 'CompanyName',
+                        label: '事件中文名称',
+                        width: 160,
+                        editable: true // must set editable to true if you want to make the field editable
+                    },
+                    {
+						name : 'Phone',
+                        label: '事件大类',
+                        width: 100,
+                        editable: true
+                    },
+                    {
+						name: 'PostalCode',
+                        label: '事件类型',
+                        width: 110,
+                        editable: true
+                    },
+                    {
+						name: 'City',
+                        label: '事件计算周期',
+                        width: 140,
+                        editable: true
+                    },
+                    {
+                        name: 'one',
+                        label: '事件维度类型',
+                        width: 140,
+                        editable: true
+                    },
+                    {
+                        name: 'two',
+                        label: '事件计算公式描述',
+                        width: 160,
+                        editable: true
+                    },
+                    {
+                        name: 'three',
+                        label: '聚合SQL',
+                        width: 140,
+                        editable: true
+                    },
+                    {
+                        name: 'four',
+                        label: '溯源SQL',
+                        width: 140,
+                        editable: true
+                    },
+                ],
+				sortname: 'CustomerID',
+				sortorder : 'asc',
+                onSelectRow: function(id) {
+
+                    var a = $('<span class="label label-default" style="font-size:16px"></span>').text("对应事件编号: " + id);
+                    $('#evtp').empty().append(a);
+
+                    var b = '<p style="margin-top:10px;"><span class="label label-default" style="margin-top:10px;font-size:16px">参数列表</span></p>'
+                    $('#evtp').append(b);
+
+                    $.ajax()
+
+                    //添加按钮 修改 修改
+
+
+                    /*
+                        var template =  '<span class="label label-default" style="margin-top:10px;font-size:16px">参数列表</span>' +
+                                        '<select class="form-control" style="margin-top:10px;">' +
+                                            '<option>参数1</option>' +
+                                            '<option>参数2</option>' + 
+                                            '<option>参数3</option>' +
+                                            '<option>参数4</option>' +
+                                            '<option>参数5</option>' +
+                                        '</select>';
+
+                        $('#evtp').append(template);
+
+                    */
+
+                },
+                loadComplete: function() {                    
+                    var a = $('<span class="label label-default" style="font-size:16px"></span>').text("对应事件编号: 还未选择事件");
+                    $('#evtp').empty().append(a);
+                },
+				loadonce: true,
+				viewrecords: true,
+                width: 1050,
+                height: 200,
+                rowNum: 10,
+                pager: "#jqGridPager"
+            });
+
+            $('#jqGrid').navGrid('#jqGridPager',
+                // the buttons to appear on the toolbar of the grid
+                { edit: true, add: true, del: true, search: true, refresh: false, view: false, position: "left", cloneToTop: false },
+                // options for the Edit Dialog
+                {
+                    editCaption: "事件配置",
+					template: template,
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+                },
+                // options for the Add Dialog
+                {
+					template: template,
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+                },
+                // options for the Delete Dailog
+                {
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+            });
+
+        
+            Vue.component('patable', {
+                template: '#patable',
+                replace: true,
+                props: {
+                    paUrl: String,
+                },
+                data: function() {
+                    return {
+                        padatas: null,
+                    }
+                },
+                computed: {
+                    paa: function() {
+                        var data = this.padatas
+                        return data
+                    }
+                },
+                methods: {
+                    fetchData: function() {
+                        var self = this
+                        axios.get(this.paUrl).then(function(response){
+                            self.padatas = response.data
+                        }).then(function(error){
+                            if(error)
+                                console.log(error);
+                        });
+                    },
+                    test: function() {
+                        this.message = "123"
+                    }
+                },
+                created: function() {
+                    this.fetchData();
+                }
+            })
+
+            var pa = new Vue({
+                el: "#pa",
+            })
+        });
+    </script>
+</body>
+
+</html>

@@ -43,7 +43,22 @@ CREATE UNIQUE INDEX uidx_rsParamVarDef ON rsParamVarDef(`name`);
 
 -- 事件配置表
 DROP TABLE IF EXISTS `evntCnfig`;
+/*
+  {"TX_STATUS":" '00','07','08','09'"}
 
+  SELECT 
+    CUST_NO,   -- 客户号
+    TX_STATUS, -- 交易状态
+    TX_DATE,   -- 交易日期
+    COUNT(1) CM_COUNT  -- 消费笔数
+   FROM PM_PAY_ORDER
+   WHERE TX_STATUS IN (${TX_STATUS})   -- 交易状态 '00','07','08','09'
+      AND CUST_NO IS NOT NULL
+  		AND TX_DATE >= '#{ACC_DATE}'   -- 交易起始日期
+			AND TX_DATE <='#{ACC_DATE}'    -- 交易结束日期
+   GROUP BY CUST_NO
+  
+*/
 CREATE TABLE `evntCnfig` (
   `evntId`           int not null auto_increment comment '事件标识码',
   `evntNo`           varchar(30)   collate utf8_unicode_ci default NULL COMMENT '事件编号',
