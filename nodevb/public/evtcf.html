@@ -7,7 +7,7 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
 </head>
 
@@ -59,10 +59,9 @@
 
 
     <script src="js/vendor/jquery.min.js"></script>
+    <script type="text/ecmascript" src="js/plugins/jquery-ui.min.js"></script>
     <script type="text/ecmascript" src="js/plugins/i18n/grid.locale-cn.js"></script>
     <script type="text/ecmascript" src="js/plugins/jquery.jqGrid.min.js"></script>
-    <script src="js/vendor/vue.min.js"></script>
-    <script src="http://cdn.bootcss.com/axios/0.15.2/axios.min.js"></script>
     <script>
 		$.jgrid.defaults.width = 780;
 		$.jgrid.defaults.responsive = true;
@@ -83,10 +82,6 @@
                 template += "<div> 溯源SQL:</div><div>{traceSql}</textarea></div>";                                
                 template += "<hr style='width:100%;'/>";
                 template += "<div> {sData} {cData}  </div></div>";
-
-
-
-
 
             $("#jqGrid").jqGrid({
                 url: 'http://localhost:3000/ecqa',
@@ -143,12 +138,14 @@
                         name: 'assembleSql',
                         label: '聚合SQL',
                         width: 140,
+                        height: 80,
                         editable: true
                     },
                     {
                         name: 'traceSql',
                         label: '溯源SQL',
                         width: 140,
+                        height: 80,                        
                         editable: true
                     },
                     {
@@ -159,7 +156,8 @@
                     }
                 ],
 				sortname: 'CustomerID',
-				sortorder : 'asc',
+				sortorder: 'asc',
+                colMenu : true,
                 onSelectRow: function(id) {
 
                     var a = $('<span class="label label-default" style="font-size:16px"></span>').text("对应事件编号: " + id);
@@ -167,23 +165,6 @@
 
                     var b = '<p style="margin-top:10px;"><span class="label label-default" style="margin-top:10px;font-size:16px">参数列表</span></p>'
                     $('#evtp').append(b);
-
-                    $.ajax()
-
-                    //添加按钮 修改 修改
-                    /*
-                        var template =  '<span class="label label-default" style="margin-top:10px;font-size:16px">参数列表</span>' +
-                                        '<select class="form-control" style="margin-top:10px;">' +
-                                            '<option>参数1</option>' +
-                                            '<option>参数2</option>' + 
-                                            '<option>参数3</option>' +
-                                            '<option>参数4</option>' +
-                                            '<option>参数5</option>' +
-                                        '</select>';
-
-                        $('#evtp').append(template);
-                    */
-
                 },
                 loadComplete: function() {                    
                     var a = $('<span class="label label-default" style="font-size:16px"></span>').text("对应事件编号: 还未选择事件");
@@ -198,9 +179,7 @@
             });
 
             $('#jqGrid').navGrid('#jqGridPager',
-                // the buttons to appear on the toolbar of the grid
                 { edit: true, add: true, del: true, search: true, refresh: false, view: false, position: "left", cloneToTop: false },
-                // options for the Edit Dialog
                 {
                     editCaption: "事件配置",
 					template: template,
@@ -208,60 +187,17 @@
                         return 'Error: ' + data.responseText
                     }
                 },
-                // options for the Add Dialog
                 {
 					template: template,
                     errorTextFormat: function (data) {
                         return 'Error: ' + data.responseText
                     }
                 },
-                // options for the Delete Dailog
                 {
                     errorTextFormat: function (data) {
                         return 'Error: ' + data.responseText
                     }
-            });
-
-        
-            Vue.component('patable', {
-                template: '#patable',
-                replace: true,
-                props: {
-                    paUrl: String,
-                },
-                data: function() {
-                    return {
-                        padatas: null,
-                    }
-                },
-                computed: {
-                    paa: function() {
-                        var data = this.padatas
-                        return data
-                    }
-                },
-                methods: {
-                    fetchData: function() {
-                        var self = this
-                        axios.get(this.paUrl).then(function(response){
-                            self.padatas = response.data
-                        }).then(function(error){
-                            if(error)
-                                console.log(error);
-                        });
-                    },
-                    test: function() {
-                        this.message = "123"
-                    }
-                },
-                created: function() {
-                    this.fetchData();
-                }
-            })
-
-            var pa = new Vue({
-                el: "#pa",
-            })
+                });
         });
     </script>
 </body>

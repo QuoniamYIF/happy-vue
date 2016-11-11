@@ -5,7 +5,7 @@ var rskParaMapping = {
 	// delete: 'delete from user where id=?',
 	// queryById: 'select * from user where id=?',
 	queryAll: 'select * from rsParamVarDef',
-	update: 'update '
+	// update: 'update '
 };
 
 var evntCnfigMapping = {
@@ -35,6 +35,10 @@ var ruleCmpRstTrcSqlMapping = {
 	queryAll: 'select * from ruleCmpRstTrcSql',
 	queryById: 'select * from ruleCmpRstTrcSql where cmpDte=? and ruleSetId=? and ruleId=? and cmpBatNo=?'
 }
+
+var rbacMenuMapping = {
+	queryAll: 'select MENU_ID, PARENT_MENU_ID, URL, IMAGE, MENU_INDEX, GBK_RESOURCE_NAME, BIG5_RESOURCE_NAME, EN_RESOURCE_NAME, OTH_RESOURCE_NAME, PROCESS_ID, ACCESS_LEVEL, REMARK from rbac_menu'
+}
  
 module.exports = {
     "rskPara": rskParaMapping,
@@ -42,5 +46,6 @@ module.exports = {
 	"rleCRst": ruleCmpRstMapping,
 	"rleCRSql": ruleCmpRstSqlMapping,
 	"rleCRT": ruleCmpRstTraceMapping,
-	"rleCRTSql": ruleCmpRstTrcSqlMapping
+	"rleCRTSql": ruleCmpRstTrcSqlMapping,
+	"menu": rbacMenuMapping
 };
