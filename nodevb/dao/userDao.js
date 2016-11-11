@@ -18,6 +18,13 @@ var jsonWrite = function (res, ret) {
 };
  
 module.exports = {
+    menu: function (req, res, next) {		
+        var connection = mysql.createConnection($conf.mysql);
+        connection.connect();
+        connection.query($sql.menu.queryAll, function(err, result) {
+            jsonWrite(res, result);
+        });
+	},
     //事件配置queryAll
 	ecqa: function (req, res, next) {		
         var connection = mysql.createConnection($conf.mysql);

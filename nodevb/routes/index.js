@@ -10,6 +10,14 @@ router.get('/', function(req, res, next) {
 
 //===================GET======================
 
+//
+
+//============================================
+router.get('/menu', function(req, res, next) {
+	userDao.menu(req, res, next);
+});
+//============================================
+
 //============================================
 router.get('/ecqa', function(req, res, next) {
 	userDao.ecqa(req, res, next);

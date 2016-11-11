@@ -22,11 +22,7 @@
         </div>
     </div>
 
-
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script>
-        window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')
-    </script>
+    <script src="js/vendor/jquery.min.js"></script>
     <script type="text/ecmascript" src="js/plugins/i18n/grid.locale-cn.js"></script>
     <script type="text/ecmascript" src="js/plugins/jquery.jqGrid.min.js"></script>
     <script>
@@ -149,8 +145,6 @@
             });
 
             $('#jqGrid').navGrid('#jqGridPager',
-
-
                 // the buttons to appear on the toolbar of the grid
                 { edit: true, add: true, del: true, search: true, refresh: false, view: false, position: "left", cloneToTop: false },
                 // options for the Edit Dialog
@@ -173,11 +167,8 @@
                     errorTextFormat: function (data) {
                         return 'Error: ' + data.responseText
                     }
-            });
-
-            
+                });        
         });
-
     </script>
 </body>
 
