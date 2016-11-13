@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container">
+        <h1></h1>
+        <div id="demo">
+            <!--<form action="#">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
+                      <i class="material-icons">search</i>
+                      
+                    </label>
+                    <div class="mdl-textfield__expandable-holder">
+                        <input class="mdl-textfield__input" type="text" name="query" v-model="searchQuery" id="sample6">
+                        <label class="mdl-textfield__label" for="sample-expandable">Expandable Input</label>
+                    </div>
+                </div>
+            </form>-->
+            <vuetable api-Url="http://localhost:3000/rsqa" :columns="gridColumns" :filter-key="searchQuery" :pages="config">
+            </vuetable>
+        </div>
+    </div>
+    <script type="text/x-template" id="vuetable">
+    <div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">        
+                    <div class="panel-heading">规则计算结果</div>
+                        
+                    <table class="table table-bordered table-hover table-condensed table-responsive">
+                        <thead>
+                            <tr>
+                                <th v-for="item in columns" @click="sortBy(item.label)" :class="sortOrders[item.label] > 0 ? 'mdl-data-table__header--sorted-ascending' : '  mdl-data-table__header--sorted-descending'">
+                                    {{ item.name }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <!-- cmpDte ruleSetId ruleId cmpBatNo ruleBelongType rstBelongTo -->
+                        <tbody>
+                            <tr v-for="entry in filteredData" @click="rstdetails" 
+                                :data-cmpDte="entry['cmpDte']" 
+                                :data-ruleSetId="entry['ruleSetId']"
+                                :data-ruleId="entry['ruleId']"
+                                :data-cmpBatNo="entry['cmpBatNo']"
+                                :data-ruleBelongType="entry['ruleBelongType']"
+                                :data-rstBelongTo="entry['rstBelongTo']">
+                                <td v-for="item in columns">
+                                    {{ entry[item.label] }}
+                                </td>
+                            </tr>                                    
+                        </tbody> 
+                                        
+                        <!--<span class="{{isOnFirstPage ? disabledClass : ''}}" class="one">
+                            <a ><i class="material-icons mdl-gray">keyboard_arrow_left</i></i></a>
+                        </span>
+                        <span class="{{isOnLastPage ? disabledClass : ''}}" class="two">
+                            <a @click="loadPage('next')"><i class="material-icons mdl-gray">keyboard_arrow_right</i></a>
+                        </span> -->                                       
+                    </table>               
+                </div>
+                <div class="btn-toolbar">                    
+                    <div class="btn-group" style="height:34px;line-height:34px;">
+                        <div>{{ from }} - {{ to }} of {{ total }}</div>
+                    </div>
+
+                    <div class="btn-group">
+                        <p style="height:34px;line-height:34px;">每页行数：</p> 
+                    </div>
+
+                    <div class="btn-group">                                            
+                        <select name="select" v-on:change="assign" class="form-control">
+                            <option v-for="page in pages" :value="page">{{page}}</option>
+                        </select> 
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" @click="loadPage('prev')">上一页</button>
+                        <button type="button" class="btn btn-default" @click="loadPage('next')">下一页</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"> 规则计算结果明细表 </div>
+                    <div class="panel panel-default" style="margin:10px auto 0">
+                        <div class="panel-heading">事件类型</div>
+                        <!--<li v-for="(item, key) in testOne['sonparams']" v-if="!isStr(item) && !isJson(item)">                               
+                            <p style="padding: 5px 0 0 5px">{{ key }} : {{ item }}</p>           
+                        </li>-->
+                        <p> {{ rst["evntType"] }} </p>
+                    </div>
+
+                    <div class="row" style="margin:10px auto 0">                        
+                        <section class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">结果明细组合</div>
+                                <table class="table table-bordered table-hover table-responsive table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>事件ID</th>
+                                            <th>事件编号</th>
+                                            <th>发生次数(金额)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in rstE">
+                                            <td>{{ item['事件ID'] }}</td>
+                                            <td>{{ item['事件编号'] }}</td>
+                                            <td>{{ item['发生次数(金额)'] }}</td>                                            
+                                        </tr>
+                                    </tody>
+                                </table>
+                            </div>
+                        </section>                        
+                    </div>
+
+
+
+                    <div class="panel panel-default" style="margin:0 auto">
+                        <div class="panel-heading">备注</div>                        
+                        <p>{{ rst["memoDes"] }}</p>
+                    </div>
+                </div>                
+            </div>
+            
+            <div class="col-md-6">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">规则计算结果语句</div>                                
+                    <div class="panel panel-default" style="margin:10px auto 0">
+                        <div class="panel-heading">规则计算SQL</div>
+                        <!--<li v-for="(item, key) in testOne['sonparams']" v-if="!isStr(item) && !isJson(item)">                               
+                            <p style="padding: 5px 0 0 5px">{{ key }} : {{ item }}</p>           
+                        </li>-->
+                        <p> {{ rsq["ruleCmpSql"] }} </p>
+                    </div>                       
+                    
+                    <div class="row" style="margin:10px auto 0">                        
+                        <section class="col-md-10">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">参数内容配置</div>
+                                <table class="table table-bordered table-hover table-responsive table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>参数名</th>
+                                            <th>参数值</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(value, key) in rsqP">
+                                            <td>{{ key }}</td>
+                                            <td>{{ value }}</td>
+                                        </tr>
+                                    </tody>
+                                </table>
+                            </div>
+                        </section>
+                        <section class="col-md-10">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">动态参数内容配置</div>
+                                <table class="table table-bordered table-hover table-responsive table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>参数名</th>
+                                            <th>参数值</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(value, key) in rsqDP">
+                                            <td>{{ key }}</td>
+                                            <td>{{ value }}</td>
+                                        </tr>
+                                    </tody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="panel panel-default" style="margin:0 auto">
+                        <div class="panel-heading">备注</div>                        
+                        <p>{{ rsq["memoDes"] }}</p>
+                    </div>       
+                </div>
+            </div>
+
+            <div class="col-md-6">            
+                <div class="panel panel-default">
+                    <div class="panel-heading">规则计算结果明细语句</div>                                
+                    <div class="panel panel-default" style="margin:10px auto 0">
+                        <div class="panel-heading">溯源SQL</div>
+                        <!--<li v-for="(item, key) in testOne['sonparams']" v-if="!isStr(item) && !isJson(item)">                               
+                            <p style="padding: 5px 0 0 5px">{{ key }} : {{ item }}</p>           
+                        </li>-->
+                        <p> {{ rstq["traceSql"] }} </p>
+                    </div>                       
+                    
+                    <div class="row" style="margin:10px auto 0">                        
+                        <section class="col-md-10">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">参数内容配置</div>
+                                <table class="table table-bordered table-hover table-responsive table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>参数名</th>
+                                            <th>参数值</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(value, key) in rstqP">
+                                            <td>{{ key }}</td>
+                                            <td>{{ value }}</td>
+                                        </tr>
+                                    </tody>
+                                </table>
+                            </div>
+                        </section>
+                        <section class="col-md-10">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">动态参数内容配置</div>
+                                <table class="table table-bordered table-hover table-responsive table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>参数名</th>
+                                            <th>参数值</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(value, key) in rstqDP">
+                                            <td>{{ key }}</td>
+                                            <td>{{ value }}</td>
+                                        </tr>
+                                    </tody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="panel panel-default" style="margin:0 auto">
+                        <div class="panel-heading">备注</div>                        
+                        <p>{{ rstq["memoDes"] }}</p>
+                    </div>       
+                </div>
+            </div>                    
+        </div>
+    </div>
+    </script>
+    <!--<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>-->
+    <!--<script>
+        window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')
+    </script>-->
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/vendor/vue.min.js"></script>
+    <script src="//cdn.bootcss.com/axios/0.15.2/axios.min.js"></script>
+    <script src="js/plugins/bootstrap.min.js"></script>
+    <script>
+        Vue.component('vuetable', {
+            template: '#vuetable',
+            replace: true,
+            props: {
+                data: Array,
+                columns: Array,
+                filterKey: String,
+                apiUrl: String,
+                colData: Array,
+                pages: Array,
+                urlOne: String,
+                urlTwo: String
+            },
+            data: function() {
+                var sortOrders = {}
+                this.columns.forEach(function(item) {
+                    sortOrders[item.label] = 1
+                })
+                return {
+                    sortKey: '',
+                    sortOrders: sortOrders,
+                    currenttableData: null,
+                    perPage: undefined,
+                    allData: null,
+                    from: undefined,
+                    to: undefined,
+                    total: undefined,
+                    currentPage: undefined,
+                    searchInfo: {},                    
+                    rsq: null,
+                    rsqP: null,
+                    rsqDP: null,
+                    rst: null,
+                    rstE: null,
+                    rstq: null,
+                    rstqP: null,
+                    rstqDP: null
+                }
+            },
+            computed: {
+                filteredData: function() {
+                    var self = this
+
+                    var sortKey = this.sortKey
+                    var filterKey = this.filterKey && this.filterKey.toLowerCase()
+                    var order = this.sortOrders[sortKey] || 1
+                    var data = this.currenttableData
+                    self.colData = this.currenttableData
+                    if (filterKey) {
+                        data = data.filter(function(row) {
+                            return Object.keys(row).some(function(key) {
+                                return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                            })
+                        })
+                    }
+                    if (sortKey) {
+                        data = data.slice().sort(function(a, b) {
+                            a = a[sortKey]
+                            b = b[sortKey]
+                            return (a === b ? 0 : a > b ? 1 : -1) * order
+                        })
+                    }
+                    return data
+                }
+            },
+            filters: {
+                capitalize: function(str) {}
+            },
+            methods: {
+                sortBy: function(key) {
+                    this.sortKey = key
+                    this.sortOrders[key] = this.sortOrders[key] * -1
+                },
+                //获取数据，并实现数据分页
+                fetchData: function() {
+                    var self = this;
+                    axios.get(self.apiUrl).then((response) => {                        
+                        self.allData = response.data
+                        var info = response.data[0];
+
+                        self.searchInfo["cmpDte"] = info["cmpDte"]
+                        self.searchInfo["ruleSetId"] = info["ruleSetId"]
+                        self.searchInfo["ruleId"] = info["ruleId"]
+                        self.searchInfo["cmpBatNo"] = info["cmpBatNo"]
+                        self.searchInfo["ruleBelongType"] = info["ruleBelongType"]
+                        self.searchInfo["rstBelongTo"] = info["rstBelongTo"]
+
+                        var initrsqurl = 'http://localhost:3000/rsqqa/search?'
+                        
+                        self.rsql = (initrsqurl + "cmpDte=" + self.searchInfo["cmpDte"])
+                        self.rsql += ("&ruleSetId=" + self.searchInfo["ruleSetId"])
+                        self.rsql += ("&ruleId=" + self.searchInfo["ruleId"])
+                        self.rsql += ("&cmpBatNo=" + self.searchInfo["cmpBatNo"])
+
+                        var initrsturl = 'http://localhost:3000/rstqa/search?'                        
+
+                        self.rstl = (initrsturl + "cmpDte=" + self.searchInfo["cmpDte"])
+                        self.rstl += ("&ruleSetId=" + self.searchInfo["ruleSetId"])
+                        self.rstl += ("&ruleId=" + self.searchInfo["ruleId"])
+                        self.rstl += ("&cmpBatNo=" + self.searchInfo["cmpBatNo"])
+                        self.rstl += ("&ruleBelongType=" + self.searchInfo["ruleBelongType"])
+                        self.rstl += ("&rstBelongTo=" + self.searchInfo["rstBelongTo"])  
+
+                        var initrstqurl = 'http://localhost:3000/rstqqa/search?'           
+
+                        self.rstql = (initrstqurl + "cmpDte=" + self.searchInfo["cmpDte"])
+                        self.rstql += ("&ruleSetId=" + self.searchInfo["ruleSetId"])
+                        self.rstql += ("&ruleId=" + self.searchInfo["ruleId"])
+                        self.rstql += ("&cmpBatNo=" + self.searchInfo["cmpBatNo"])                        
+                        
+                        
+                        axios.get(self.rsql).then(function(response) {
+                            self.rsqP = JSON.parse(response.data[0]["paramCntConf"]);
+                            self.rsqDP = JSON.parse(response.data[0]["dynVarCntConf"]);         
+                            self.rsq = response.data[0];
+                                                                         
+                        }).then(function(error) {
+                            if(error)
+                                console.log(error)
+                        });
+
+                        axios.get(self.rstl).then(function(response) {
+                            self.rstE = JSON.parse(response.data[0]["rstTraceSet"]);
+                            //self.rsqDP = JSON.parse(response.data[0]["dynVarCntConf"]);         
+                            self.rst = response.data[0];
+                        }).then(function(error) {
+                            if(error)
+                                console.log(error)
+                        }); 
+
+                        axios.get(self.rstql).then(function(response) {
+                            self.rstqP = JSON.parse(response.data[0]["paramCntConf"]);
+                            self.rstqDP = JSON.parse(response.data[0]["dynVarCntConf"]);         
+                            self.rstq = response.data[0];
+                            console.log(self.rstql)
+                            console.log(self.rstq)
+
+                        }).then(function(error) {
+                            if(error)
+                                console.log(error)
+                        });  
+
+                        
+
+                        self.total = response.data.length
+                        self.temp = [];
+                        self.currentPage = 0;
+                        self.perPage = self.pages[0];
+                        self.from = 1;
+                        self.to = self.perPage;
+                        self.lastPage = Number( Math.floor(this.total % this.perPage) == 0 ? Math.floor(this.total / this.perPage) - 1 :Math.floor(this.total / this.perPage))
+                        self.totalPage = self.lastPage;
+                        self.dealData = Object.assign([], self.allData);                        
+                        var currentIndex = 0;
+                        for(var i = 0;i <= self.totalPage; i ++) {
+                          self.temp[i] = self.dealData.splice(currentIndex, currentIndex + self.perPage);                        
+                        }
+                        currentIndex = 0;
+                        self.currenttableData = self.temp[0];
+
+                    }).then((error) => {
+                        if(error)
+                            console.log(error)
+                    })
+                    //获取初始的rsq
+                                     
+                },
+                //用来加载分页数据
+
+                //分发切换table页事件
+                loadPage: function(page) {
+                    if(page == "prev") {
+                      // console.log("上一页")
+                      if(this.currentPage >= 1) {
+                        this.currenttableData = this.temp[this.currentPage - 1];
+                        this.currentPage --
+                        +(this.from -= this.perPage)
+                        +(this.to -= this.perPage)
+                      }
+                      // console.log(this.currenttableData)
+                    } else if( page == "next") {
+                      // console.log("下一页")
+                      if(this.currentPage < this.lastPage) {
+                        // console.log("from:" + this.from)
+                        // console.log("to:" + this.to)
+                        // console.log("perpage:" + this.perPage)
+                        // console.log("currentPage:" + this.currentPage);
+                        // console.log("lastPage: " + this.lastPage);
+                        // console.log("此时的数据分组: " + this.temp);
+                        this.currenttableData = this.temp[this.currentPage + 1];
+                        this.currentPage ++
+                        this.from += Number(this.perPage)
+                        this.to = (this.to + Number(this.perPage) > this.total ? this.total : (this.to + Number(this.perPage)))
+                        // console.log("to:" + this.to)
+                      }
+                      // console.log(this.currenttableData)
+                    }
+                },
+                assign: function(event) {                  
+                  this.perPage = event.target.value;                
+                  this.from = 1;
+                  this.to = Number(this.perPage)
+
+                  this.dealData = Object.assign([], this.allData);
+                  var currentIndex = 0;                  
+                  this.lastPage = Number( Math.floor(this.total % this.perPage) == 0 ? Math.floor(this.total / this.perPage) - 1 : Math.floor(this.total / this.perPage))
+                  this.totalPage = this.lastPage
+                  for(var i = 0;i <= this.totalPage; i ++) {
+                    // console.log("执行此处");
+                    this.temp[i] = this.dealData.splice(currentIndex, currentIndex + this.perPage);
+                    // console.log(this.temp[i]);
+                    // console.log()
+                    //console.log("第" + i + "次：" + this.dealData)
+                  }
+
+                  //console.log("总数据:" + this.temp);
+
+                  //console.log(this.temp[0])
+
+                  this.currenttableData = this.temp[0]
+
+                  //console.log("最后一页:" + this.lastPage)
+                  this.currentPage = Number(0)
+                },
+                rstdetails: function(event) {
+                    var info = event.target.parentNode.dataset
+                    //cmpDte ruleSetId ruleId cmpBatNo ruleBelongType rstBelongTo
+                    var initrsqurl = 'http://localhost:3000/rsqqa/search';
+                    var initrsturl = 'http://localhost:3000/rstqa/search';
+                    var initrstqurl = 'http://localhost:3000/rstqqa/search';
+
+                    this.searchInfo["cmpDte"] = info["cmpdte"]
+                    this.searchInfo["ruleSetId"] = info["rulesetid"]
+                    this.searchInfo["ruleId"] = info["ruleid"]
+                    this.searchInfo["cmpBatNo"] = info["cmpbatno"]
+                    this.searchInfo["ruleBelongType"] = info["rulebelongtype"]
+                    this.searchInfo["rstBelongTo"] = info["rstbelongto"]
+
+                    this.rsql = (initrsqurl + "cmpDte=" + this.searchInfo["cmpDte"])
+                    this.rsql += ("&ruleSetId=" + this.searchInfo["ruleSetId"])
+                    this.rsql += ("&ruleId=" + this.searchInfo["ruleId"])
+                    this.rsql += ("&cmpBatNo=" + this.searchInfo["cmpBatNo"])
+
+                    this.rstql = (initrstqurl + "cmpDte=" + this.searchInfo["cmpDte"])
+                    this.rstql += ("&ruleSetId=" + this.searchInfo["ruleSetId"])
+                    this.rstql += ("&ruleId=" + this.searchInfo["ruleId"])
+                    this.rstql += ("&cmpBatNo=" + this.searchInfo["cmpBatNo"])
+
+                    this.rstl = (initrsturl + "cmpDte=" + this.searchInfo["cmpDte"])
+                    this.rstl += ("&ruleSetId=" + this.searchInfo["ruleSetId"])
+                    this.rstl += ("&ruleId=" + this.searchInfo["ruleId"])
+                    this.rstl += ("&cmpBatNo=" + this.searchInfo["cmpBatNo"])
+                    this.rstl += ("&ruleBelongType=" + this.searchInfo["ruleBelongType"])
+                    this.rstl += ("&rstBelongTo=" + this.searchInfo["rstBelongTo"])                
+                    
+                    console.log(this.rsql)
+                    console.log(this.rstl)
+                    console.log(this.rstql)                    
+                }
+                /*
+                isJson: function(item) {                    
+                    if(Array.isArray(item)) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                isStr: function(item) {
+                    if(!Array.isArray(item) && item.length > 50) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                */
+            },
+            created: function() {
+                this.fetchData();
+            }
+        })
+
+        var demo = new Vue({
+            el: '#demo',
+            data: {
+                searchQuery: '',
+                gridColumns: [{
+                    label: "ruleId",
+                    name: "规则标识码"
+                }, {
+                    label: "ruleBelongType",
+                    name: "规则归属类型"
+                },{
+                    label: "rstSts",
+                    name: "默认状态值"
+                },{
+                    label: "rstBelongTo",
+                    name: "结果归属物"
+                },{
+                    label: "evntCount",
+                    name: "事件总数"
+                },{
+                    label: "evntCount",
+                    name: "事件总金额"
+                },{
+                    label: "upRptFlg",
+                    name: "可上报标志"
+                },{
+                    label: "evntCountSet",
+                    name: "事件总数结果组合"
+                },{
+                    label: "evntSumAmtSet",
+                    name: "事件金额组合"
+                },{
+                    label: "memoDes",
+                    name: "备注"
+                }],
+                config: [20,30,40]
+            }
+        });
+    </script>
+</body>
+
+</html>

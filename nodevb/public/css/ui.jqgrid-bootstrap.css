@@ -184,10 +184,11 @@ div.tablediv > .table-bordered {
 .ui-jqgrid tr.jqgroup {  
 	outline-style: none; 
 }
-.ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td { 
-	overflow: hidden; 
-	white-space: pre; 
-	padding-right: 2px;
+.ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 2px;
 }
 .ui-jqgrid tr.jqgfirstrow  td {
 	height:auto; 
