@@ -1,0 +1,35 @@
+{
+  "editor":"Ray",
+  "date":"2016-11-3",
+  "menuList":[
+      {"id":"1000000","name":"用户","icon":"fa-user-circle","level":"root","list":[
+        {"id":"1010000","name":"个人信息","url":"#a1"},
+        {"id":"1020000","name":"修改密码","url":"#a2"},
+        {"id":"1030000","name":"安全退出","url":"#a3"}
+      ]},
+      {"id":"2000000","name":"事件计算管理","icon":"fa-cog","level":"root","list":[
+        {"id":"2010000","name":"事件配置","list":[
+          {"id":"2010100","name":"事件主体配置","url":"#b111"},
+          {"id":"2010200","name":"参数变量配置","url":"#b111"},
+          {"id":"2010300","name":"参数内容配置","url":"#b112"},
+          {"id":"2010400","name":"动态变量配置","url":"#b112"}
+        ]},
+        {"id":"2020000","name":"事件计算","url":"#b2"}
+      ]},
+      {"id":"2000000","name":"规则计算管理","icon":"fa-folder-open","level":"root","list":[
+        {"id":"2010000","name":"规则配置","list":[
+          {"id":"2010100","name":"规则主体配置","url":"#b111"},
+          {"id":"2010200","name":"参数变量配置","url":"#b111"},
+          {"id":"2010300","name":"参数内容配置","url":"#b112"},
+          {"id":"2010400","name":"动态变量配置","url":"#b112"}
+        ]},
+        {"id":"2020000","name":"规则计算","url":"#b2"}
+      ]},
+      {"id":"3000000","name":"规则计算视图","icon":"fa-window-maximize","level":"root","list":[
+        {"id":"3010000","name":"规则查询结果","url":"ruleQuery.html"}
+      ]},
+      {"id":"3000000","name":"事件计算视图","icon":"fa-window-maximize","level":"root","list":[
+        {"id":"3010000","name":"事件查询结果","url":"ruleQuery.html"}
+      ]}
+  ]
+}

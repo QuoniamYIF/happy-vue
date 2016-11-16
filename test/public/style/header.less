@@ -1,0 +1,38 @@
+@import "variable";
+
+/*header style start*/
+
+/*brand style*/
+.logoBox{height: 4rem;}
+.brand{height: 4rem;
+  >li{float: left;width: 4rem;text-align: center;height: 4rem;line-height: 4rem;cursor: pointer}
+}
+.styleBox>img{vertical-align: sub;cursor: pointer;width: 2rem;}
+.styleSetBox{position: absolute;top: 4rem;width: 100%;min-height: 6rem;display: none;
+  border-bottom: 1px solid @borderGray;background: @MWhite;color:#98A6AD}
+.styleBox:hover .styleSetBox{display: block;}
+.styleImg{height: 6rem;float: left;
+  li{float: left;width: 10rem;height: 6rem;text-align: center;
+    img{display:block;margin: 1rem auto 0 auto;}
+    p{height: 2.5rem;line-height: 2.5rem;}
+  }
+  li:first-child{width: 6rem;cursor: default;line-height: 6rem}
+}
+
+/*user center style*/
+.userInfoBox{height: 4rem;line-height: 4rem;margin-right: 4rem;}
+.userInfo{cursor: pointer;height: 4rem;line-height: 4rem;width: 8rem;text-align: center;
+    img{vertical-align: sub;margin-right: 0.5rem}
+}
+.languageBox{width: 8rem!important;}
+.languageBox:hover{background: @hoverGray;color:@fontGray;
+  .language{display: block;}
+}
+.userInfo:hover{background: @hoverGray;color:@fontGray;
+  .setting{display: block;}
+}
+.setting,.language{width: 8rem;background: @white;display: none;padding-bottom: 0.8rem;border: 1px solid @borderGray;border-top: none;
+  li{height: 3rem;line-height: 3rem;cursor: pointer;text-align: center;color:@fontGray}
+  li:hover{background: @hoverGray;}
+}
+/*header style end*/

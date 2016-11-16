@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+		<meta name="renderer" content="webkit">
+		<title>vui-2</title>
+		<link href="style/font-awesome.min.css" rel="stylesheet">
+		<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="style/ui.jqgrid-bootstrap.css" />
+		<link rel="stylesheet" href="style/public.css"/>
+		<link rel="stylesheet" href="style/frame.css"/>
+		<link rel="stylesheet" href="style/header.css"/>
+		<link rel="stylesheet" href="style/menu-v1.css" id="menuStyle"/>
+		<link rel="stylesheet" href="style/index.css"/>
+	</head>
+
+	<body>
+		<header class="wide_H" id="header"></header>
+		<aside class="aside_v1 wide_A" id="aside"></aside>
+		<main class="wide_M" id="main">
+			<div id="loadLine"></div>
+			<!--<div class="moreLabel">
+				<ul>
+					<li>事件配置 <span class="fa fa-close rt"></span></li>
+					<li>事件配置 <span class="fa fa-close rt"></span></li>
+					<li>事件配置 <span class="fa fa-close rt"></span></li>
+					<li>事件配置 <span class="fa fa-close rt"></span></li>
+				</ul>
+			</div>-->
+			<div id="mainBox"></div>
+		</main>
+	</body>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/style.js"></script>
+	<script src="js/route.js"></script>
+	<script src="js/menu_wide.js"></script>
+	<script src="js/menu_narrow.js"></script>
+	<script src="js/echarts.common.min.js"></script>
+	<script src="js/plugins/jquery-ui.min.js"></script>
+	<script src="js/plugins/i18n/grid.locale-cn.js"></script>
+	<script src="js/plugins/jquery.jqGrid.min.js"></script>
+	<script>
+		$.jgrid.defaults.width = 700;
+		$.jgrid.defaults.responsive = true;
+		$.jgrid.defaults.styleUI = 'Bootstrap';
+	</script>
+	<script src="js/vendor/vue.min.js"></script>
+	<script src="js/vendor/axios.min.js"></script>
+	<script>
+		axios.defaults.baseURL = 'http://localhost:3000/';
+	</script>
+	<script src="js/plugins/bootstrap.min.js"></script>
+	<script>
+		$(function(){
+			/*set mainBox's height && width*/
+			var mainH =  document.body.clientHeight - 52;
+			var mainW = document.body.clientWidth - 234;
+
+			/*load default menu*/
+			sessionStorage.setItem('style','wide');
+			sessionStorage.setItem('header','narrow');
+
+			$("#header").load('frame/header.html');
+			$("#aside").load('frame/menu/menu_v3.html');
+			$("#main").css({'height':mainH,'width':mainW,'left':'234px'});
+			$("#mainBox").css({'width':mainW-3,'height':mainH-6}).load('tpl/default.html');
+
+
+
+		})
+	</script>
+</html>

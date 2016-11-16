@@ -1,0 +1,39 @@
+@import "variable";
+
+
+.narrow_W{width: @asideW_narrow;}
+.wide_W{width: @asideW_wide}
+.narrow_P{padding-left: @asideW_narrow}
+.wide_P{padding-left: @asideW_wide;}
+
+/*header style start*/
+header{position: fixed;height: 4rem;width: 100%;background: @white;border-bottom:1px solid @borderGray;z-index: 101;}
+
+/* left aside style start*/
+aside{position: fixed;left: 0;height: 100%;width: @asideW_wide;z-index: 100;padding-top: 4rem;}
+.aside_v1{background: @bgGray;}
+.aside_v2{background: @white;border-right: 1px solid @borderGray;}
+
+/*宽屏与窄屏的样式*/
+/*.narrow_A{width: @asideW_narrow}
+.wide_A{width: @asideW_wide}*/
+
+
+/*main style start*/
+main{background: @white url(../img/bigData.jpg);filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+  -moz-background-size:100% 100%;background-size:100% 100%;position: fixed;top:4rem;z-index: 98;right: 2px;}
+/*.wide_M{left: @asideW_wide;}
+.narrow_M{left: @asideW_narrow;}*/
+
+#loadLine{height: 3px;background: @loadBar;width: 0;}
+.moreLabel{height: 2.5rem;width: 100%;border-bottom: 1px solid @borderGray;
+  ul{padding-left: 1rem}
+  li{width: 10rem;border: 1px solid @borderGray;border-radius: 5px 5px 0 0;height: 2.5rem;line-height: 2.5rem;margin-left: 5px;
+    padding: 0 .8rem; float: left;
+    span{display: inline-block;height: 2.5rem;line-height: 2.5rem;}
+    span:hover{color:sandybrown}
+  }
+}
+#mainBox{position: absolute;background: @mainBg;overflow: auto;}
+/*main style end*/
+

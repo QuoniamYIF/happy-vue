@@ -1,0 +1,18 @@
+<div id="menuTree" class="menu_micro"></div>
+<script>
+    $(function() {
+        // debugger;
+        $.ajax({
+            url: "data/menuJson.json",
+            dataType: "json",
+            success:function(data){
+                menuStr="";     /*初始化菜单生成函数*/
+
+                var list = data.menuList || [];
+                $("#menuTree").html(createTree(list));
+                $
+                //menuTree();
+            }
+        });
+    });
+</script>

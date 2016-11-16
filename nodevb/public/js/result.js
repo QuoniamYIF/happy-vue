@@ -8,7 +8,7 @@
 */
 //====================================================================================
 
-const str = ["cmpDte", "ruleId","ruleSetId","cmpBatNo","ruleBelongType","rstBelongTo"]
+const str = ["cmpDte","ruleId","ruleSetId","cmpBatNo","ruleBelongType","rstBelongTo"]
             
 Vue.component('vuetable', {
   template: '#vuetable',
@@ -24,8 +24,19 @@ Vue.component('vuetable', {
         rstqurl: String
       },
       rsq: null,
+      rsqQ: String,
+      rsqP: null,
+      rsqDP: null,
+      rsqM: String,
+      rstq: null,
+      rstqQ: String,
+      rstqP: null,
+      rstqDP: null,
+      rstqM: String,
       rst: null,
-      rstq: null
+      rstT:null,
+      rstE: null,
+      rstM: String
     }
   },
   methods: {
@@ -42,7 +53,24 @@ Vue.component('vuetable', {
       var self = this;
       axios.get(url)
       .then(function(response) {
-        self[param] = response.data;
+        self[param] = response.data[0];
+        if(response.data[0]["rstTraceSet"]) {
+          self.rstT = response.data[0]["evntType"]
+          self.rstE = JSON.parse(response.data[0]["rstTraceSet"]);
+          self.rstM = response.data[0]["memoDes"]
+        }
+        if(response.data[0]['ruleCmpSql']) {
+          self.rsqQ = response.data[0]['ruleCmpSql'];
+          self.rsqP = JSON.parse(response.data[0]["paramCntConf"]);
+          self.rsqDP = JSON.parse(response.data[0]["dynVarCntConf"]); 
+          self.rsqM = response.data[0]["memoDes"]          
+        }
+        if(response.data[0]['traceSql']) {
+          self.rstqQ = response.data[0]['traceSql']
+          self.rstqP = JSON.parse(response.data[0]["paramCntConf"]);
+          self.rstqDP = JSON.parse(response.data[0]["dynVarCntConf"]); 
+          self.rstqM = response.data[0]["memoDes"]    
+        }
       })
       .catch(function(error) {
         self.errorHandle(error);
@@ -78,7 +106,8 @@ Vue.component('vuetable', {
       this.url.rsq = initrsq + deal(four);
       this.url.rst = initrst + deal(six);
       this.url.rstq = initrstq + deal(four);
-       
+
+      console.log(this.url)
     },
     fetchData: function () {
       var self = this;
@@ -121,18 +150,22 @@ Vue.component('vuetable', {
             }, {
               name: "evntCount",
               label: "事件总金额",
+              width: 130              
             }, {
               name: "upRptFlg",
               label: "可上报标志",
+              width: 130
             }, {
               name: "evntCountSet",
-              label: "事件总数结果组合"
+              label: "事件总数结果组合",
+              width: 160
             }, {
               name: "evntSumAmtSet",
               label: "事件金额组合"
             }, {
               name: "memoDes",
               label: "备注",
+              width: 70
             }
           ],
           caption: "规则结果",
@@ -158,7 +191,7 @@ Vue.component('vuetable', {
             fet(url.rstq, "rstq");
           },
           viewrecords: true,
-          width: 730,
+          width: 750,
           height: 200,
           rowNum: 30,
           pager: "#jqGridPager"

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container">
+        <div id="et">
+            <evt api-Url="rlcqa"></evt>
+        </div>
+    </div>
+    <script type="text/x-template" id="evt">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="jqGrid"></table>
+                <div id="jqGridPager"></div>
+            </div>   
+
+            <div class="col-md-12" style="margin-top: 10px">
+                <div class="panel panel-default" >
+                    <div class="panel-heading"> 规则基本参数内容配置 </div>                    
+                    <div class="row">
+                        <div class="col-md-6" v-for='(val, key) in rlpcP'>
+                            <div class="panel panel-default"  style="margin:10px auto 10px">
+                                <div class="panel-heading">{{ key }}</div>
+                                <p>{{ val }}</p>
+                            </div>  
+                        </div>   
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click='addPar' class="pull-right">添加参数</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click='addPar' class="pull-right">配置参数</button>                                                                      
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click='addPar' class="pull-right">删除参数</button>                         
+                    </div>                      
+                </div>  
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">内容配置</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label>事件ID</label>
+                        <p>{{ rowId }}</p>
+                        <label for='evts'>参数选择</label>
+                            <select id="evts" class="form-control" @change='acId(event)'>
+                                <option v-for='item in rspar' :id='item["inputType"]'>{{ item['name'] }} - {{ item['chnName'] }}</option>
+                            </select>
+                        </label> 
+
+                        <label>参数填写</label>
+                        <p class='0' style="display:none">文本</p>                           
+                        <p class='1' style="display:none">机构单选+文本</p> 
+                        <p class='2' style="display:none">机构多选+文本</p>           
+                        <p class='3' style="display:none">日期+文本</p>           
+                        <p class='4' style="display:none">下拉列表单选+文本</p>           
+                        <p class='5' style="display:none">下拉列表多选+文本</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary">保存</button>
+                    </div>
+                </div>                                        
+            </div>                     
+        </div>
+    </script>
+
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/plugins/jquery-ui.min.js"></script>
+    <script src="js/plugins/i18n/grid.locale-cn.js"></script>
+    <script src="js/plugins/jquery.jqGrid.min.js"></script>
+    <script>
+		$.jgrid.defaults.width = 780;
+		$.jgrid.defaults.responsive = true;
+		$.jgrid.defaults.styleUI = 'Bootstrap';
+	</script>
+    <script src="js/vendor/vue.min.js"></script>
+    <script src="js/vendor/axios.min.js"></script>
+    <script>
+        axios.defaults.baseURL = 'http://localhost:3000/';
+    </script>
+    <script src="js/plugins/bootstrap.min.js"></script>
+    <script src="js/rlecf.js"></script>
+</body>
+
+</html>

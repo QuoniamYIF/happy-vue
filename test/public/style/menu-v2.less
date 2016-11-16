@@ -1,0 +1,46 @@
+@import "variable";
+
+/*设置user信息样式*/
+.user{width: 18rem;height: 10rem;}
+.photo{width: 8rem;padding-left: 1.5rem;line-height: 10rem;
+  img{border-radius: 50%;width: 7rem;}
+}
+.userMsg{margin: 2.5rem 0 0 2rem;
+  h4{font-size: 1.3rem;padding-bottom: .8rem;margin: 0;}
+  p{padding-bottom: .8rem;}
+}
+.online{display: inline-block;width: .5rem;height: .5rem;border-radius: 50%;background: #30CE73;margin-right: 1rem;}
+
+/*菜单通用样式定义*/
+.activeMenu{background: @menuOpenBg_2;}
+.menuActive{background: @menuActive_2;color:@darkGray!important;}
+.open{height: auto;border-bottom: 1px solid @asideBg_2;background: @menuOpenBg_2}
+
+/*无限极菜单样式 --wide版*/
+.menuTree{width: 18rem;padding-top: 1rem}
+.mainMenu{display: block; height: 3rem;line-height: 3rem;font-size: 1.1rem;color:@fontGray;cursor: pointer;padding:0 1.5rem;
+  i,b{height: 3rem;line-height: 3rem}
+}
+.mainMenu:hover{background: @hoverGray;}
+.menuList{display: none;padding-left: 2.5rem;height: auto;background: @menuOpenBg_2;}
+
+/*无限极菜单样式 --narrow版*/
+.menu_micro{width: 4rem;padding-top: 1rem;}
+.menuMainBox{position: relative;}
+.menuMain{position: relative;height: 3rem;line-height: 3rem;width: 4rem;display: block;padding-left: 1.5rem;
+    border-radius:0 3px 3px 0;font-size: 1.3rem;cursor: pointer;}
+.menuMainBox:hover{background: @menuOpenBg_2;
+  .childMenu{display: block;}
+}
+.childMenu{position: absolute;left: 4rem;top:0;width: 8rem;background:@menuOpenBg_2; display: none;cursor: pointer;border: 1px solid @menuOpenBg_2;
+  border-left:1px dashed @white;
+  >div{height: 3rem;line-height: 3rem;;padding-left: 1rem;}
+  >div:hover{background: @menuOpenBg_2;
+    .grandsonMenu{display: block}
+  }
+}
+.grandsonMenu{position: absolute;left: 5.8rem;top: 0;width: 8rem;background: @menuOpenBg_2;display: none;
+    border: 1px solid @menuOpenBg_2;border-left: 1px dashed @white;
+  >div{padding-left: 1rem;}
+  >div:hover{background: @menuActive_2;}
+}

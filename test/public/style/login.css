@@ -1,0 +1,89 @@
+/*root size*/
+/*public color*/
+/*米白色*/
+/*header color*/
+/*aside color variable*/
+/*menu s1 color*/
+/*menu s2 color*/
+/*main area color variable*/
+body {
+  background: #F0F3F4 url(../img/login.jpg);
+  filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+  -moz-background-size: 100% 100%;
+  background-size: 100% 100%;
+}
+.loginBox {
+  border: 1px solid #999;
+  width: 38rem;
+  height: 35rem;
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  margin-left: -20rem;
+  background: #fff;
+  border-radius: 4px;
+}
+.title {
+  text-align: center;
+  margin-top: 2rem;
+}
+.login {
+  margin: 2rem auto;
+  width: 30rem;
+  border: 1px dashed #999;
+  height: 20rem;
+  border-radius: 0.4rem;
+  padding-top: 1rem;
+}
+.login p {
+  height: 4rem;
+  margin: 0 3rem;
+  font-size: 1.3rem;
+  border-bottom: 1px dashed #999;
+  padding-top: 1.5rem;
+}
+.login p input {
+  border: none;
+}
+.login p:last-child {
+  border: none;
+}
+.loginForm label {
+  width: 4.3rem;
+  text-align: right;
+  display: inline-block;
+}
+input {
+  font-size: 1.3rem;
+  outline: none;
+}
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #333;
+}
+.codeInp {
+  width: 8rem;
+}
+.submitBtn {
+  display: block;
+  background: #333;
+  color: #fff;
+  width: 100%;
+  height: 3.5rem;
+  border-radius: 0.4rem;
+  font-size: 1.3rem;
+  letter-spacing: 4rem;
+  font-weight: bold;
+}
+.submitBtn:hover {
+  background: #F0F3F4;
+  color: #333;
+}
+.submitBtn:active {
+  box-shadow: inset 0 0.5rem 0.3rem #999;
+  -webkit-box-shadow: inset 0 0.5rem 0.3rem #fff;
+}
+.footer {
+  margin-top: 5rem;
+  text-align: center;
+}

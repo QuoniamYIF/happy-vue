@@ -1,0 +1,154 @@
+<div class="contentBox">
+    <h1 class="title">离线风险控制结果--图表展示</h1>
+    <div class="top">
+        <div class="rule-canvas-box lf">
+            <div id="canvas-1" class="canvas-1"></div>
+        </div>
+        <div class="rule-canvas-explain lf">
+            <ul class="rule-result-list">
+                <li>
+                    <div class="list-Lf">
+                        <p style="color: sandybrown">3次</p>
+                        <p>可疑结果</p>
+                    </div>
+                    <i class="fa fa-warning rt" style="color: sandybrown"></i>
+                </li>
+                <li>
+                    <div class="list-Lf">
+                        <p style="color: #8462B9">3次</p>
+                        <p>未处理结果</p>
+                    </div>
+                    <i class="fa fa-folder-o rt" style="color: #8462B9"></i>
+                </li>
+                <li>
+                    <div class="list-Lf">
+                        <p style="color: #C44A83">3次</p>
+                        <p>跟进中结果</p>
+                    </div>
+                    <i class="fa fa-hourglass-2 rt" style="color: #C44A83"></i>
+                </li>
+                <li>
+                    <div class="list-Lf">
+                        <p style="color: red">3次</p>
+                        <p>异常结果</p>
+                    </div>
+                    <i class="fa fa-ban rt" style="color: red"></i>
+                </li>
+                <li>
+                    <div class="list-Lf">
+                        <p style="color: #48BE66">3次</p>
+                        <p>正常结果</p>
+                    </div>
+                    <i class="fa fa-sun-o rt" style="color: #48BE66"></i>
+                </li>
+                <li>
+                    <div class="list-Lf">
+                        <p style="color: #3C56A0">3次</p>
+                        <p>关注结果</p>
+                    </div>
+                    <i class="fa fa-heart-o rt" style="color: #3C56A0"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="bottom">
+        <div id="canvas-2" class="canvas-2"></div>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        /*加载数据饼状图*/
+        var myChart = echarts.init(document.getElementById('canvas-1'));
+        option = {
+            color:['#ff0000','#ED9F5D','#8462B9','#C44A83','#48BE66','#3C56A0'],
+            title:{text:'离线风控图表',textAlign:'left',left:'20',top:'0'},
+            tooltip: {trigger: 'item',formatter: "{a} <br/>{b}: {c} ({d}%)"},
+            legend: {orient:'vertical',x:'left',top:'45',left:'20',itemHeight:'20',
+                data:['异常','可疑','未处理','跟进中','正常','关注']
+            },
+            series: [{
+                name:'状态统计结果', type:'pie', top:'20', center:['62%','55%'], radius: ['35%', '70%'], avoidLabelOverlap: false,
+                label: {
+                    normal: {show: false, position: 'center'},
+                    emphasis: {show: true, textStyle: {fontSize: '30', fontWeight: 'bold'}}
+                },
+                labelLine: {normal: {show: false}},
+                data:[
+                    {value:135, name:'异常'},
+                    {value:335, name:'可疑'},
+                    {value:310, name:'未处理'},
+                    {value:234, name:'跟进中'},
+                    {value:1548, name:'正常'},
+                    {value:1548, name:'关注'}
+                ]
+            }]
+        };
+        myChart.setOption(option);
+
+        /*趋势表*/
+        var canvas2 = echarts.init(document.getElementById('canvas-2'));
+        option = {
+            title: {text: '配置结果趋势图'},
+            tooltip : {trigger: 'axis'},
+            legend: {data:['异常','可疑','未处理','跟进中','正常','关注']},
+            grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+            xAxis : [{
+                type : 'category',
+                boundaryGap : false,
+                data : ['周一','周二','周三','周四','周五','周六','周日']
+            }],
+            yAxis : [{type : 'value'}],
+            series : [{
+                name:'可疑',
+                type:'line',
+                stack: '次数',
+                areaStyle: {normal: {}},
+                data:[120, 132, 101, 134, 90, 230, 210]
+            }, {
+                name:'异常',
+                type:'line',
+                stack: '次数',
+                areaStyle: {normal: {}},
+                data:[220, 182, 191, 234, 290, 330, 310]
+            }, {
+                name:'未处理',
+                type:'line',
+                stack: '次数',
+                areaStyle: {normal: {}},
+                data:[150, 232, 201, 154, 190, 330, 410]
+            }, {
+                name:'跟进中',
+                type:'line',
+                stack: '次数',
+                areaStyle: {normal: {}},
+                data:[320, 332, 301, 334, 390, 330, 320]
+            }, {
+                name:'正常',
+                type:'line',
+                stack: '次数',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                areaStyle: {normal: {}},
+                data:[820, 932, 901, 934, 1290, 1330, 1320]
+            }, {
+                name:'关注',
+                type:'line',
+                stack: '次数',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                areaStyle: {normal: {}},
+                data:[820, 932, 901, 934, 1290, 1330, 1320]
+            }]
+        };
+        canvas2.setOption(option);
+    })
+</script>

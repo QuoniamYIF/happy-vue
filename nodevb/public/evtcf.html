@@ -7,7 +7,7 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
 </head>
 
@@ -16,35 +16,79 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div class="container">
-        <div id="evt">
-            <evt api-Url="http://localhost:3000/ecqa"></evt>
+        <div id="et">
+            <evt api-Url="ecqa"></evt>            
         </div>
     </div>
-
     <script type="text/x-template" id="evt">
-        <div class="row">
+        <div class="row" style="width:100%" id='event'>
             <div class="col-md-12">
-                <table id="jqGrid"></table>
+                <table id="jqGrid" style="width:100%"></table>
                 <div id="jqGridPager"></div>
             </div>
 
-            <div class="panel panel-default" style="width:1050px;margin-top:20px;">
-                <div class="panel-heading">事件基本参数内容配置表</div>
-                <div class="panel-body">
-                    <p id="evtp"></p>
+            <div class="col-md-12" id="paraDetails" style="margin-top: 20px">
+                <table id="jqGrid1" style="width:100%"></table>
+                <div id="jqGridPager1"></div>
+            </div>
 
-                    <div id="pa">
-                        <patable pa-url='data/pa.json'></patable>
+            <!--<div class="col-md-12" style="margin-top: 10px">
+                <div class="panel panel-default" >
+                    <div class="panel-heading"> 事件基本参数内容配置 </div>                    
+                    
+                    <div class="row">
+                        <div class="col-md-6" v-for='(val, key) in epcP'>
+                            <div class="panel panel-default"  style="margin:10px auto 10px">
+                                <div class="panel-heading">{{ key }}</div>
+                                <p>{{ val }}</p>
+                            </div>  
+                        </div>   
                     </div>
-                </div>
-            </div>            
+
+                    <div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click='addPar' class="pull-right">添加参数</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click='addPar' class="pull-right">配置参数</button>                                                                      
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click='addPar' class="pull-right">删除参数</button>                         
+                    </div>                      
+                </div>  
+
+                
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">内容配置</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label>事件ID</label>
+                        <p>{{ rowId }}</p>
+                        <label for='evts'>参数选择</label>
+                            <select id="evts" class="form-control" @change='acId(event)'>
+                                <option v-for='item in rspar' :id='item["inputType"]'>{{ item['name'] }} - {{ item['chnName'] }}</option>
+                            </select>
+                        </label> 
+
+                        <label>参数填写</label>
+                        <p class='0' style="display:none">文本</p>                           
+                        <p class='1' style="display:none">机构单选+文本</p> 
+                        <p class='2' style="display:none">机构多选+文本</p>           
+                        <p class='3' style="display:none">日期+文本</p>           
+                        <p class='4' style="display:none">下拉列表单选+文本</p>           
+                        <p class='5' style="display:none">下拉列表多选+文本</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary">保存</button>
+                    </div>
+                </div>                                        
+            </div>                     -->
         </div>
     </script>
-
     <script src="js/vendor/jquery.min.js"></script>
-    <script type="text/ecmascript" src="js/plugins/jquery-ui.min.js"></script>
-    <script type="text/ecmascript" src="js/plugins/i18n/grid.locale-cn.js"></script>
-    <script type="text/ecmascript" src="js/plugins/jquery.jqGrid.min.js"></script>
+    <script src="js/plugins/jquery-ui.min.js"></script>
+    <script src="js/plugins/i18n/grid.locale-cn.js"></script>
+    <script src="js/plugins/jquery.jqGrid.min.js"></script>
     <script>
 		$.jgrid.defaults.width = 780;
 		$.jgrid.defaults.responsive = true;
@@ -56,98 +100,9 @@
         axios.defaults.baseURL = 'http://localhost:3000/';
     </script>
     <script src="js/plugins/bootstrap.min.js"></script>
-    <script src="evtcf.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-			var template;
-                template += "<div style='margin-left:15px;'><div> 事件编号: </div><div>{evntNo} </div>";
-                template += "<div> 事件中文名称: </div><div>{chnName} </div>";
-                template += "<div> 事件大类: </div><div>{evntCatlog} </div>";
-                template += "<div> 事件类型:</div><div> {evntType} </div>";
-                template += "<div> 事件计算周期:</div><div> {evntCmpPeriod} </div>";
-                template += "<div> 事件维度类型:</div><div> {evntDmType} </div>";
-                template += "<div> 事件计算公式描述:</div><div> {evntFormulaDes} </div>";
-                template += "<div> 聚合SQL:</div><div>{assembleSql}</div>";    
-                template += "<div> 溯源SQL:</div><div>{traceSql}</textarea></div>";                                
-                template += "<hr style='width:100%;'/>";
-                template += "<div> {sData} {cData}  </div></div>";
-                           
-            $("#jqGrid").jqGrid({
-                url: 'http://localhost:3000/ecqa',
-                datatype: "json",
-                caption: "事件配置表",
-                colModel: [
-                    {
-						name: 'evntNo',
-                        label: '事件编号',                       
-						editable: true,						
-                    },
-                    {
-						name: 'chnName',
-                        label: '事件中文名称',
-                        editable: true // must set editable to true if you want to make the field editable
-                    },
-                    {
-						name : 'evntCatlog',
-                        label: '事件大类',
-                        editable: true
-                    }, 
-                    {
-						name : 'evntType',
-                        label: '事件类型',
-                        editable: true
-                    },
-                    {
-						name: 'evntCmpPeriod',
-                        label: '事件计算周期',
-                        editable: true
-                    },
-                    {
-                        name: 'evntDmType',
-                        label: '事件维度类型',
-                        editable: true
-                    },
-                    {
-                        name: 'evntFormulaDes',
-                        label: '事件计算公式描述',
-                        editable: true
-                    },
-                    {
-                        name: 'assembleSql',
-                        label: '聚合SQL',                
-                        editable: true
-                    },
-                    {
-                        name: 'traceSql',
-                        label: '溯源SQL',                                              
-                        editable: true
-                    },
-                    {
-                        name: 'memoDes',
-                        label: '备注',
-                        editable: true
-                    }
-                ],				
-                onSelectRow: function(id) {                    
-                },
-                loadComplete: function() {                                        
-                },
-				viewrecords: true,
-                width: 1050,
-                height: 200,
-                rowNum: 10,
-                pager: "#jqGridPager"
-            });
-
-            $('#jqGrid').navGrid('#jqGridPager',{ 
-                edit: true, 
-                add: true, 
-                del: true, 
-                search: true, 
-                position: "left", 
-            });
-        });
-    </script>
+    <script src="js/evtcf.js"></script>
+    <!--补丁js脚本-->
+    <script></script>
 </body>
 
 </html>

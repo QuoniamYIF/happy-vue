@@ -1,0 +1,39 @@
+/*root size*/
+/*public color*/
+/*米白色*/
+/*header color*/
+/*aside color variable*/
+/*menu s1 color*/
+/*menu s2 color*/
+/*main area color variable*/
+/*icon view style */
+.styleImg {
+  height: 4rem;
+  padding-left: 3rem;
+}
+.styleImg li {
+  float: left;
+  line-height: 4rem;
+  height: 4rem;
+  width: 10rem;
+  text-align: center;
+}
+.styleImg li img {
+  vertical-align: middle;
+  width: 80%;
+}
+.settingImg {
+  height: 7rem;
+  padding: 0.5rem;
+  background: #1c2b36;
+  position: absolute;
+  bottom: 0;
+  width: 3rem;
+}
+.settingImg img {
+  vertical-align: middle;
+  margin-bottom: 1rem;
+}
+.settingImg span {
+  writing-mode: lr-tb;
+}

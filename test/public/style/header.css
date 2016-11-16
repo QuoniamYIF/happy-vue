@@ -1,0 +1,121 @@
+/*root size*/
+/*public color*/
+/*米白色*/
+/*header color*/
+/*aside color variable*/
+/*menu s1 color*/
+/*menu s2 color*/
+/*main area color variable*/
+/*header style start*/
+/*brand style*/
+.logoBox {
+  height: 4rem;
+}
+.brand {
+  height: 4rem;
+}
+.brand > li {
+  float: left;
+  width: 4rem;
+  text-align: center;
+  height: 4rem;
+  line-height: 4rem;
+  cursor: pointer;
+}
+.styleBox > img {
+  vertical-align: sub;
+  cursor: pointer;
+  width: 2rem;
+}
+.styleSetBox {
+  position: absolute;
+  top: 4rem;
+  width: 100%;
+  min-height: 6rem;
+  display: none;
+  border-bottom: 1px solid #dee5e7;
+  background: #f6f8f8;
+  color: #98a6ad;
+}
+.styleBox:hover .styleSetBox {
+  display: block;
+}
+.styleImg {
+  height: 6rem;
+  float: left;
+}
+.styleImg li {
+  float: left;
+  width: 10rem;
+  height: 6rem;
+  text-align: center;
+}
+.styleImg li img {
+  display: block;
+  margin: 1rem auto 0 auto;
+}
+.styleImg li p {
+  height: 2.5rem;
+  line-height: 2.5rem;
+}
+.styleImg li:first-child {
+  width: 6rem;
+  cursor: default;
+  line-height: 6rem;
+}
+/*user center style*/
+.userInfoBox {
+  height: 4rem;
+  line-height: 4rem;
+  margin-right: 4rem;
+}
+.userInfo {
+  cursor: pointer;
+  height: 4rem;
+  line-height: 4rem;
+  width: 8rem;
+  text-align: center;
+}
+.userInfo img {
+  vertical-align: sub;
+  margin-right: 0.5rem;
+}
+.languageBox {
+  width: 8rem!important;
+}
+.languageBox:hover {
+  background: #edf1f2;
+  color: #98a6ad;
+}
+.languageBox:hover .language {
+  display: block;
+}
+.userInfo:hover {
+  background: #edf1f2;
+  color: #98a6ad;
+}
+.userInfo:hover .setting {
+  display: block;
+}
+.setting,
+.language {
+  width: 8rem;
+  background: #ffffff;
+  display: none;
+  padding-bottom: 0.8rem;
+  border: 1px solid #dee5e7;
+  border-top: none;
+}
+.setting li,
+.language li {
+  height: 3rem;
+  line-height: 3rem;
+  cursor: pointer;
+  text-align: center;
+  color: #98a6ad;
+}
+.setting li:hover,
+.language li:hover {
+  background: #edf1f2;
+}
+/*header style end*/

@@ -1,0 +1,98 @@
+/*root size*/
+/*public color*/
+/*米白色*/
+/*header color*/
+/*aside color variable*/
+/*menu s1 color*/
+/*menu s2 color*/
+/*main area color variable*/
+.narrow_W {
+  width: 4rem;
+}
+.wide_W {
+  width: 18rem;
+}
+.narrow_P {
+  padding-left: 4rem;
+}
+.wide_P {
+  padding-left: 18rem;
+}
+/*header style start*/
+header {
+  position: fixed;
+  height: 4rem;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #DEE5E7;
+  z-index: 101;
+}
+/* left aside style start*/
+aside {
+  position: fixed;
+  left: 0;
+  height: 100%;
+  width: 18rem;
+  z-index: 100;
+  padding-top: 4rem;
+}
+.aside_v1 {
+  background: #1C2B36;
+}
+.aside_v2 {
+  background: #fff;
+  border-right: 1px solid #DEE5E7;
+}
+/*宽屏与窄屏的样式*/
+/*.narrow_A{width: @asideW_narrow}
+.wide_A{width: @asideW_wide}*/
+/*main style start*/
+main {
+  background: #fff url(../img/bigData.jpg);
+  filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+  -moz-background-size: 100% 100%;
+  background-size: 100% 100%;
+  position: fixed;
+  top: 4rem;
+  z-index: 98;
+  right: 2px;
+}
+/*.wide_M{left: @asideW_wide;}
+.narrow_M{left: @asideW_narrow;}*/
+#loadLine {
+  height: 3px;
+  background: #23B7E5;
+  width: 0;
+}
+.moreLabel {
+  height: 2.5rem;
+  width: 100%;
+  border-bottom: 1px solid #DEE5E7;
+}
+.moreLabel ul {
+  padding-left: 1rem;
+}
+.moreLabel li {
+  width: 10rem;
+  border: 1px solid #DEE5E7;
+  border-radius: 5px 5px 0 0;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  margin-left: 5px;
+  padding: 0 .8rem;
+  float: left;
+}
+.moreLabel li span {
+  display: inline-block;
+  height: 2.5rem;
+  line-height: 2.5rem;
+}
+.moreLabel li span:hover {
+  color: sandybrown;
+}
+#mainBox {
+  position: absolute;
+  background: #F0F3F4;
+  overflow: auto;
+}
+/*main style end*/

@@ -1,0 +1,83 @@
+/*root size*/
+/*public color*/
+/*米白色*/
+/*header color*/
+/*aside color variable*/
+/*menu s1 color*/
+/*menu s2 color*/
+/*main area color variable*/
+.contentBox {
+  width: 100%;
+}
+.title {
+  height: 4rem;
+  line-height: 4rem;
+  padding-left: 2rem;
+  background: #F6F8F8;
+  border-bottom: 1px solid #dee5e7;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: normal;
+  margin-top: 0;
+}
+.top {
+  width: 100%;
+  height: 20rem;
+}
+.rule-canvas-box {
+  width: 35%;
+  height: 100%;
+}
+.canvas-1 {
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
+}
+.rule-canvas-explain {
+  width: 65%;
+  height: 100%;
+}
+.rule-result-list {
+  width: 100%;
+  height: 100%;
+}
+.rule-result-list li {
+  float: left;
+  width: 25%;
+  margin: 4.5% 0 0 6%;
+  height: 6rem;
+  border: 1px solid #dee5e7;
+  padding: 0 1.3rem;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 3px 3px 2px #f0f3f4;
+}
+.rule-result-list li i {
+  display: inline-block;
+  line-height: 6rem;
+  font-size: 2rem;
+}
+.list-Lf {
+  display: inline-block;
+}
+.list-Lf p {
+  line-height: 3rem;
+  font-size: 1.2rem;
+  margin: 0;
+}
+.list-Lf p:first-child {
+  font-size: 1.8rem;
+}
+.bottom {
+  margin-top: 1.5rem;
+  height: 30rem;
+  border-top: 1px solid #dee5e7;
+  padding-top: 1rem;
+  background: #F6F8F8;
+  width: 100%;
+}
+.canvas-2 {
+  width: 95%;
+  height: 100%;
+  margin: 0 auto;
+}

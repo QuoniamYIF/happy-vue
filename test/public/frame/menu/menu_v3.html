@@ -1,0 +1,30 @@
+<div>
+    <div class="user" id="userBox" style="display: block">
+        <div class="lf photo">
+            <img src="img/user.png" alt="" />
+        </div>
+        <div class="lf userMsg">
+            <h4>Mary / 女士</h4>
+            <p>角色：管理员</p>
+            <p><span class="online"></span>在线</p>
+        </div>
+    </div>
+    <div id="menuTree" class="menuTree"></div>
+</div>
+
+
+<script>
+    $(function() {
+        $.ajax({
+            url: "data/menuJson.json",
+            dataType: "json",
+            success:function(data){
+                wideStr = "";
+                var list = data.menuList || [];
+                $("#menuTree").html("").html(forTree(list));
+
+                menuTree();
+            }
+        });
+    });
+</script>

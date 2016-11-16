@@ -1,0 +1,99 @@
+<div>
+    <p class="logoBox lf" id="logoBox" style="background: #1C2B36;">
+        <img src="img/logo_b.png" alt="LOGO" id="logoImg"/>
+    </p>
+    <ul class="brand lf">
+        <li class="styleBox">
+            <span class="fa fa-outdent" id="doMenu" style="font-size: 1.3rem"></span>
+            <div class="styleSetBox" id="setStyle">
+                <ul class="styleImg">
+                    <li>展示风格</li>
+                    <li onclick="narrowStyle(this)">
+                        <img src="img/wide.jpg" title="宽屏风格"/>
+                        <p>宽屏风格</p>
+                    </li>
+                    <li onclick="wideStyle(this)">
+                        <img src="img/narrow.jpg" alt="" title="窄屏风格"/>
+                        <p>窄屏风格</p>
+                    </li>
+                </ul>
+                <ul class="styleImg">
+                    <li>色彩配置</li>
+                    <li  onclick="setLogoBg(this,'#1C2B36')">
+                        <img src="img/view-1.jpg" alt="" title="夜间深灰"/>
+                        <p>金属灰</p>
+                    </li>
+                    <li onclick="setLogoBg(this,'#FF0000')">
+                        <img src="img/view-2.jpg" alt="" title="红红火火"/>
+                        <p>艳阳红</p>
+                    </li>
+                    <li onclick="setLogoBg(this,'#7266BA')">
+                        <img src="img/view-3.jpg" alt="" title="粉紫"/>
+                        <p>贵气紫</p>
+                    </li>
+                    <li onclick="setHeaderBg(this,'#1199C4')">
+                        <img src="img/view-4.jpg" alt="" title="湛蓝"/>
+                        <p>天空蓝</p>
+                    </li>
+                    <li onclick="setHeaderBg(this,'#018501')">
+                        <img src="img/view-5.jpg" alt="" title="健康绿"/>
+                        <p>健康绿</p>
+                    </li>
+                    <li onclick="setHeaderBg(this,'#506677')">
+                        <img src="img/view-6.jpg" alt="" title="水银灰"/>
+                        <p>水银灰</p>
+                    </li>
+
+                </ul>
+            </div>
+        </li>
+
+        <li id="user">
+            <span class="fa fa-user-o" style="font-size: 1.3rem"></span>
+            <!--<img src="img/user.png"/>-->
+        </li>
+        <li><span class="fa fa-star"> 最近</span></li>
+        <li class="languageBox">
+            <p><span class="fa fa-globe"> 语言</span><span class="fa fa-caret-down" style="margin-left: 1.5rem"></span></p>
+            <ul class="language" id="setLang">
+                <li> 中文</li>
+                <li> 繁体</li>
+                <li> English</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="userInfoBox rt">
+        <div class="userInfo">
+			<span>
+				<span class="fa fa-user" style="font-size: 1.3rem"></span>
+				个人中心
+			</span>
+            <ul class="setting">
+                <li onclick="loadUser(this,'userInfo.html')">个人信息</li>
+                <li onclick="loadUser(this,'updatePsw.html')">修改密码</li>
+                <li onclick="loadUser(this,'logout.html')">退出系统</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    /*页面启动时自动加载*/
+    $("#doMenu").click(function(){
+        var menuViewName = sessionStorage.getItem('style');
+        menuViewName=='wide'?
+            $(this).removeClass('fa-outdent').addClass('fa-indent')&&narrowStyle():
+                $(this).removeClass('fa-indent').addClass('fa-outdent')&&wideStyle();
+    });
+
+    /*设置显示语言*/
+    $("#setLang li").click(function(){
+        var langVal = $(this).text();
+        $("#setLang").prev().children("span").eq(0).text(langVal);
+    })
+
+    /*设置用户是否可见*/
+    $("#user").click(function(){
+        $("#userBox").toggle(300);
+    })
+
+</script>
