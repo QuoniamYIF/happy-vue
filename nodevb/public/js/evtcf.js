@@ -12,20 +12,55 @@ Vue.component('evt', {
             epc: null,
             epcP: null,
             rspar: null,
+            inputBoxType: 1
         }
     },
     computed: {
         paramSelect: function() {
             var temp = ''
             for(item of this.rspar) {
-                console.log(item['name'])
-                console.log(item['chnName'])
-                temp += item['paramId'] + ':' + item['name'] + '-' + item['chnName'] + ';'
+                var ipttype = '';
+                var number = item['inputType'];
+                // console.log(item['name'])
+                // console.log(item['chnName'])
+                // console.log(item['inputType'])
+                
+                switch(number) {
+                    case 0:
+                        ipttype = '文本'
+                        break;
+                    case 1:
+                        ipttype = '机构单选+文本'
+                        break;
+                    case 2:
+                        ipttype = '机构多选+文本'
+                        break;
+                    case 3:
+                        ipttype = '日期+文本' 
+                        break;
+                    case 4:
+                        ipttype = '下拉列表单选+文本'
+                        break;
+                    case 5: 
+                        ipttype = '下拉列表多选+文本'
+                        break;
+                }
+
+                temp += item['paramId'] + ':' + item['name'] + '-' + item['chnName'] + '(' + item['inputType'] + ':' + ipttype + ')' + ';'
             }
-            //name:chnName:
-            console.log(temp)
+
             temp += '4:TX_STATUS1';
             return temp;
+        },
+        paramType: function() {
+            if(this.inputBoxType == 1) {
+                console.log("啦啦啦")
+                return 'select'
+            }
+            if(this.inputBoxType == 4) {
+                console.log("咩咩咩") 
+                return 'input'              
+            }
         }
     },
     methods: {
@@ -101,20 +136,33 @@ Vue.component('evt', {
                     name: 'paraN',
                     editable: true,
                     editoptions: {
-                        value: self.paramSelect                        
+                        value: self.paramSelect,
+                        dataEvents: [ 
+                            { 
+                                type: 'change', 
+                                fn: function(e) { 
+                                    var selText = $('#' + e.target.id + '>option:selected').text();
+                                    var temp = selText.split('(');
+                                    var seltype = +temp[1][0];
+                                    self.inputBoxType = seltype;
+                                    console.log('inputBoxType:' + self.inputBoxType)
+                                    console.log('paramType:' + self.paramType)
+                                    //console.log($('#' + e.target.id + '>option:selected').text()); 
+                                } 
+                            },                     
+                        ]                                     
                     }
                 }, {
                     label: '参数值',
                     name: 'paraV',
-                    editable: true // must set editable to true if you want to make the field editable
+                    editable: true,
+                    edittype: self.paramType                   
                 }, {
                     label: "编辑选项",
                     name: "actions",
                     width: 100,
                     formatter: "actions",
-                    formatoptions: {
-
-                    }
+                    formatoptions: {}
                 }],
                 sortname: 'EmployeeID',
                 loadonce: true,
