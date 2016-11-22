@@ -6,7 +6,8 @@ Vue.component('rsp', {
     data: function () {
         return {
             parId: 1,
-            postUrl: String
+            postUrl: String,
+            deleteUrl: String
         }
     },
     methods: {
@@ -41,7 +42,7 @@ Vue.component('rsp', {
                 $("#jqGrid").jqGrid({
                     url: self.apiUrl,
                     // we set the changes to be made at client side using predefined word clientArray
-                    editurl: '',
+                    editurl: self.apiUrl,
                     datatype: "json",
                     caption: "风控事件规则参数属性定义表",
                     colModel: [
@@ -110,8 +111,9 @@ Vue.component('rsp', {
                         width: 100,
                         editable: true
                     }],
-                    onSelectRow: function(id) {
-                        self.parId = id
+                    onSelectRow: function(id) {                        
+                        self.parId = +$($('#' + id).children()[0]).text()
+                        console.log(self.parId)
                     },
                     sortname: 'CustomerID',
                     sortorder: 'asc',
@@ -149,6 +151,8 @@ Vue.component('rsp', {
                             // console.log(posdata)
                             self.postUrl = self.apiUrl + '/' + self.parId
                             // console.log(self.postUrl)
+                            console.log('params:' + params)                            
+                            console.log('posdata:' + posdata)
                             axios.post(self.postUrl, posdata)
                             .then(function(response){
                                 console.log(response)
@@ -163,12 +167,38 @@ Vue.component('rsp', {
                     {
                         errorTextFormat: function (data) {
                             return 'Error: ' + data.responseText
+                        },
+                        onclickSubmit: function(params, posdata) {
+                            // console.log(posdata)
+                            self.postUrl = self.apiUrl
+                            console.log(self.postUrl)
+                            // axios.post(self.postUrl, posdata)
+                            // .then(function(response){
+                            //     console.log(response)
+                            //     alert('更新成功:'+ 'OK')
+                            // })
+                            // .catch(function(error){
+                            //     self.errorHandle(error)
+                            // })
                         }
                     },
                     // options for the Delete Dailog
                     {
                         errorTextFormat: function (data) {
                             return 'Error: ' + data.responseText
+                        },
+                        onclickSubmit: function(params, posdata) {
+                            console.log(posdata)
+                            // self.deleteUrl = self.apiUrl + '/delete/' + self.parId;
+                            // console.log(self.deleteUrl)
+                            // axios.get(self.deleteUrl)
+                            // .then(function(response){
+                            //     console.log(response)
+                            //     console.log('删除成功:'+ 'OK')
+                            // })
+                            // .catch(function(error){
+                            //     self.errorHandle(error)
+                            // })
                         }
                     });
             });
