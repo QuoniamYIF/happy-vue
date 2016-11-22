@@ -16,16 +16,16 @@ Vue.component('evt', {
         }
     },
     computed: {
-        paramSelect: function() {
+        paramSelect: function () {
             var temp = ''
-            for(item of this.rspar) {
+            for (item of this.rspar) {
                 var ipttype = '';
                 var number = item['inputType'];
                 // console.log(item['name'])
                 // console.log(item['chnName'])
                 // console.log(item['inputType'])
-                
-                switch(number) {
+
+                switch (number) {
                     case 0:
                         ipttype = '文本'
                         break;
@@ -36,12 +36,12 @@ Vue.component('evt', {
                         ipttype = '机构多选+文本'
                         break;
                     case 3:
-                        ipttype = '日期+文本' 
+                        ipttype = '日期+文本'
                         break;
                     case 4:
                         ipttype = '下拉列表单选+文本'
                         break;
-                    case 5: 
+                    case 5:
                         ipttype = '下拉列表多选+文本'
                         break;
                 }
@@ -52,14 +52,18 @@ Vue.component('evt', {
             temp += '4:TX_STATUS1';
             return temp;
         },
-        paramType: function() {
-            if(this.inputBoxType == 1) {
-                console.log("啦啦啦")
-                return 'select'
+        paramType: function () {
+            if (this.inputBoxType == 1) {
+
+                return '机构单选+文本'
             }
-            if(this.inputBoxType == 4) {
-                console.log("咩咩咩") 
-                return 'input'              
+            if (this.inputBoxType == 4) {
+
+                return '下拉列表单选+文本'
+            }
+            if (this.inputBoxType == 5) {
+
+                return '下拉列表多选+文本'
             }
         }
     },
@@ -117,10 +121,11 @@ Vue.component('evt', {
             // $("#jqGrid1").remove();
             // $('#jqGridPager1').remove();
             var self = this;
-            var template = '<div class="col-md-12" id="paraDetails" style="margin-top: 20px">' +
-                '<table id="jqGrid1" style="width:100%"></table>' +
-                '<div id="jqGridPager1"></div>' +
-                '</div>';
+            var template = ''
+            +'<div class="col-md-12" id="paraDetails" style="margin-top: 20px">' 
+            +'<table id="jqGrid1" style="width:100%"></table>' 
+            +'<div id="jqGridPager1"></div>' 
+            +'</div>';
 
             $("#paraDetails").remove();
             $('#event').append(template);
@@ -137,26 +142,92 @@ Vue.component('evt', {
                     editable: true,
                     editoptions: {
                         value: self.paramSelect,
-                        dataEvents: [ 
-                            { 
-                                type: 'change', 
-                                fn: function(e) { 
-                                    var selText = $('#' + e.target.id + '>option:selected').text();
-                                    var temp = selText.split('(');
-                                    var seltype = +temp[1][0];
-                                    self.inputBoxType = seltype;
-                                    console.log('inputBoxType:' + self.inputBoxType)
-                                    console.log('paramType:' + self.paramType)
-                                    //console.log($('#' + e.target.id + '>option:selected').text()); 
-                                } 
-                            },                     
-                        ]                                     
+                        dataEvents: [{
+                            type: 'change',
+                            fn: function (e) {
+                                var ele = e
+                                var template = ''
+                                var value = ''
+                                var inputtemplate = ''
+                                var pre = '<input type="text" id="2_paraV" name="paraV" rowid="2" role="textbox" class="editable inline-edit-cell form-control" style="width: 96%;" '                                
+                                var selText = $('#' + e.target.id + '>option:selected').text();
+                                var temp = selText.split('(');
+                                console.log(temp);
+                                var seltype = +temp[1][0];
+                                self.inputBoxType = seltype;
+                                
+                                var modalPre = ''                                
+                                    +'<div class="modal-dialog">'
+                                        +'<div class="modal-content">'
+                                        +'<div class="modal-header">'
+                                            +'<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'
+                                            +'<h4 class="modal-title" id="myModalLabel">';
+                                
+                                var modalMiddle = ''
+                                        +'</h4>'
+                                        +'</div>'
+                                        +'<div class="modal-body">'
+                                        
+                                var modalLast = ''       
+                                        +'</div>'
+                                        +'<div class="modal-footer">'
+                                            +'<button id="paramcontent" type="button" class="btn btn-default" data-dismiss="modal">保存</button>'
+                                            +'<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>'
+                                        +'</div>'
+                                        +'</div>'
+                                    +'</div>'
+                                var modalcontent = ''
+                                if(self.inputBoxType == 1){
+                                    modalcontent = ''
+                                    +'<form role="form" id="paramform">'                                        
+                                        +'<label class="radio-inline">'
+                                        +'<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="机构1"> 机构1'
+                                        +'</label>'                                      
+                                        +'<label class="radio-inline">'
+                                        +'<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="机构2"> 机构2'
+                                        +'</label>'                                                                                                                                  
+                                        +'<label class="radio-inline">'
+                                        +'<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="机构3"> 机构3'
+                                        +'</label>'                                                                                
+                                        +'<label class="sr-only" for="text">文本</label>'
+                                        +'<textarea id="text" name="paramtext" class="form-control" rows="3"></textarea>'                                        
+                                    +'</form>'
+                                }                                
+
+                                var template = modalPre + temp[0] + modalMiddle + modalcontent + modalLast;
+                                $('#myModal').children().remove();
+                                $('#myModal').append(template)                                
+
+                                $('#trimodalll').trigger("click");
+
+                                $('#paramcontent').click(function(e){
+                                    //alert($('#paramform').serialize());
+                                    var r = $('[name=inlineRadioOptions]:checked').val()
+                                    var t = $('[name=paramtext]').val()
+                                    console.log(t)       
+                                    value = r + t   
+                                    console.log(value)                                               
+
+                                    inputtemplate = pre + 'value=' + value + '>'
+                                    $('#' + ele.target.id).parent().next().children().remove();
+                                    $('#' + ele.target.id).parent().next().append(inputtemplate);                
+                                })                             
+
+                                //var pre = '<td role="gridcell" style="" title="" aria-describedby="jqGrid1_paraV">'
+
+                                
+                                
+                                //console.log($('#' + e.target.id).parent().next())
+                                //console.log('inputBoxType:' + self.inputBoxType)
+                                //console.log('paramType:' + self.paramType)
+                                //console.log($('#' + e.target.id + '>option:selected').text()); 
+                            }
+                        }, ]
                     }
                 }, {
                     label: '参数值',
                     name: 'paraV',
-                    editable: true,
-                    edittype: self.paramType                   
+                    editable: true
                 }, {
                     label: "编辑选项",
                     name: "actions",
@@ -324,14 +395,19 @@ Vue.component('evt', {
                         name: 'memoDes',
                         label: '备注',
                         width: 90,
-                        editable: true
+                        editable: true,
+                        formoptions: {
+                            colpos: 2,
+                            rowpos: 3,
+                            label: "备注"
+                        }
                     }],
                     onSelectRow: function (id) {
-
                         self.rowId = id;
                         self.createurl($('#' + id).children());
                         console.log(self.epcurl)
                         self.fetchParData();
+
                         //console.log(self.epcurl)
                         // axios
                         // .get(self.epcurl)
@@ -342,18 +418,17 @@ Vue.component('evt', {
                         // .catch(function (error) {
                         //     self.errorHandle(error);
                         // });
-
                     },
                     loadComplete: function () {
                         axios
-                            .get(self.rspaurl)
-                            .then(function (response) {
-                                self.rspar = response.data;
-                                console.log(self.rspar)                                
-                            })
-                            .catch(function (error) {
-                                self.errorHandle(error);
-                            });
+                        .get(self.rspaurl)
+                        .then(function (response) {
+                            self.rspar = response.data;
+                            console.log(self.rspar)
+                        })
+                        .catch(function (error) {
+                            self.errorHandle(error);
+                        });
                     },
                     colMenu: true,
                     viewrecords: true,
@@ -373,13 +448,30 @@ Vue.component('evt', {
                     position: "left",
                 }, {
                     editCaption: "事件编辑",
-                    width: 1000
+                    width: 1000,
+                    afterShowForm: function() {
+                        $($('[rowpos=8]').children()[1]).attr('colspan', 8)
+                        $($('[rowpos=9]').children()[1]).attr('colspan', 8)
+                        $($($('[rowpos=8]').children()[1]).children()[0]).attr('cols',130)
+                        $($($('[rowpos=9]').children()[1]).children()[0]).attr('cols',130)
+                        //console.log("111111")
+                    }
+                }, {
+                    editCaption: "事件编辑",
+                    width: 1000,
+                    afterShowForm: function() {
+                        $($('[rowpos=8]').children()[1]).attr('colspan', 8)
+                        $($('[rowpos=9]').children()[1]).attr('colspan', 8)
+                        $($($('[rowpos=8]').children()[1]).children()[0]).attr('cols',130)
+                        $($($('[rowpos=9]').children()[1]).children()[0]).attr('cols',130)
+                        //console.log("111111")
+                    }                  
                 });
             });
         },
-        delegate: function() {
+        delegate: function () {
             // console.log('event:' + $('body').html());
-            
+
             // $('#add_jqGrid').click(function(){
             //     console.log("我被点击了")
             // });

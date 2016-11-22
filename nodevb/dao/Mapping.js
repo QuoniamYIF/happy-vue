@@ -2,8 +2,9 @@ var rskParaMapping = {
 	// insert:'INSERT INTO user(id, name, age) VALUES(0,?,?)',
 	//chnName=?, inputType=?, multiSelFlg=?, dataType=?, required=?, defaultValue=?, readOnly=?, minValue=?, maxValue=?, selectContent=?, validFlg=? 
 	update:'update rsParamVarDef set name=?, chnName=?, inputType=?, multiSelFlg=?, dataType=?, required=?, defaultValue=?, readOnly=?, minValue=?, selectContent=?, validFlg=? where paramId=?',
-	// delete: 'delete from user where id=?,',
+	delete: 'delete from rsParamVarDef where paramId=?',
 	// queryById: 'select * from user where id=?,',
+	insert: 'INSERT INTO rsParamVarDef(name, chnName) VALUES(?, ?)',
 	queryAll: 'select * from rsParamVarDef',
 	// update: 'update '
 };

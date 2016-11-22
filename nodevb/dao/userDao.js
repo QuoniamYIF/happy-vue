@@ -129,6 +129,24 @@ module.exports = {
             jsonWrite(res, result);            
         });
     },
+    rpadd: function (req, res, next) {
+        var connection = mysql.createConnection($conf.mysql);
+        connection.connect();
+        //console.log(req.body)
+        console.log(req.body.name)
+        connection.query($sql.rskPara.insert, [req.body.name, req.body.chnName], function (err, result) {
+            jsonWrite(res, result);            
+        });
+    },
+    rpdelete: function(req, res, next) {
+        var connection = mysql.createConnection($conf.mysql);
+        connection.connect();
+        console.log(+req.params.id);
+        
+        connection.query($sql.rskPara.delete, +req.params.id, function (err, result) {
+            jsonWrite(res, result);            
+        });
+    },
     //风控事件规则参数更新
     rpud: function (req, res, next) {
         var connection = mysql.createConnection($conf.mysql);

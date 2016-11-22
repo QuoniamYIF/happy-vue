@@ -22,6 +22,14 @@ router.get('/menu', function (req, res, next) {
 router.get('/ecqa', function (req, res, next) {
 	userDao.ecqa(req, res, next);
 });
+router.get('/ecqa/delete/:id', function (req, res, next) {
+	console.log(req.body)
+	res.json({
+		code: '1',
+		msg: '操作成功'
+    })
+	//userDao.rpud(req, res, next);
+});
 //============================================
 
 //============================================
@@ -83,6 +91,10 @@ router.get('/rstqqa', function (req, res, next) {
 router.get('/rstqqa/search', function (req, res, next) {
 	userDao.rstqqd(req, res, next);
 });
+
+router.get('/rpqa/delete/:id', function(req, res, next){
+	userDao.rpdelete(req, res, next);
+})
 //============================================
 
 //===================GET END======================
@@ -91,11 +103,29 @@ router.get('/rstqqa/search', function (req, res, next) {
 
 //===================POST=========================
 router.post('/rpqa', function (req, res, next) {
-	userDao.add(req, res, next);
+	console.log(req.body)
+	userDao.rpadd(req, res, next);
 });
 router.post('/rpqa/:id', function (req, res, next) {
 	userDao.rpud(req, res, next);
 });
+router.post('/ecqa', function (req, res, next) {
+	console.log(req.body)
+	res.json({
+		code: '1',
+		msg: '操作成功'
+    })
+	//userDao.rpud(req, res, next);
+});
+router.post('/ecqa/:id', function (req, res, next) {
+	console.log(req.body)
+	res.json({
+		code: '1',
+		msg: '操作成功'
+    })
+	//userDao.rpud(req, res, next);
+});
+
 
 // router.get('/', function(req, res, next) {
 // 	userDao.rpqa(req, res, next);
