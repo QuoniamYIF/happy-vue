@@ -5,6 +5,11 @@ Vue.component('evt', {
     },
     data: function () {
         return {
+            lastSeId: '',
+            currentType: 2,
+            currentParValue: Array,
+            epcRowId: String,
+            //==============================================
             epcurl: String,
             rspaurl: 'rpqa',
             ec_edit_post_url: 'http://localhost:3000/ecqa/',
@@ -17,150 +22,279 @@ Vue.component('evt', {
     computed: {
         paramSelect: function () {
             var temp = ''
+            var length = this.rspar.length
+
             for (item of this.rspar) {
                 var ipttype = '';
                 var number = item['inputType'];
-                // console.log(item['name'])
-                // console.log(item['chnName'])
-                // console.log(item['inputType'])
+
+                if(item['inputType'] == this.currentType) {
+                    cparamId = item['paramId'];
+                    cname = item['name'];
+                    cchnName = item['chnName'];
+                    cinputType = this.currentType;
+                    switch (this.currentType) {
+                        case 0:
+                            cipttype = '文本'
+                            break;
+                        case 1:
+                            cipttype = '机构单选'
+                            break;
+                        case 2:
+                            cipttype = '机构多选'
+                            break;
+                        case 3:
+                            cipttype = '日期'
+                            break;
+                        case 4:
+                            cipttype = '下拉单选'
+                            break;
+                        case 5:
+                            cipttype = '下拉多选'
+                            break;
+                    }
+                    continue;
+                }
 
                 switch (number) {
                     case 0:
                         ipttype = '文本'
                         break;
                     case 1:
-                        ipttype = '机构单选+文本'
+                        ipttype = '机构单选'
                         break;
                     case 2:
-                        ipttype = '机构多选+文本'
+                        ipttype = '机构多选'
                         break;
                     case 3:
-                        ipttype = '日期+文本'
+                        ipttype = '日期'
                         break;
                     case 4:
-                        ipttype = '下拉列表单选+文本'
+                        ipttype = '下拉单选'
                         break;
                     case 5:
-                        ipttype = '下拉列表多选+文本'
+                        ipttype = '下拉多选'
                         break;
                 }
-                temp += item['paramId'] + ':' + item['name'] + '-' + item['chnName'] + '(' + item['inputType'] + ':' + ipttype + ')' + ';'
+                //item['paramId']
+                temp += item['name'] + ':' + item['name'] + '-' + item['chnName'] + '(' + item['inputType'] + ':' + ipttype + ')' + ';'
             }
-            temp += '4:TX_STATUS1';
+            //获取当前值
+            //temp += '4:TX_STATUS1';
+            //cname + '-' + cchnName + '(' + cinputType + ':' + cipttype + ')' + ';'
+            temp += cname + ':' + cname + '-' + cchnName + '(' + cinputType + ':' + cipttype + ')';
+            //console.log(this.epcRowId)
+            //console.log($('#' + this.epcRowId))
+            //console.log($('#' + this.epcRowId).children())
+            //console.log(temp)
             return temp;
-        },
-        paramType: function () {
-            if (this.inputBoxType == 1) {
-                return '机构单选+文本'
-            }
-            if (this.inputBoxType == 4) {
-                return '下拉列表单选+文本'
-            }
-            if (this.inputBoxType == 5) {
-                return '下拉列表多选+文本'
-            }
         }
     },
     methods: {
-        inputControl: function () {
-            var setting = {
-                view: {
-                    dblClickExpand: false
-                },
-                data: {
-                    simpleData: {
-                        enable: true
-                    }
-                },
-                callback: {
-                    beforeClick: beforeClick,
-                    onClick: onClick
-                }
-            };
+        inputControl: function (seltype, epcId) {
+            var setting;
+            var zNodes;
 
-            var zNodes = [{
-                id: 1,
-                pId: 0,
-                name: "北京"
-            }, {
-                id: 2,
-                pId: 0,
-                name: "天津"
-            }, {
-                id: 3,
-                pId: 0,
-                name: "上海"
-            }, {
-                id: 6,
-                pId: 0,
-                name: "重庆"
-            }, {
-                id: 4,
-                pId: 0,
-                name: "河北省",
-                open: true
-            }, {
-                id: 41,
-                pId: 4,
-                name: "石家庄"
-            }, {
-                id: 42,
-                pId: 4,
-                name: "保定"
-            }, {
-                id: 43,
-                pId: 4,
-                name: "邯郸"
-            }, {
-                id: 44,
-                pId: 4,
-                name: "承德"
-            }, {
-                id: 5,
-                pId: 0,
-                name: "广东省",
-                open: true
-            }, {
-                id: 51,
-                pId: 5,
-                name: "广州"
-            }, {
-                id: 52,
-                pId: 5,
-                name: "深圳"
-            }, {
-                id: 53,
-                pId: 5,
-                name: "东莞"
-            }, {
-                id: 54,
-                pId: 5,
-                name: "佛山"
-            }, {
-                id: 6,
-                pId: 0,
-                name: "福建省",
-                open: true
-            }, {
-                id: 61,
-                pId: 6,
-                name: "福州"
-            }, {
-                id: 62,
-                pId: 6,
-                name: "厦门"
-            }, {
-                id: 63,
-                pId: 6,
-                name: "泉州"
-            }, {
-                id: 64,
-                pId: 6,
-                name: "三明"
-            }];
+            //console.log(epcId)
+
+            if (seltype == 1 || seltype == 4) {
+                setting = {
+                    check: {
+                        enable: true,
+                        chkStyle: "radio",
+                        radioType: "all"
+                    },
+                    view: {
+                        dblClickExpand: false
+                    },
+                    data: {
+                        simpleData: {
+                            enable: true
+                        }
+                    },
+                    callback: {
+                        onClick: onClick,
+                        onCheck: onCheck
+                    }
+                };
+            }
+
+            if (seltype == 2 || seltype == 5) {
+                setting = {
+                    check: {
+                        enable: true,
+                        chkboxType: {
+                            "Y": "",
+                            "N": ""
+                        }
+                    },
+                    view: {
+                        dblClickExpand: false
+                    },
+                    data: {
+                        simpleData: {
+                            enable: true
+                        }
+                    },
+                    callback: {
+                        beforeClick: beforeClick,
+                        onCheck: onCheck
+                    }
+                };
+            }
+
+
+            if (seltype == 1 || seltype == 2) {
+                zNodes = [{
+                    id: 1,
+                    pId: 0,
+                    name: "北京",
+                }, {
+                    id: 2,
+                    pId: 0,
+                    name: "天津"
+                }, {
+                    id: 3,
+                    pId: 0,
+                    name: "上海"
+                }, {
+                    id: 6,
+                    pId: 0,
+                    name: "重庆"
+                }, {
+                    id: 4,
+                    pId: 0,
+                    name: "河北省",
+                    open: true,
+                    nocheck: true
+                }, {
+                    id: 41,
+                    pId: 4,
+                    name: "石家庄"
+                }, {
+                    id: 42,
+                    pId: 4,
+                    name: "保定"
+                }, {
+                    id: 43,
+                    pId: 4,
+                    name: "邯郸"
+                }, {
+                    id: 44,
+                    pId: 4,
+                    name: "承德"
+                }, {
+                    id: 5,
+                    pId: 0,
+                    name: "广东省",
+                    open: true,
+                    nocheck: true
+                }, {
+                    id: 51,
+                    pId: 5,
+                    name: "广州"
+                }, {
+                    id: 52,
+                    pId: 5,
+                    name: "深圳"
+                }, {
+                    id: 53,
+                    pId: 5,
+                    name: "东莞"
+                }, {
+                    id: 54,
+                    pId: 5,
+                    name: "佛山"
+                }, {
+                    id: 6,
+                    pId: 0,
+                    name: "福建省",
+                    open: true,
+                    nocheck: true
+                }, {
+                    id: 61,
+                    pId: 6,
+                    name: "福州"
+                }, {
+                    id: 62,
+                    pId: 6,
+                    name: "厦门"
+                }, {
+                    id: 63,
+                    pId: 6,
+                    name: "泉州"
+                }, {
+                    id: 64,
+                    pId: 6,
+                    name: "三明"
+                }];
+            }
+
+            if (seltype == 4 || seltype == 5) {
+                zNodes = [{
+                    id: 1,
+                    pId: 0,
+                    name: "北京"
+                }, {
+                    id: 2,
+                    pId: 0,
+                    name: "天津"
+                }, {
+                    id: 3,
+                    pId: 0,
+                    name: "上海"
+                }, {
+                    id: 6,
+                    pId: 0,
+                    name: "重庆"
+                }, {
+                    id: 1,
+                    pId: 0,
+                    name: "北京"
+                }, {
+                    id: 2,
+                    pId: 0,
+                    name: "天津"
+                }, {
+                    id: 3,
+                    pId: 0,
+                    name: "上海"
+                }, {
+                    id: 6,
+                    pId: 0,
+                    name: "重庆"
+                }, {
+                    id: 1,
+                    pId: 0,
+                    name: "北京"
+                }, {
+                    id: 2,
+                    pId: 0,
+                    name: "天津"
+                }, {
+                    id: 3,
+                    pId: 0,
+                    name: "上海"
+                }, {
+                    id: 6,
+                    pId: 0,
+                    name: "重庆"
+                }]
+            }
 
             $(document).ready(function () {
-                $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                if (seltype != 3 && seltype != 0) {
+                    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                }
+
+                if (seltype == 3) {
+                    $('.epcDateSelect').datepicker({
+                        language: "zh-CN",
+                        format: "yyyy-mm-dd",
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+                }
             });
         },
         errorHandle: function (error) {
@@ -174,9 +308,8 @@ Vue.component('evt', {
         },
         showChildGrid: function (parentRowID, parentRowKey) {
             var self = this
-
-            //console.log("id:" + parentRowID);
-            //console.log(parentRowKey);
+                //console.log("id:" + parentRowID);
+                //console.log(parentRowKey);
             axios
             .get(this.apiUrl)
             .then(function (response) {
@@ -200,14 +333,14 @@ Vue.component('evt', {
         customButtonClicked: function () {
             $('#trimodalll').trigger('click')
         },
-        
+
         fetchRelaEVar: function () {
             var self = this;
-            
-            var template = ''+
-                '<div class="col-md-12" id="paraDetails" style="margin-top: 20px">'+
-                    '<table id="jqGrid1" style="width:100%"></table>'+
-                    '<div id="jqGridPager1"></div>'+
+
+            var template = '' +
+                '<div class="col-md-12" id="paraDetails" style="margin-top: 20px">' +
+                '<table id="jqGrid1" style="width:100%"></table>' +
+                '<div id="jqGridPager1"></div>' +
                 '</div>';
 
             $("#paraDetails").remove();
@@ -215,129 +348,108 @@ Vue.component('evt', {
 
             $("#jqGrid1").jqGrid({
                 url: self.epcurl,
-                editurl: '/rpqa',
+                editurl: self.epcurl,
                 datatype: "json",
                 caption: '事件基本参数内容配置',
-                colModel: [
-                    {
-                        label: '参数名称',
-                        edittype: 'select',
-                        name: 'paraN',
-                        editable: true,
-                        editoptions: {
-                            value: self.paramSelect,
-                            dataEvents: [{
-                                type: 'change',
-                                fn: function (e) {
-                                    var ele = e
-                                    var template = ''
-                                    var eleId = $(e.target).attr('id');
-                                    var eleRowId = $(e.target).attr('rowid');
+                colModel: [{
+                    label: '参数名称',
+                    edittype: 'select',
+                    name: 'paraN',
+                    editable: true,
+                    editoptions: {
+                        value: (function(){return self.paramSelect})(),
+                        dataEvents: [{
+                            type: 'click',
+                            fn: function (e) {
+                                var ele = e
+                                var selText = $('#' + e.target.id + '>option:selected').text();
+                                var temp = selText.split('(');
+                                var seltype = +temp[1][0];
+                                //self.currentType = seltype;
+                                var template = ''
+                                var readonly = ''
+                                var lastS = ''
 
-                                    var pre = '<input type="text" role="textbox" class="citySel editable inline-edit-cell form-control" style="width: 96%;"  readonly ';
-                                    id = "1_paraV"
-                                    name = "paraV"
-                                    rowid = "1"
-                                    var eleId = 'id=' + $(e.target).attr("id"); + ' ';
-                                    var eleName = 'name="paraV"' + ' ';
-                                    var eleRowId = 'rowid=' + $(e.target).attr('rowid') + ' ';
-                                    var last = 'onclick="toggleMenu()"/>'
-                                    //var value = ''
-                                    var inputtemplate = pre + eleId + eleName + eleRowId + last;
-                                    var divtemplate = '' +
-                                        '<div id="menuContent" class="menuContent">'+
-                                        '<ul id="treeDemo" class="ztree" style="margin-top:0; width:160px;"></ul>'+
-                                        '</div>'
+                                var pre = '<input value="" type="text" role="textbox" class="epcDateSelect citySel editable inline-edit-cell form-control" style="width: 96%;" ';
+                                var eleId = 'id="' + $(e.target).attr("id") + '" ';
+                                var eleName = 'name="' + self.epcRowId + '_' + 'paraV"' + ' ';
+                                var eleRowId = 'rowid="' + $(e.target).attr('rowid') + '" ';
+                                var last = '/>'
 
-                                    $('#' + ele.target.id).parent().next().children().remove();
-                                    $('#' + ele.target.id).parent().next().append(inputtemplate).append(divtemplate);
+                                // var text = OtoggleMenu($(e.target).attr('rowid'))
+                                // console.log(text)
 
-                                    self.inputControl();
-                                    //var selText = $('#' + e.target.id + '>option:selected').text();
-                                    //var temp = selText.split('(');
-                                    //console.log(temp);
-                                    //var seltype = +temp[1][0];
-                                    //self.inputBoxType = seltype;                                
-                                    // if(self.inputBoxType == 1){
-                                    //     modalcontent = ''
-                                    //     +'<form role="form" id="paramform">'                                        
-                                    //         +'<label class="radio-inline">'
-                                    //         +'<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="机构1"> 机构1'
-                                    //         +'</label>'                                      
-                                    //         +'<label class="radio-inline">'
-                                    //         +'<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="机构2"> 机构2'
-                                    //         +'</label>'                                                                                                                                  
-                                    //         +'<label class="radio-inline">'
-                                    //         +'<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="机构3"> 机构3'
-                                    //         +'</label>'                                                                                
-                                    //         +'<label class="sr-only" for="text">文本</label>'
-                                    //         +'<textarea id="text" name="paramtext" class="form-control" rows="3"></textarea>'                                        
-                                    //     +'</form>'
-                                    // }                                
-
-                                    // var template = modalPre + temp[0] + modalMiddle + modalcontent + modalLast;
-                                    // $('#myModal').children().remove();
-                                    // $('#myModal').append(template)                                
-
-                                    // $('#trimodalll').trigger("click");
-
-                                    // $('#paramcontent').click(function(e){
-                                    //     //alert($('#paramform').serialize());
-                                    //     var r = $('[name=inlineRadioOptions]:checked').val()
-                                    //     var t = $('[name=paramtext]').val()
-                                    //     console.log(t)       
-                                    //     value = r + t   
-                                    //     console.log(value)                                               
-
-                                    //     inputtemplate = pre + 'value=' + value + '>'
-                                    //     $('#' + ele.target.id).parent().next().children().remove();
-                                    //     $('#' + ele.target.id).parent().next().append(inputtemplate);                
-                                    // })                             
-
-                                    //var pre = '<td role="gridcell" style="" title="" aria-describedby="jqGrid1_paraV">'
-
-
-
-                                    //console.log($('#' + e.target.id).parent().next())
-                                    //console.log('inputBoxType:' + self.inputBoxType)
-                                    //console.log('paramType:' + self.paramType)
-                                    //console.log($('#' + e.target.id + '>option:selected').text()); 
+                                if (seltype == 1 || seltype == 2 || seltype == 4 || seltype == 5) {
+                                    readonly = 'readonly '
+                                    lastS = 'onclick="toggleMenu(' + $(e.target).attr('rowid') + ')"'
+                                    //lastS = 'onclick="toggleMenu()"'
+                                    
                                 }
-                            }]
-                        }
-                    }, {
-                        label: '参数值',
-                        name: 'paraV',
-                        editable: true
-                    }, {
-                        label: "编辑选项",
-                        name: "actions",
-                        width: 100,
-                        formatter: "actions",
-                        formatoptions: {
-                            keys: true,
-                            onEdit: function(param1,param2,param3){
-                                // console.log('iddddddddd:' + param1)
-                                // console.log('iddddddddd:' + param2)
-                                // console.log('iddddddddd:' + param3)
+
                                 
-                                console.log("我正在被编辑")
-                            },
-                            afterSave: function(param1,param2,param3){
-                                // console.log('iddddddddd1:' + param1)
-                                // console.log('iddddddddd1:' + param2)
-                                // console.log('iddddddddd1:' + param3)
-                                console.log("我被保存了")
-                                //console.log($('#jqGrid1').jqGrid('editRow', "1", {keys: true, focusField: 2, url: 'http://localhost:3000/rpqa', mtype: 'POST'}))         
-                            },                      
+
+                                console.log("下拉列表点击事件执行")
+                                var inputtemplate = pre + readonly + eleId + eleName + eleRowId + lastS + last;
+                                //+ ' menuContent' + $(e.target).attr('rowid')
+                                var divtemplate = '' +
+                                    '<div id="menuContent" class="menuContent menuContent' + $(e.target).attr('rowid') + '">' +
+                                    '<ul id="treeDemo" class="ztree" style="margin-top:0; width:160px;"></ul>' +
+                                    '</div>'
+
+                                $('#' + ele.target.id).parent().next().children().remove();
+                                $('#' + ele.target.id).parent().next().append(inputtemplate).append(divtemplate);
+                                //console.log(ele.target.id)
+
+                                self.inputControl(seltype, $(e.target).attr("id"));
+                            }
+                        }]
+                    }
+                }, {
+                    label: '参数值',
+                    name: 'paraV',
+                    editable: true
+                }, {
+                    label: "编辑选项",
+                    name: "actions",
+                    width: 100,
+                    formatter: "actions",
+                    formatoptions: {
+                        keys: true,
+                        delOptions: {
+                            url: 'localhost:3000/rpqa/delete/1',
+                            mtype: 'GET'
                         }
                     }
-                ],
-                onSelectRow: function(id) {
-                    console.log(id)
+                }],
+                onSelectRow: function (id, status, e) {                    
+                    self.epcRowId = id
+                    // console.log("wobeidianjile")
+                    // console.log($(e.target).attr('class'))
+                    if($(e.target).attr('class') == 'glyphicon glyphicon-edit') {
+                        var ELE = $($(e.target).parent().parent().parent().parent()).children()[0];
+                        var currentParName = $(ELE).attr('title').split('-')[0]
+                        //onsole.log(currentParName)
+                        self.currentParValue = $($($(e.target).parent().parent().parent().parent()).children()[1]).attr('title').split(",")
+                        //currentType
+                        for (item of self.rspar) {                       
+                            if(item['name'] == currentParName) {
+                                self.currentType = item['inputType']
+                            } 
+                        }
+                        //console.log(self.currentType)
+                        console.log("编辑事件执行")
+
+                        var ELETitle = currentParName.split('-')[0]
+                        var ELEId = $($(ELE).children()[0]).attr('id')
+                        //console.log(ELEId)
+                        //console.log(self.currentType)
+                        $('#' + ELEId).trigger('click')
+
+                        //$('input[name=' + self.epcRowId + '_paraV]').val($($($(e.target).parent().parent().parent().parent()).children()[1]).attr('title'))
+                    }                           
                 },
                 sortname: 'EmployeeID',
-                loadonce: true,
+                //loadonce: true,
                 width: 1110,
                 height: 350,
                 rowNum: 150,
@@ -354,43 +466,18 @@ Vue.component('evt', {
                 position: "right"
             });
 
-            $('#jqGrid1').inlineNav('#jqGridPager1', {
-                edit: false,
-                add: true,
-                del: false,
-                cancel: true,
-                search: false,                
-                addParams: {
-                    keys: true,
-                    //rowID
-                },
-                editParams: {
-                    // keys: true,
-                    // "url": "http://localhost:3000/rpqa",                 
-                    // "mtype" : "POST",
-                    // "aftersavefunc": function() {
-                    //     consoel.log("我被调用了")
-                        
-                    // },
-                    // "errorfunc": function(){
-                    //     console.log("cuoleeeeeeeeeeeee")                    
-                    // }
-                    keys: true,
-                    url: "http://localhost:3000/rpqa",                 
-                    
-                    
-                }
-            });
+            
 
-            $('#jqGrid1').navButtonAdd('#jqGridPager1', {
-                buttonicon: "ui-icon-mail-closed",
-                title: "添加新参数",
-                caption: "添加新参数",
-                position: "last",
-                onClickButton: self.customButtonClicked
-            });
+            //$('#jqGrid1').inlineNav('#jqGridPager1',{edit: false,add: true,del: false,cancel: true});
+
+            // $('#jqGrid1').navButtonAdd('#jqGridPager1', {
+            //     buttonicon: "ui-icon-mail-closed",
+            //     title: "添加新参数",
+            //     caption: "添加新参数",
+            //     position: "last",
+            //     onClickButton: self.customButtonClicked
+            // });
         },
-        
         fetchData: function () {
             var self = this;
 
@@ -399,117 +486,115 @@ Vue.component('evt', {
                     url: self.apiUrl,
                     datatype: "json",
                     caption: "事件配置表",
-                    colModel: [
-                        {
-                            name: 'evntId',
-                            label: '事件ID',
-                            hidden: true,
-                        }, {
-                            name: 'evntNo',
-                            label: '事件编号',
-                            width: 130,
-                            hidden: true,
-                            editable: true,
-                            editrules: {
-                                edithidden: true
-                            },
-                            formoptions: {
-                                colpos: 1, // the position of the column
-                                rowpos: 1, // the position of the row
-                                label: "事件编号" // the label to show for each input control                    
-                                    //elmsuffix: " * " // the suffix to show after that
-                            }
-                        }, {
-                            name: 'chnName',
-                            label: '事件中文名称',
-                            editable: true,
-                            edittype: 'text',
-                            formoptions: {
-                                colpos: 2, // the position of the column
-                                rowpos: 1, // the position of the row
-                                label: "事件中文名称" // the label to show for each input control                                                    
-                            }
-                        }, {
-                            name: 'evntCatlog',
-                            label: '事件大类',
-                            width: 130,
-                            edittype: 'text',
-                            editable: true,
-                            formoptions: {
-                                colpos: 3,
-                                rowpos: 1,
-                                label: "事件大类"
-                            }
-                        }, {
-                            name: 'evntType',
-                            label: '事件类型',
-                            width: 130,
-                            editable: true,
-                            formoptions: {
-                                colpos: 1,
-                                rowpos: 2,
-                                label: "事件类型"
-                            }
-                        }, {
-                            name: 'evntCmpPeriod',
-                            label: '事件计算周期',
-                            editable: true,
-                            formoptions: {
-                                colpos: 2,
-                                rowpos: 2,
-                                label: "事件计算周期"
-                            }
-                        }, {
-                            name: 'evntDmType',
-                            label: '事件维度类型',
-                            editable: true,
-                            formoptions: {
-                                colpos: 3,
-                                rowpos: 2,
-                                label: "事件维度类型"
-                            }
-                        }, {
-                            name: 'evntFormulaDes',
-                            label: '事件计算公式描述',
-                            width: 200,
-                            editable: true,
-                            formoptions: {
-                                colpos: 1,
-                                rowpos: 3,
-                                label: "事件计算公式描述"
-                            }
-                        }, {
-                            name: 'assembleSql',
-                            label: '聚合SQL',
-                            width: 130,
-                            editable: true,
-                            edittype: 'textarea',
-                            editoptions: {
-                                rows: "10",
-                                cols: "13"
-                            }
-                        }, {
-                            name: 'traceSql',
-                            label: '溯源SQL',
-                            width: 130,
-                            editable: true,
-                            edittype: 'textarea',
-                            editoptions: {
-                                rows: "10",
-                                cols: "13"
-                            }
-                        }, {
-                            name: 'memoDes',
-                            label: '备注',
-                            width: 90,
-                            editable: true,
-                            formoptions: {
-                                colpos: 2,
-                                rowpos: 3,
-                                label: "备注"
-                            }
+                    colModel: [{
+                        name: 'evntId',
+                        label: '事件ID',
+                        hidden: true,
+                    }, {
+                        name: 'evntNo',
+                        label: '事件编号',
+                        width: 130,
+                        hidden: true,
+                        editable: true,
+                        editrules: {
+                            edithidden: true
+                        },
+                        formoptions: {
+                            colpos: 1, // the position of the column
+                            rowpos: 1, // the position of the row
+                            label: "事件编号" // the label to show for each input control                    
+                                //elmsuffix: " * " // the suffix to show after that
                         }
-                    ],
+                    }, {
+                        name: 'chnName',
+                        label: '事件中文名称',
+                        editable: true,
+                        edittype: 'text',
+                        formoptions: {
+                            colpos: 2, // the position of the column
+                            rowpos: 1, // the position of the row
+                            label: "事件中文名称" // the label to show for each input control                                                    
+                        }
+                    }, {
+                        name: 'evntCatlog',
+                        label: '事件大类',
+                        width: 130,
+                        edittype: 'text',
+                        editable: true,
+                        formoptions: {
+                            colpos: 3,
+                            rowpos: 1,
+                            label: "事件大类"
+                        }
+                    }, {
+                        name: 'evntType',
+                        label: '事件类型',
+                        width: 130,
+                        editable: true,
+                        formoptions: {
+                            colpos: 1,
+                            rowpos: 2,
+                            label: "事件类型"
+                        }
+                    }, {
+                        name: 'evntCmpPeriod',
+                        label: '事件计算周期',
+                        editable: true,
+                        formoptions: {
+                            colpos: 2,
+                            rowpos: 2,
+                            label: "事件计算周期"
+                        }
+                    }, {
+                        name: 'evntDmType',
+                        label: '事件维度类型',
+                        editable: true,
+                        formoptions: {
+                            colpos: 3,
+                            rowpos: 2,
+                            label: "事件维度类型"
+                        }
+                    }, {
+                        name: 'evntFormulaDes',
+                        label: '事件计算公式描述',
+                        width: 200,
+                        editable: true,
+                        formoptions: {
+                            colpos: 1,
+                            rowpos: 3,
+                            label: "事件计算公式描述"
+                        }
+                    }, {
+                        name: 'assembleSql',
+                        label: '聚合SQL',
+                        width: 130,
+                        editable: true,
+                        edittype: 'textarea',
+                        editoptions: {
+                            rows: "10",
+                            cols: "13"
+                        }
+                    }, {
+                        name: 'traceSql',
+                        label: '溯源SQL',
+                        width: 130,
+                        editable: true,
+                        edittype: 'textarea',
+                        editoptions: {
+                            rows: "10",
+                            cols: "13"
+                        }
+                    }, {
+                        name: 'memoDes',
+                        label: '备注',
+                        width: 90,
+                        editable: true,
+                        formoptions: {
+                            colpos: 2,
+                            rowpos: 3,
+                            label: "备注"
+                        }
+                    }],
                     onSelectRow: function (id) {
                         //createurl用来获取事件参数变量的url
                         self.evntId = +$($('#' + id).children()[1]).text()
@@ -518,13 +603,15 @@ Vue.component('evt', {
                     },
                     loadComplete: function () {
                         axios
-                        .get(self.rspaurl)
-                        .then(function (response) {
-                            self.rspar = response.data;
-                        })
-                        .catch(function (error) {
-                            self.errorHandle(error);
-                        });
+                            .get(self.rspaurl)
+                            .then(function (response) {
+
+                                self.rspar = response.data;
+                                console.log(self.rspar)
+                            })
+                            .catch(function (error) {
+                                self.errorHandle(error);
+                            });
                     },
                     colMenu: true,
                     viewrecords: true,
@@ -546,13 +633,13 @@ Vue.component('evt', {
                 }, {
                     editCaption: "编辑事件",
                     width: 1000,
-                    left: 50,                    
+                    left: 50,
                     top: 50,
                     url: self.ec_edit_post_url + self.evntId,
                     mtype: 'POST',
                     //checkOnSubmit: true,     
                     //checkOnUpdate: true,
-                    closeAfterEdit: true,                    
+                    closeAfterEdit: true,
                     afterShowForm: function () {
                         $($('[rowpos=8]').children()[1]).attr('colspan', 8)
                         $($('[rowpos=9]').children()[1]).attr('colspan', 8)
@@ -561,25 +648,26 @@ Vue.component('evt', {
                     },
                     afterSubmit: function (res, postdata) {
                         console.log(res.responseText)
-                        //return [true, "错误"]                        
+                            //return [true, "错误"]                        
                         return [false, "错误"]
                     }
                 }, {
                     addCaption: "添加事件",
                     width: 1000,
-                    left: 50,                                        
-                    top: 50,    
+                    left: 50,
+                    top: 50,
                     url: self.ec_add_post_url,
                     mtype: 'POST',
                     //checkOnSubmit: true,
                     //checkOnUpdate: true,
                     //topinfo: '对事件进行详细配置',    
-                    closeAfterAdd: true,    
+                    closeAfterAdd: true,
+
                     afterSubmit: function (res, postdata) {
                         console.log(res.responseText)
-                        return [true, "错误"]                        
-                        //return [false, "错误"]
-                    },                
+                        return [true, "错误"]
+                            //return [false, "错误"]
+                    },
                     afterShowForm: function () {
                         $($('[rowpos=8]').children()[1]).attr('colspan', 8)
                         $($('[rowpos=9]').children()[1]).attr('colspan', 8)
@@ -596,8 +684,8 @@ Vue.component('evt', {
                     mtype: 'GET',
                     afterSubmit: function (res, postdata) {
                         console.log(res.responseText)
-                        return [true, "错误"]                        
-                        //return [false, "错误"]
+                        return [true, "错误"]
+                            //return [false, "错误"]
                     }
                 });
             });
