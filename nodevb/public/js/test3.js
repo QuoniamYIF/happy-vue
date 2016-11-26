@@ -7,8 +7,8 @@ Vue.component('evt', {
         return {
             lastSeId: '',
             currentType: 2,
-            currentParValue: Array,
             epcRowId: String,
+            whichisorarechecked: Array,
             //==============================================
             epcurl: String,
             rspaurl: 'rpqa',
@@ -26,12 +26,12 @@ Vue.component('evt', {
 
             for (item of this.rspar) {
                 var ipttype = '';
-                var number = item['inputType'];
+                var number = item['inputtype'];
 
-                if(item['inputType'] == this.currentType) {
-                    cparamId = item['paramId'];
+                if(item['inputtype'] == this.currentType) {
+                    cparamId = item['paramid'];
                     cname = item['name'];
-                    cchnName = item['chnName'];
+                    cchnName = item['chnname'];
                     cinputType = this.currentType;
                     switch (this.currentType) {
                         case 0:
@@ -77,7 +77,7 @@ Vue.component('evt', {
                         break;
                 }
                 //item['paramId']
-                temp += item['name'] + ':' + item['name'] + '-' + item['chnName'] + '(' + item['inputType'] + ':' + ipttype + ')' + ';'
+                temp += item['name'] + ':' + item['name'] + '-' + item['chnname'] + '(' + item['inputtype'] + ':' + ipttype + ')' + ';'
             }
             //获取当前值
             //temp += '4:TX_STATUS1';
@@ -91,7 +91,36 @@ Vue.component('evt', {
         }
     },
     methods: {
-        inputControl: function (seltype, epcId) {
+        errorHandle: function (error) {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else {
+                console.log('Error', error.message);
+            }
+        },
+        saveRspa: function() {
+            var test = ['name', 'chnname', 'inputtype'];
+            var ELE = $('.rlpa');
+            var par = {};
+            var self = this;
+            for(var k = 0;k < ELE.length;k ++) {
+                par[test[k]] = $(ELE[k]).val()
+            }
+            console.log(par)
+            //console.log($('.rlpa'))
+            axios
+            .post('http://localhost:3000/rpqa', par)
+            .then(function(response) {
+                console.log(resposne)
+            })
+            .catch(function (err){
+                if(err)
+                    self.errorHandle(err)
+            })
+        },
+        inputControl: function (seltype, rowid) {
             var setting;
             var zNodes;
 
@@ -247,44 +276,12 @@ Vue.component('evt', {
                     id: 6,
                     pId: 0,
                     name: "重庆"
-                }, {
-                    id: 1,
-                    pId: 0,
-                    name: "北京"
-                }, {
-                    id: 2,
-                    pId: 0,
-                    name: "天津"
-                }, {
-                    id: 3,
-                    pId: 0,
-                    name: "上海"
-                }, {
-                    id: 6,
-                    pId: 0,
-                    name: "重庆"
-                }, {
-                    id: 1,
-                    pId: 0,
-                    name: "北京"
-                }, {
-                    id: 2,
-                    pId: 0,
-                    name: "天津"
-                }, {
-                    id: 3,
-                    pId: 0,
-                    name: "上海"
-                }, {
-                    id: 6,
-                    pId: 0,
-                    name: "重庆"
                 }]
             }
 
             $(document).ready(function () {
                 if (seltype != 3 && seltype != 0) {
-                    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                    $.fn.zTree.init($("#treeDemo" + rowid), setting, zNodes);
                 }
 
                 if (seltype == 3) {
@@ -297,15 +294,6 @@ Vue.component('evt', {
                 }
             });
         },
-        errorHandle: function (error) {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else {
-                console.log('Error', error.message);
-            }
-        },
         showChildGrid: function (parentRowID, parentRowKey) {
             var self = this
                 //console.log("id:" + parentRowID);
@@ -315,9 +303,9 @@ Vue.component('evt', {
             .then(function (response) {
                 $("#" + parentRowID)
                 .append('<p>溯源SQL</p>')
-                .append('<pre>' + response.data[parentRowKey - 1]["traceSql"] + '</pre>')
+                .append('<pre>' + response.data[parentRowKey - 1]["tracesql"] + '</pre>')
                 .append('<p>聚合SQL</p>')
-                .append('<pre>' + response.data[parentRowKey - 1]["assembleSql"] + '</pre>')
+                .append('<pre>' + response.data[parentRowKey - 1]["assemblesql"] + '</pre>')
             })
             .catch(function (err) {
                 if (err)
@@ -327,11 +315,18 @@ Vue.component('evt', {
         createurl: function (elements) {
             var initepcurl = 'epcqa/search?';
             var temp = '';
-            temp += ('evntId=' + $(elements[1]).text())
+            temp += ('evntid=' + $(elements[1]).text())
             this.epcurl = initepcurl + temp;
         },
-        customButtonClicked: function () {
+        customButtonClicked1: function () {
+            //$('#trimodalll').trigger('click')
+            //console.log("r")
+            $("#jqGrid1").jqGrid('addRow',{});
+        },
+        customButtonClicked2: function () {
             $('#trimodalll').trigger('click')
+            // console.log("r")
+            // $("#jqGrid1").jqGrid('addRow',{});
         },
 
         fetchRelaEVar: function () {
@@ -356,11 +351,12 @@ Vue.component('evt', {
                     edittype: 'select',
                     name: 'paraN',
                     editable: true,
-                    editoptions: {
+                    editoptions: {                        
                         value: (function(){return self.paramSelect})(),
                         dataEvents: [{
                             type: 'click',
                             fn: function (e) {
+                                treenodeidpolyFill = $(e.target).attr('rowid');
                                 var ele = e
                                 var selText = $('#' + e.target.id + '>option:selected').text();
                                 var temp = selText.split('(');
@@ -370,7 +366,14 @@ Vue.component('evt', {
                                 var readonly = ''
                                 var lastS = ''
 
-                                var pre = '<input value="" type="text" role="textbox" class="epcDateSelect citySel editable inline-edit-cell form-control" style="width: 96%;" ';
+                                var prefirst = '<input value="" type="text" role="textbox" class="'
+                                var premiddle = ''
+                                if(seltype == 3) {
+                                    premiddle = 'epcDateSelect citySel editable inline-edit-cell form-control' 
+                                } else {
+                                    premiddle = 'citySel editable inline-edit-cell form-control' 
+                                }
+                                var prelast = '" style="width: 96%;" ';
                                 var eleId = 'id="' + $(e.target).attr("id") + '" ';
                                 var eleName = 'name="' + self.epcRowId + '_' + 'paraV"' + ' ';
                                 var eleRowId = 'rowid="' + $(e.target).attr('rowid') + '" ';
@@ -378,29 +381,31 @@ Vue.component('evt', {
 
                                 // var text = OtoggleMenu($(e.target).attr('rowid'))
                                 // console.log(text)
-
+                                var divtemplate = ''
                                 if (seltype == 1 || seltype == 2 || seltype == 4 || seltype == 5) {
+                                    var rowid = $(e.target).attr('rowid') + ''
                                     readonly = 'readonly '
-                                    lastS = 'onclick="toggleMenu(' + $(e.target).attr('rowid') + ')"'
-                                    //lastS = 'onclick="toggleMenu()"'
-                                    
+                                    lastS = 'onclick="toggleMenu(\'' + rowid + '\'' + ')"'                                   
+                                    premiddle = 'citySel' + treenodeidpolyFill + ' editable inline-edit-cell form-control'                                 
+                                    divtemplate = '' +
+                                    '<div class="menuContent menuContent' + rowid + '">' +
+                                    '<ul id="treeDemo' + treenodeidpolyFill + '" class="ztree" style="margin-top:0; width:160px;"></ul>' +
+                                    '</div>'
                                 }
 
                                 
 
-                                console.log("下拉列表点击事件执行")
-                                var inputtemplate = pre + readonly + eleId + eleName + eleRowId + lastS + last;
-                                //+ ' menuContent' + $(e.target).attr('rowid')
-                                var divtemplate = '' +
-                                    '<div id="menuContent" class="menuContent menuContent' + $(e.target).attr('rowid') + '">' +
-                                    '<ul id="treeDemo" class="ztree" style="margin-top:0; width:160px;"></ul>' +
-                                    '</div>'
+                                //console.log("下拉列表点击事件执行")
+                                var inputtemplate = prefirst + premiddle + prelast + readonly + eleId + eleName + eleRowId + lastS + last;
+                                console.log(inputtemplate)
+                                console.log(divtemplate)
+                                
 
                                 $('#' + ele.target.id).parent().next().children().remove();
                                 $('#' + ele.target.id).parent().next().append(inputtemplate).append(divtemplate);
                                 //console.log(ele.target.id)
 
-                                self.inputControl(seltype, $(e.target).attr("id"));
+                                self.inputControl(seltype, $(e.target).attr("rowid"));
                             }
                         }]
                     }
@@ -414,39 +419,63 @@ Vue.component('evt', {
                     width: 100,
                     formatter: "actions",
                     formatoptions: {
-                        keys: true,
+                        url: 'http://localhost:3000/epcqa',
+                        mtype: 'POST',
                         delOptions: {
-                            url: 'localhost:3000/rpqa/delete/1',
-                            mtype: 'GET'
+                            url: 'http://localhost:3000/rpqa/delete/1',
+                            mtype: 'POST'
                         }
                     }
                 }],
-                onSelectRow: function (id, status, e) {                    
+                onSelectRow: function (id, status, e) {
+                    var clickeditseltype;          
+                    //console.log($("#" + id))
+                    // console.log(id)  
+                    // console.log(e)                                      
                     self.epcRowId = id
                     // console.log("wobeidianjile")
-                    // console.log($(e.target).attr('class'))
-                    if($(e.target).attr('class') == 'glyphicon glyphicon-edit') {
-                        var ELE = $($(e.target).parent().parent().parent().parent()).children()[0];
-                        var currentParName = $(ELE).attr('title').split('-')[0]
-                        //onsole.log(currentParName)
-                        self.currentParValue = $($($(e.target).parent().parent().parent().parent()).children()[1]).attr('title').split(",")
-                        //currentType
-                        for (item of self.rspar) {                       
-                            if(item['name'] == currentParName) {
-                                self.currentType = item['inputType']
-                            } 
+                    //console.log($(e.target))
+                    if(e) {
+                        if($(e.target).attr('class') == 'glyphicon glyphicon-edit') {     
+                            console.log($(e.target).length);                   
+                            var ELE = $($(e.target).parent().parent().parent().parent()).children()[0];
+                            var ELE1 = $($(e.target).parent().parent().parent().parent()).children()[1];
+                            console.log(ELE1)
+                            var currentParName = $(ELE).attr('title').split('-')[0]
+                            //console.log(currentParName)
+                            //onsole.log(currentParName)
+                            self.whichisorarechecked = $($($(e.target).parent().parent().parent().parent()).children()[1]).attr('title').split(",")
+                            //currentType
+                            //console.log(self.whichisorarechecked)
+                            for (item of self.rspar) {                       
+                                if(item['name'] == currentParName) {
+                                    clickeditseltype = item['inputtype']
+                                } 
+                            }
+                            var ELETitle = currentParName.split('-')[0]
+                            var ELEId = $($(ELE).children()[0]).attr('id')
+                            $('#' + ELEId).trigger('click')                        
+                            //console.log(self.currentType)
+                            //console.log("编辑事件执行")
+                            if(clickeditseltype != 0 && clickeditseltype != 3) {
+                                for(var k = 0;k < self.whichisorarechecked.length;k ++) {
+                                    //console.log(self.whichisorarechecked[k])
+                                    $($(ELE1).children()[1]).find('[title=' + self.whichisorarechecked[k] + ']').trigger('click')                                
+                                }
+                                //console.log($(ELE1).children()[1])                        
+                            }
+
+                            
+                            //console.log(ELEId)
+                            //console.log(self.currentType)
+
+                            if(clickeditseltype == 0 || clickeditseltype == 3) {
+                                $('input[name=' + self.epcRowId + '_paraV]').val($($($(e.target).parent().parent().parent().parent()).children()[1]).attr('title'))
+                            }
                         }
-                        //console.log(self.currentType)
-                        console.log("编辑事件执行")
-
-                        var ELETitle = currentParName.split('-')[0]
-                        var ELEId = $($(ELE).children()[0]).attr('id')
-                        //console.log(ELEId)
-                        //console.log(self.currentType)
-                        $('#' + ELEId).trigger('click')
-
-                        //$('input[name=' + self.epcRowId + '_paraV]').val($($($(e.target).parent().parent().parent().parent()).children()[1]).attr('title'))
-                    }                           
+                    } else {
+                        $('#jEditButton_' + self.epcRowId).trigger('click')
+                    }                          
                 },
                 sortname: 'EmployeeID',
                 //loadonce: true,
@@ -464,19 +493,25 @@ Vue.component('evt', {
                 refresh: false,
                 view: false,
                 position: "right"
+            });        
+
+            //$('#jqGrid1').inlineNav('#jqGridPager1',{edit: false, add: true, del: false, cancel: true});
+
+            $('#jqGrid1').navButtonAdd('#jqGridPager1', {
+                buttonicon: "glyphicon-plus",
+                title: "添加新参数",
+                caption: "添加新参数",
+                position: "last",
+                onClickButton: self.customButtonClicked1
             });
 
-            
-
-            //$('#jqGrid1').inlineNav('#jqGridPager1',{edit: false,add: true,del: false,cancel: true});
-
-            // $('#jqGrid1').navButtonAdd('#jqGridPager1', {
-            //     buttonicon: "ui-icon-mail-closed",
-            //     title: "添加新参数",
-            //     caption: "添加新参数",
-            //     position: "last",
-            //     onClickButton: self.customButtonClicked
-            // });
+            $('#jqGrid1').navButtonAdd('#jqGridPager1', {
+                buttonicon: "glyphicon-plus",
+                title: "添加新参数变量",
+                caption: "添加新参数变量",
+                position: "last",
+                onClickButton: self.customButtonClicked2
+            });
         },
         fetchData: function () {
             var self = this;
@@ -487,11 +522,11 @@ Vue.component('evt', {
                     datatype: "json",
                     caption: "事件配置表",
                     colModel: [{
-                        name: 'evntId',
+                        name: 'evntid',
                         label: '事件ID',
                         hidden: true,
                     }, {
-                        name: 'evntNo',
+                        name: 'evntno',
                         label: '事件编号',
                         width: 130,
                         hidden: true,
@@ -506,7 +541,7 @@ Vue.component('evt', {
                                 //elmsuffix: " * " // the suffix to show after that
                         }
                     }, {
-                        name: 'chnName',
+                        name: 'chnname',
                         label: '事件中文名称',
                         editable: true,
                         edittype: 'text',
@@ -516,7 +551,7 @@ Vue.component('evt', {
                             label: "事件中文名称" // the label to show for each input control                                                    
                         }
                     }, {
-                        name: 'evntCatlog',
+                        name: 'evntcatlog',
                         label: '事件大类',
                         width: 130,
                         edittype: 'text',
@@ -527,7 +562,7 @@ Vue.component('evt', {
                             label: "事件大类"
                         }
                     }, {
-                        name: 'evntType',
+                        name: 'evnttype',
                         label: '事件类型',
                         width: 130,
                         editable: true,
@@ -537,7 +572,7 @@ Vue.component('evt', {
                             label: "事件类型"
                         }
                     }, {
-                        name: 'evntCmpPeriod',
+                        name: 'evntcmpperiod',
                         label: '事件计算周期',
                         editable: true,
                         formoptions: {
@@ -546,7 +581,7 @@ Vue.component('evt', {
                             label: "事件计算周期"
                         }
                     }, {
-                        name: 'evntDmType',
+                        name: 'evntdmtype',
                         label: '事件维度类型',
                         editable: true,
                         formoptions: {
@@ -555,7 +590,7 @@ Vue.component('evt', {
                             label: "事件维度类型"
                         }
                     }, {
-                        name: 'evntFormulaDes',
+                        name: 'evntformulades',
                         label: '事件计算公式描述',
                         width: 200,
                         editable: true,
@@ -565,7 +600,7 @@ Vue.component('evt', {
                             label: "事件计算公式描述"
                         }
                     }, {
-                        name: 'assembleSql',
+                        name: 'assemblesql',
                         label: '聚合SQL',
                         width: 130,
                         editable: true,
@@ -575,7 +610,7 @@ Vue.component('evt', {
                             cols: "13"
                         }
                     }, {
-                        name: 'traceSql',
+                        name: 'tracesql',
                         label: '溯源SQL',
                         width: 130,
                         editable: true,
@@ -585,7 +620,7 @@ Vue.component('evt', {
                             cols: "13"
                         }
                     }, {
-                        name: 'memoDes',
+                        name: 'memodes',
                         label: '备注',
                         width: 90,
                         editable: true,

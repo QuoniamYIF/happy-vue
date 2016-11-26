@@ -122,7 +122,7 @@ router.post('/ecqa/:id', function (req, res, next) {
     })
 	//userDao.rpud(req, res, next);
 });
-router.get('/epcqa', function (req, res, next) {
+router.post('/epcqa', function (req, res, next) {
 	console.log("啦啦啦")
 	res.json({
 		code: '1',
@@ -131,7 +131,7 @@ router.get('/epcqa', function (req, res, next) {
 	//userDao.epcqa(req, res, next);
 });
 router.post('/rpqa/delete/:id', function(req, res, next){
-	//console.log("啦啦啦")
+	console.log("啦啦啦")
 	console.log(req.body)	
 	userDao.rpdelete(req, res, next);
 })

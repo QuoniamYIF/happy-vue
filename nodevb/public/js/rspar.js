@@ -33,7 +33,7 @@ Vue.component('rsp', {
                     caption: "风控事件规则参数属性定义表",
                     colModel: [
                     {
-                        name: 'paramId',
+                        name: 'paramid',
                         label: '参数Id',
                         hidden:true
                     },{
@@ -42,22 +42,22 @@ Vue.component('rsp', {
                         width: 160,
                         editable: true,                        
                     }, {
-                        name: 'chnName',
+                        name: 'chnname',
                         label: '参数变量中文名称',
                         width: 180,
                         editable: true // must set editable to true if you want to make the field editable
                     }, {
-                        name: 'inputType',
+                        name: 'inputtype',
                         label: '输入类型',
                         width: 130,
                         editable: true
                     }, {
-                        name: 'multiSelFlg',
+                        name: 'multiselflg',
                         label: '多选标识',
                         width: 130,
                         editable: true
                     }, {
-                        name: 'dataType',
+                        name: 'datatype',
                         label: '数据类型',
                         width: 130,
                         editable: true
@@ -67,32 +67,32 @@ Vue.component('rsp', {
                         width: 130,
                         editable: true
                     }, {
-                        name: 'defaultValue',
+                        name: 'defaultvalue',
                         label: '缺省值',
                         width: 110,
                         editable: true
                     }, {
-                        name: 'readOnly',
+                        name: 'readonly',
                         label: '只读标识',
                         width: 140,
                         editable: true
                     }, {
-                        name: 'minValue',
+                        name: 'minvalue',
                         label: '最小值(长度)',
                         width: 140,
                         editable: true
                     }, {
-                        name: 'maxValue',
+                        name: 'maxvalue',
                         label: '最大值(长度)',
                         width: 140,
                         editable: true
                     }, {
-                        name: 'selectContent',
+                        name: 'selectcontent',
                         label: '选择资源',
                         width: 140,
                         editable: true
                     }, {
-                        name: 'validFlg',
+                        name: 'validflg',
                         label: '生效标识',
                         width: 140,
                         editable: true
@@ -104,9 +104,13 @@ Vue.component('rsp', {
                         //console.log(self.deleteUrl)
                         //console.log(self.parId)
                     },
+                    prmNames: {
+                        page:"page",rows:"rows", sort:"sidx", order:"sord", search:"_search", nd:"nd", id:"id", oper:"oper", editoper:"edit", addoper:"add", deloper:"del", subgridid:"id", npage:null, totalrows:"totalrows"
+                    },
                     sortname: 'CustomerID',
                     sortorder: 'asc',
                     colMenu: true,
+                    //prmNames: 
                     //loadonce: true,
                     viewrecords: true,
                     width: 1180,
@@ -139,22 +143,33 @@ Vue.component('rsp', {
                             //     url: '啦啦啦啦啦啦啦啦啦'
                             // }))
                             //delete posdata.prototype.oper
-                            console.log(params)
-                            console.log(posdata)   
+                            //console.log(params)
+                            console.log(posdata)
+                            //window.p = posdata
+                            //Reflect.deleteProperty(posdata, 'oper')
+                            //console.log(delete posdata['oper'])                            
+                            //console.log(delete posdata['datatype'])
+                            console.log(posdata)
+                            console.log($("#jqGrid").jqGrid('getGridParam' ,'postData'))
+                            //.removePostDataItem('oper')
+                            console.log(posdata)
+                            
+                            
+                            //console.log(posdata['chnname'])                                  
                             //delete posdata.chnName
-                            delete posdata.oper  
+                            //delete posdata.oper  
                             //posdata.oper = undefined
                             //posdata.oper = "lsllslslsl"  
                             //console.log(delete posdata.prototype.oper)   
                             //console.log(posdata.prototype)
-                            console.log(posdata.propertyIsEnumerable('oper'))
+                            //console.log(posdata.propertyIsEnumerable('oper'))
                             //console.log(Object.getOwnPropertyDescriptor(posdata, 'oper'))
-                            console.log(Object.getPrototypeOf(posdata))
+                            //console.log(Object.getPrototypeOf(posdata))
                             //console.log(posdata.hasOe)                    
                             //console.log(self.editUrl)
                             params.url = self.editUrl
                             //delete posdata.oper
-                            posdata.chnName = "eeeee";
+                            //posdata.chnname = "eeeee";
                             //console.log(posdata.chnName)
                             
                             // console.log(posdata)  
@@ -171,12 +186,7 @@ Vue.component('rsp', {
                             // .catch(function(error){
                             //     self.errorHandle(error)
                             // })
-                        },
-                        //serializeRowData
-                        afterSubmit: function(res, postdata) {
-                            console.log(res.responseText);
-                            return [true, "错误"]
-                        },
+                        },                        
                         // errorTextFormat: function (data) {
                         //     console.log(data)
                         //     return '出现错误' + data.statusText
@@ -225,6 +235,7 @@ Vue.component('rsp', {
                         //     //     self.errorHandle(error)
                         //     // })
                         // }
+                        
                     },
                     // options for the Delete Dailog
                     {                        
@@ -256,6 +267,7 @@ Vue.component('rsp', {
                             // })
                         },
                         afterSubmit: function(res, postdata) {
+
                             //console.log(res.responseText);
                             return [true, "错误"]
                         },

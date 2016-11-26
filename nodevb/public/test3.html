@@ -43,21 +43,26 @@
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                         <h4 class="modal-title" id="myModalLabel">风控新参数设置</h4>
                     </div>
-                    <div class="modal-body">
-                        <!-- name chnName inputType -->
-                        <div class="form-group">
-                            <label for="name">Email address</label>
-                            <input type="email" class="form-control" id="name" placeholder="定义参数变量名称">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="定义参数变量中文名称">
-                        </div>                        
+                    <div class="modal-body">                
+                        <form role="form" method="POST" action="http://localhost:3000/rpqa">
+                            <!-- name chnName inputType -->
+                            <div class="form-group">
+                                <label for="name">参数变量名称</label>
+                                <input type="text" class="form-control rlpa" id="name" placeholder="定义参数变量名称" value>
+                            </div>
+                            <div class="form-group">
+                                <label for="chnname">参数变量中文名称</label>
+                                <input type="text" class="form-control rlpa" id="chnname" placeholder="定义参数变量中文名称" value>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputtype">输入类型</label>
+                                <input type="text" class="form-control rlpa" id="inputtype" placeholder="输入类型" value>
+                            </div> 
+                        </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default"　data-dismiss="modal">保存</button>
+                    <div class="modal-footer">                                                
+                        <button type="button" class="btn btn-default"　data-dismiss="modal" @click="saveRspa">保存</button>
                         <button type="button" class="btn btn-primary"　data-dismiss="modal">取消</button>
-                    </div>
                     </div>
                 </div>
             </div>          
@@ -84,34 +89,42 @@
     <script src="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.zh-CN.min.js"></script>
     <!--补丁js脚本-->
     <script>
+        var treenodeidpolyFill;
+
         function beforeClick(treeId, treeNode) {
-			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            //console.log(treeId)
+
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill);
 			zTree.checkNode(treeNode, !treeNode.checked, null, true);
 			return false;
 		}
 
         function onClick(e, treeId, treeNode) {
-			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            //console.log(treeId)
+            
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill);
 			zTree.checkNode(treeNode, !treeNode.checked, null, true);
 			return false;
 		}
 
 		function onCheck(e, treeId, treeNode) {
-			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+            //console.log(treeId)
+            
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill),
 			nodes = zTree.getCheckedNodes(true),
 			v = "";
 			for (var i=0, l=nodes.length; i<l; i++) {
 				v += nodes[i].name + ",";
 			}
 			if (v.length > 0 ) v = v.substring(0, v.length-1);
-			var cityObj = $(".citySel");
+			var cityObj = $(".citySel" + treenodeidpolyFill);
 			cityObj.attr("value", v);
 		}
 
 		function showMenu(c) {
             //console.log("啦啦啦" + idE)
-			var cityObj = $(".citySel");
-			var cityOffset = $(".citySel").offset();
+			var cityObj = $(".citySel" + treenodeidpolyFill);
+			var cityOffset = $(".citySel" + treenodeidpolyFill).offset();
 			$(".menuContent" + c).css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
 
 			//$("body").bind("mousedown", onBodyDown);
@@ -164,10 +177,13 @@
 
         for(var i = 0;i < toggle.length;i ++) {
             toggle[i] = true
+            toggle['jqg' + i] = true
         }
+
+        console.log(toggle)
         
 
-        var toggle = true; 
+        //var toggle = true; 
         //var test
 
         function toggleMenu(c) {
@@ -181,7 +197,8 @@
             }
         }        
     </script>
-    <script src="js/test3.js"></script>        
+    <script src="js/test3.js"></script>            
+    
     
 </body>
 
