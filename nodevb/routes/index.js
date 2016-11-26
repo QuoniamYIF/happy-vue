@@ -9,7 +9,6 @@ router.get('/', function (req, res, next) {
 	});
 });
 //==============GET home page END=================
-
 //===================GET======================
 
 //============================================
@@ -23,7 +22,7 @@ router.get('/ecqa', function (req, res, next) {
 	userDao.ecqa(req, res, next);
 });
 router.get('/ecqa/delete/:id', function (req, res, next) {
-	console.log(req.body)
+	//console.log(req.body)
 	res.json({
 		code: '1',
 		msg: '操作成功'
@@ -60,6 +59,7 @@ router.get('/rlpcqa/search', function (req, res, next) {
 
 //============================================
 router.get('/rpqa', function (req, res, next) {
+	console.log(req.body)
 	userDao.rpqa(req, res, next);
 });
 //============================================
@@ -91,10 +91,6 @@ router.get('/rstqqa', function (req, res, next) {
 router.get('/rstqqa/search', function (req, res, next) {
 	userDao.rstqqd(req, res, next);
 });
-
-router.get('/rpqa/delete/:id', function(req, res, next){
-	userDao.rpdelete(req, res, next);
-})
 //============================================
 
 //===================GET END======================
@@ -107,10 +103,11 @@ router.post('/rpqa', function (req, res, next) {
 	userDao.rpadd(req, res, next);
 });
 router.post('/rpqa/:id', function (req, res, next) {
+	console.log(req.body)
 	userDao.rpud(req, res, next);
 });
 router.post('/ecqa', function (req, res, next) {
-	console.log(req.body)
+	//console.log(req.body)
 	res.json({
 		code: '1',
 		msg: '操作成功'
@@ -118,14 +115,26 @@ router.post('/ecqa', function (req, res, next) {
 	//userDao.rpud(req, res, next);
 });
 router.post('/ecqa/:id', function (req, res, next) {
-	console.log(req.body)
+	//console.log(req.body)
 	res.json({
 		code: '1',
 		msg: '操作成功'
     })
 	//userDao.rpud(req, res, next);
 });
-
+router.post('/epcqa', function (req, res, next) {
+	console.log("啦啦啦")
+	res.json({
+		code: '1',
+		msg: '操作成功'
+    })
+	//userDao.epcqa(req, res, next);
+});
+router.post('/rpqa/delete/:id', function(req, res, next){
+	console.log("啦啦啦")
+	console.log(req.body)	
+	userDao.rpdelete(req, res, next);
+})
 
 // router.get('/', function(req, res, next) {
 // 	userDao.rpqa(req, res, next);

@@ -4,12 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
+    <title>test3</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/ztree/zTreeStyle.css" type="text/css">
     <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
+    <link href="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -20,9 +21,11 @@
         <div id="et">
             <evt api-Url="ecqa"></evt>            
         </div>
-    </div>
+    </div>    
+
     <script type="text/x-template" id="evt">
         <div class="row" style="width:100%" id='event'>
+            
             <div class="col-md-12">
                 <table id="jqGrid" style="width:100%"></table>
                 <div id="jqGridPager"></div>
@@ -40,13 +43,26 @@
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                         <h4 class="modal-title" id="myModalLabel">风控新参数设置</h4>
                     </div>
-                    <div class="modal-body">
-                        
+                    <div class="modal-body">                
+                        <form role="form" method="POST" action="http://localhost:3000/rpqa">
+                            <!-- name chnName inputType -->
+                            <div class="form-group">
+                                <label for="name">参数变量名称</label>
+                                <input type="text" class="form-control rlpa" id="name" placeholder="定义参数变量名称" value>
+                            </div>
+                            <div class="form-group">
+                                <label for="chnname">参数变量中文名称</label>
+                                <input type="text" class="form-control rlpa" id="chnname" placeholder="定义参数变量中文名称" value>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputtype">输入类型</label>
+                                <input type="text" class="form-control rlpa" id="inputtype" placeholder="输入类型" value>
+                            </div> 
+                        </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default"　data-dismiss="modal">保存</button>
+                    <div class="modal-footer">                                                
+                        <button type="button" class="btn btn-default"　data-dismiss="modal" @click="saveRspa">保存</button>
                         <button type="button" class="btn btn-primary"　data-dismiss="modal">取消</button>
-                    </div>
                     </div>
                 </div>
             </div>          
@@ -68,64 +84,122 @@
     </script>
     <script src="js/plugins/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/plugins/ztree/jquery.ztree.core.js"></script>
-    <script src="js/test3.js"></script>
+    <script type="text/javascript" src="js/plugins/ztree/jquery.ztree.excheck.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.zh-CN.min.js"></script>
     <!--补丁js脚本-->
     <script>
+        var treenodeidpolyFill;
+
         function beforeClick(treeId, treeNode) {
-            var check = (treeNode && !treeNode.isParent);
-            if (!check) alert("只能选择城市...");
-            return check;
-        }
+            //console.log(treeId)
+
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill);
+			zTree.checkNode(treeNode, !treeNode.checked, null, true);
+			return false;
+		}
 
         function onClick(e, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-                nodes = zTree.getSelectedNodes(),
-                v = "";
-            nodes.sort(function compare(a, b) {
-                return a.id - b.id;
-            });
-            for (var i = 0, l = nodes.length; i < l; i++) {
-                v += nodes[i].name + ",";
-            }
-            if (v.length > 0) v = v.substring(0, v.length - 1);
-            var cityObj = $(".citySel");
-            cityObj.attr("value", v);
-        }
+            //console.log(treeId)
+            
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill);
+			zTree.checkNode(treeNode, !treeNode.checked, null, true);
+			return false;
+		}
 
-        function showMenu() {
-            var cityObj = $(".citySel");
-            var cityOffset = $(".citySel").offset();
-            $("#menuContent").css({
-                left: cityOffset.left + "px",
-                top: cityOffset.top + cityObj.outerHeight() + "px"
-            }).slideDown("fast");
+		function onCheck(e, treeId, treeNode) {
+            //console.log(treeId)
+            
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill),
+			nodes = zTree.getCheckedNodes(true),
+			v = "";
+			for (var i=0, l=nodes.length; i<l; i++) {
+				v += nodes[i].name + ",";
+			}
+			if (v.length > 0 ) v = v.substring(0, v.length-1);
+			var cityObj = $(".citySel" + treenodeidpolyFill);
+			cityObj.attr("value", v);
+		}
 
-            $("body").bind("mousedown", onBodyDown);
-        }
+		function showMenu(c) {
+            //console.log("啦啦啦" + idE)
+			var cityObj = $(".citySel" + treenodeidpolyFill);
+			var cityOffset = $(".citySel" + treenodeidpolyFill).offset();
+			$(".menuContent" + c).css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
 
-        function hideMenu() {
-            $("#menuContent").fadeOut("fast");
-            $("body").unbind("mousedown", onBodyDown);
-        }
+			//$("body").bind("mousedown", onBodyDown);
+		}
+		function hideMenu(c) {
+            //console.log("略略略" + idE)            
+			$(".menuContent" + c).fadeOut("fast");
+			//$("body").unbind("mousedown", onBodyDown);
+		}
+        /*
+		function onBodyDown(event) {
+			if (!(event.target.id == "menuBtn" || event.target.id == "citySel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+				hideMenu();
+			}
 
-        var toggle = true;
-
-        function toggleMenu() {
             if (toggle) {
-                showMenu();
+                showMenu(c);
                 toggle = false;
             } else {
-                hideMenu();
+                hideMenu(c);
                 toggle = true;
             }
+		}
+
+        function OtoggleMenu(c) {
+            var obj = Object.create(OtoggleMenu.methods);
+            obj.c = c;
+            obj.toggle = true;
+            return obj;
         }
 
-        function onBodyDown(event) {
-            if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length > 0)) {
-                hideMenu();
+        OtoggleMenu.methods = {
+            toggleMenu: function() {
+                console.log(this.toggle)
+                if (this.toggle) {
+                    console.log("11111")
+                    showMenu(this.c);
+                    console.log("11111111111111")                    
+                    this.toggle = false;
+                    console.log(this.toggle)                                        
+                } else {
+                    console.log(this.c)                    
+                    hideMenu(this.c);
+                    this.toggle = true;
+                }
             }
         }
+        */
+        var toggle = new Array(10000)
+
+        for(var i = 0;i < toggle.length;i ++) {
+            toggle[i] = true
+            toggle['jqg' + i] = true
+        }
+
+        console.log(toggle)
+        
+
+        //var toggle = true; 
+        //var test
+
+        function toggleMenu(c) {
+            //test = OtoggleMenu(c)
+            if (toggle[c]) {
+                showMenu(c);
+                toggle[c] = false;
+            } else {
+                hideMenu(c);
+                toggle[c] = true;
+            }
+        }        
     </script>
+    <script src="js/test3.js"></script>            
+    
+    
 </body>
 
 </html>

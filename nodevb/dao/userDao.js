@@ -4,7 +4,7 @@ var mysql = require('mysql');
 var $conf = require('../conf/db');
 var $sql = require('./Mapping');
 
-console.log($sql.queryAll)
+//console.log($sql.queryAll)
     // 向前台返回JSON方法的简单封装
 var jsonWrite = function (res, ret) {
     if (typeof ret === 'undefined') {
@@ -74,13 +74,13 @@ module.exports = {
         connection.connect();
 
         var q = req.query;
-        var evntId = +q.evntId;
+        var evntId = +q.evntid;
 
         // console.log(evntId)
 
         connection.query($sql.evntPC.queryById, evntId, function (err, result) {
 
-            var item = JSON.parse(JSON.stringify(result))[0]['paramCntConf']
+            var item = JSON.parse(JSON.stringify(result))[0]['paramcntconf']
             var nitem = JSON.parse(item)
 
             var tempO = { "rows" : []}
@@ -106,7 +106,7 @@ module.exports = {
             tempO['rows'] = ar
             ar = [];
 
-            console.log(tempO)
+            //console.log(tempO)
 
             // for(var i = 0;i < nitem.length;i ++) {
             //     tempO['rows'][i]['paramN']
@@ -126,22 +126,23 @@ module.exports = {
         var connection = mysql.createConnection($conf.mysql);
         connection.connect();
         connection.query($sql.rskPara.queryAll, function (err, result) {
+            //console.log(result)
             jsonWrite(res, result);            
         });
     },
     rpadd: function (req, res, next) {
         var connection = mysql.createConnection($conf.mysql);
         connection.connect();
-        //console.log(req.body)
-        console.log(req.body.name)
-        connection.query($sql.rskPara.insert, [req.body.name, req.body.chnName], function (err, result) {
+        console.log(req.body)
+        //console.log(req.body.name)
+        connection.query($sql.rskPara.insert, [req.body.name, req.body.chnname, +req.body.inputtype], function (err, result) {
             jsonWrite(res, result);            
         });
     },
     rpdelete: function(req, res, next) {
         var connection = mysql.createConnection($conf.mysql);
         connection.connect();
-        console.log(+req.params.id);
+        console.log("风控参数ID:" + +req.params.id);
         
         connection.query($sql.rskPara.delete, +req.params.id, function (err, result) {
             jsonWrite(res, result);            
@@ -153,7 +154,7 @@ module.exports = {
         connection.connect();
 
         var temp = [];
-        console.log(req.body);
+        //console.log(req.body);
         
         for(item in req.body) {
             temp.push(req.body[item])                                
@@ -164,12 +165,16 @@ module.exports = {
         for(var i = 0;i < ooo.length;i ++){
             temp[ooo[i]] = +temp[ooo[i]]
         }
+
+        console.log(temp)
         //console.log(temp)
         //console.log("999:" + temp[9]);
-
-        
+                
         //temp[2],temp[3],temp[4],temp[5],temp[6],temp[7],temp[8],temp[9],temp[10],temp[11],
-        connection.query($sql.rskPara.update, [temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7], temp[8], temp[10], temp[11], temp[12]], function (err, result) {
+        //, temp[3], temp[4], temp[5], temp[6], temp[7], temp[8], temp[10], temp[11], temp[12]
+        //console.log("啦啦啦" + temp[12])
+        connection.query($sql.rskPara.update, [temp[0], temp[1], temp[2], temp[13]], function (err, result) {
+            console.log(result)
             jsonWrite(res, result);
             //console.log('localhost:3000/r.html')
         });
@@ -179,7 +184,7 @@ module.exports = {
         var connection = mysql.createConnection($conf.mysql);
         connection.connect();
         connection.query($sql.rleCRst.queryAll, function (err, result) {
-            console.log(result)
+            //console.log(result)
             jsonWrite(res, result);
         });
     },
