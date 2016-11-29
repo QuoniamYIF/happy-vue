@@ -1,69 +1,31 @@
-<!doctype html>
-<html lang="">
+var Polyrspar = function () {
+    this.apiUrl = "rpqa";
+}
+Polyrspar.prototype.errorHandle = function (error) {
+    if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+    } else {
+        console.log('Error', error.message);
+    }
+};
+var self = new Polyrspar();
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
-</head>
-
-<body>
-    <!--[if lt IE 8]>
-      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-    <!--<div id="rs" class="container" style="margin-top:20px;">
-        <rsp api-url="rpqa"></rsp>
-    </div>-->
-    <!--<script type="text/x-template" id="rsp">-->
-        <div>
-            <table id="jqGrid"></table>
-            <div id="jqGridPager"></div>
-        </div>
-    <!--</script>-->
-
-    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-    <script src="js/plugins/jquery-ui.min.js"></script>
-    <script src="js/plugins/i18n/grid.locale-cn.js"></script>
-    <script src="js/plugins/jquery.jqGrid.min.js"></script>
-    <script>
-		$.jgrid.defaults.width = 780;
-		$.jgrid.defaults.responsive = true;
-		$.jgrid.defaults.styleUI = 'Bootstrap';
-	</script>
-    <script src="js/vendor/vue.min.js"></script>
-    <script src="js/vendor/axios.min.js"></script>
-    <script>
-        axios.defaults.baseURL = 'http://localhost:3000/';
-    </script>
-    <script src="js/plugins/bootstrap.min.js"></script>
-    <script>
-        var Poly = function() {
-            this.apiUrl = "rpqa"; 
-        }
-
-        var self = new Poly();
-
-
-
-    $(document).ready(function () {
+$(document).ready(function () {
     $("#jqGrid").jqGrid({
         url: self.apiUrl,
         datatype: "json",
         caption: "风控事件规则参数属性定义表",
-        colModel: [
-        {
+        colModel: [{
             name: 'paramid',
             label: '参数Id',
-            hidden:true
-        },{
+            hidden: true
+        }, {
             name: 'name',
             label: '参数变量名称',
             width: 160,
-            editable: true,                        
+            editable: true,
         }, {
             name: 'chnname',
             label: '参数变量中文名称',
@@ -120,16 +82,29 @@
             width: 140,
             editable: true
         }],
-        onSelectRow: function(id) { 
-            self.rowId = id;                       
-            self.parId = +$($('#' + id).children()[0]).text()                       
+        onSelectRow: function (id) {
+            self.rowId = id;
+            self.parId = +$($('#' + id).children()[0]).text()
         },
         prmNames: {
-            page:"page",rows:"rows", sort:"sidx", order:"sord", search:"_search", nd:"nd", id:"id", oper:"oper", editoper:"edit", addoper:"add", deloper:"del", subgridid:"id", npage:null, totalrows:"totalrows"
+            page: "page",
+            rows: "rows",
+            sort: "sidx",
+            order: "sord",
+            search: "_search",
+            nd: "nd",
+            id: "id",
+            oper: "oper",
+            editoper: "edit",
+            addoper: "add",
+            deloper: "del",
+            subgridid: "id",
+            npage: null,
+            totalrows: "totalrows"
         },
         sortname: 'CustomerID',
         sortorder: 'asc',
-        colMenu: true,                    
+        colMenu: true,
         viewrecords: true,
         width: 1180,
         height: 500,
@@ -154,49 +129,44 @@
             editCaption: "编辑风控事件规则参数",
             mtype: 'POST',
             closeAfterEdit: true,
-            onclickSubmit: function(params, posdata) {
-                self.editUrl = self.apiUrl + '/' + self.parId;                            
+            onclickSubmit: function (params, posdata) {
+                self.editUrl = self.apiUrl + '/' + self.parId;
                 console.log(posdata)
                 console.log(posdata)
-                console.log($("#jqGrid").jqGrid('getGridParam' ,'postData'))
-                console.log(posdata)                            
-                params.url = self.editUrl                            
-            },                                               
-        },
-        {
+                console.log($("#jqGrid").jqGrid('getGridParam', 'postData'))
+                console.log(posdata)
+                params.url = self.editUrl
+            },
+        }, {
             url: self.apiUrl,
             mtype: 'POST',
             closeAfterAdd: true,
-            afterSubmit: function(res, postdata) {
+            afterSubmit: function (res, postdata) {
                 console.log(res.responseText);
                 return [true, "错误"]
-            },                        
+            },
         },
         // options for the Delete Dailog
-        {                        
+        {
             // url: function() {
             //     return self.deleteUrl + self.parId
             // },
             mtype: 'POST',
             // delData: ["123", self.parId],
-            closeAfterAdd: true,                        
+            closeAfterAdd: true,
             // errorTextFormat: function (data) {
             //     return 'Error: ' + data.responseText
             // },
-            onclickSubmit: function(params, posdata) {
+            onclickSubmit: function (params, posdata) {
                 console.log(params)
                 self.deleteUrl = self.apiUrl + '/delete/' + self.parId;
                 // console.log($('#jqgrid').delGridRow(self.rowId, {
                 //     url: '啦啦啦啦啦啦啦啦啦'
                 // }))
-                params.url = self.deleteUrl                           
+                params.url = self.deleteUrl
             },
-            afterSubmit: function(res, postdata) {
+            afterSubmit: function (res, postdata) {
                 return [true, "错误"]
             },
-    });                            
-    });        
-    </script>
-    <!--<script src="js/rspar.js"></script>-->
-</body>
-</html>
+        });
+});
