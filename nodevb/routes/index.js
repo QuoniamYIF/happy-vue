@@ -123,7 +123,7 @@ router.post('/ecqa/:id', function (req, res, next) {
 	//userDao.rpud(req, res, next);
 });
 router.post('/epcqa', function (req, res, next) {
-	console.log("啦啦啦")
+	console.log(req.body)
 	res.json({
 		code: '1',
 		msg: '操作成功'

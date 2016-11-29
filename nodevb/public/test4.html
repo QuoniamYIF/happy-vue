@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>test3</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/ztree/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
+    <link href="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container">
+        <div class="row" style="width:100%" id='event'>
+            <div class="col-md-12 mdl-hover">
+                <table id="jqGrid" style="width:100%"></table>
+                <div id="jqGridPager"></div>
+            </div>
+            <button id='trimodalll' type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none">
+                Launch demo modal
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel">风控新参数设置</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" method="POST" action="http://localhost:3000/rpqa">
+                                <!-- name chnName inputType -->
+                                <div class="form-group">
+                                    <label for="name">参数变量名称</label>
+                                    <input type="text" class="form-control rlpa" id="name" placeholder="定义参数变量名称" value>
+                                </div>
+                                <div class="form-group">
+                                    <label for="chnname">参数变量中文名称</label>
+                                    <input type="text" class="form-control rlpa" id="chnname" placeholder="定义参数变量中文名称" value>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputtype">输入类型</label>
+                                    <input type="text" class="form-control rlpa" id="inputtype" placeholder="输入类型" value>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default evtcfaddRspa" 　data-dismiss="modal">保存</button>
+                            <button type="button" class="btn btn-primary" 　data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+        <script src="js/plugins/jquery-ui.min.js"></script>
+        <script src="js/plugins/i18n/grid.locale-cn.js"></script>
+        <script src="js/plugins/jquery.jqGrid.min.js"></script>
+        <script>
+            $.jgrid.defaults.width = 780;
+            $.jgrid.defaults.responsive = true;
+            $.jgrid.defaults.styleUI = 'Bootstrap';
+	    </script>
+        <script src="js/vendor/axios.min.js"></script>
+        <script>
+            axios.defaults.baseURL = 'http://localhost:3000/';
+        </script>
+        <script src="js/plugins/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/plugins/ztree/jquery.ztree.core.js"></script>
+        <script type="text/javascript" src="js/plugins/ztree/jquery.ztree.excheck.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+        <script src="js/test4.js"></script>
+
+</body>
+
+</html>
