@@ -334,8 +334,8 @@ Vue.component('evt', {
 
             var template = '' +
                 '<div class="col-md-12" id="paraDetails" style="margin-top: 20px">' +
-                '<table id="jqGrid1" style="width:100%"></table>' +
-                '<div id="jqGridPager1"></div>' +
+                    '<table id="jqGrid1" style="width:100%"></table>' +
+                    '<div id="jqGridPager1"></div>' +
                 '</div>';
 
             $("#paraDetails").remove();
@@ -494,8 +494,6 @@ Vue.component('evt', {
                 view: false,
                 position: "right"
             });        
-
-            //$('#jqGrid1').inlineNav('#jqGridPager1',{edit: false, add: true, del: false, cancel: true});
 
             $('#jqGrid1').navButtonAdd('#jqGridPager1', {
                 buttonicon: "glyphicon-plus",
