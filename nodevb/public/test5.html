@@ -4,22 +4,27 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
+    <title>test3</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/ztree/zTreeStyle.css" type="text/css">
     <link rel="stylesheet" href="css/ui.jqgrid-bootstrap.css" />
+    <link href="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.min.css" rel="stylesheet">
 </head>
 
 <body>
     <!--[if lt IE 8]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div>
-        <table id="jqGrid"></table>
-        <div id="jqGridPager"></div>
+    <div class="container">
+        <div class="row" style="width:100%" id='event'>
+            <div class="col-md-12 mdl-hover">
+                <table id="jqGrid" style="width:100%"></table>
+                <div id="jqGridPager"></div>
+            </div>
+        </div>
     </div>
-
     <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/plugins/jquery-ui.min.js"></script>
     <script src="js/plugins/i18n/grid.locale-cn.js"></script>
@@ -30,7 +35,11 @@
         $.jgrid.defaults.styleUI = 'Bootstrap';
     </script>
     <script src="js/plugins/bootstrap.min.js"></script>
-    <script src="js/rspar1.js"></script>
+    <script type="text/javascript" src="js/plugins/ztree/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="js/plugins/ztree/jquery.ztree.excheck.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+    <script src="js/test5.js"></script>
 </body>
 
 </html>

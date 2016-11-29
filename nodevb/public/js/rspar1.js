@@ -1,7 +1,7 @@
-var Polyrspar = function () {
+function Rspar() {
     this.apiUrl = "rpqa";
 }
-Polyrspar.prototype.errorHandle = function (error) {
+Rspar.prototype.errorHandle = function(error) {
     if (error.response) {
         console.log(error.response.data);
         console.log(error.response.status);
@@ -10,9 +10,9 @@ Polyrspar.prototype.errorHandle = function (error) {
         console.log('Error', error.message);
     }
 };
-var self = new Polyrspar();
+var self = new Rspar();
 
-$(document).ready(function () {
+$(document).ready(function() {
     $("#jqGrid").jqGrid({
         url: self.apiUrl,
         datatype: "json",
@@ -82,9 +82,12 @@ $(document).ready(function () {
             width: 140,
             editable: true
         }],
-        onSelectRow: function (id) {
+        onSelectRow: function(id) {
             self.rowId = id;
             self.parId = +$($('#' + id).children()[0]).text()
+        },
+        loadComplete: function() {
+            console.log($("#jqGrid").jqGrid('getRowData'))
         },
         prmNames: {
             page: "page",
@@ -129,7 +132,7 @@ $(document).ready(function () {
             editCaption: "编辑风控事件规则参数",
             mtype: 'POST',
             closeAfterEdit: true,
-            onclickSubmit: function (params, posdata) {
+            onclickSubmit: function(params, posdata) {
                 self.editUrl = self.apiUrl + '/' + self.parId;
                 console.log(posdata)
                 console.log(posdata)
@@ -141,7 +144,7 @@ $(document).ready(function () {
             url: self.apiUrl,
             mtype: 'POST',
             closeAfterAdd: true,
-            afterSubmit: function (res, postdata) {
+            afterSubmit: function(res, postdata) {
                 console.log(res.responseText);
                 return [true, "错误"]
             },
@@ -157,7 +160,7 @@ $(document).ready(function () {
             // errorTextFormat: function (data) {
             //     return 'Error: ' + data.responseText
             // },
-            onclickSubmit: function (params, posdata) {
+            onclickSubmit: function(params, posdata) {
                 console.log(params)
                 self.deleteUrl = self.apiUrl + '/delete/' + self.parId;
                 // console.log($('#jqgrid').delGridRow(self.rowId, {
@@ -165,7 +168,7 @@ $(document).ready(function () {
                 // }))
                 params.url = self.deleteUrl
             },
-            afterSubmit: function (res, postdata) {
+            afterSubmit: function(res, postdata) {
                 return [true, "错误"]
             },
         });

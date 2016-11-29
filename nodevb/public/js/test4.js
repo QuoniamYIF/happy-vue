@@ -1,91 +1,31 @@
-var treenodeidpolyFill;
-var data_user = {   
-    _userid:"C4CA4238A0B923820DCC509A6F75849B",
-    _token:"c985c27f3e7f809be7390d892abb939c",
-    comTyp: "",     
+var data_user = {
+    _userid: "C4CA4238A0B923820DCC509A6F75849B",
+    _token: "c985c27f3e7f809be7390d892abb939c",
+    comTyp: "",
 };
+
 var rskurl = 'http://192.168.17.34:8080/banking-console/aSelectOptBpCodeProcess.json';
-
-function beforeClick(treeId, treeNode) {
-    //console.log(treeId)
-    var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill);
-    zTree.checkNode(treeNode, !treeNode.checked, null, true);
-    return false;
-}
-
-function onClick(e, treeId, treeNode) {
-    //console.log(treeId)
-    var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill);
-    zTree.checkNode(treeNode, !treeNode.checked, null, true);
-    return false;
-}
-
-function onCheck(e, treeId, treeNode) {
-    //console.log(treeId)
-
-    var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill),
-        nodes = zTree.getCheckedNodes(true),
-        v = "";
-    for (var i = 0, l = nodes.length; i < l; i++) {
-        v += nodes[i].name + ",";
-    }
-    if (v.length > 0) v = v.substring(0, v.length - 1);
-    var cityObj = $(".citySel" + treenodeidpolyFill);
-    cityObj.attr("value", v);
-}
-
-function showMenu(c) {
-    //console.log("啦啦啦" + idE)
-    var cityObj = $(".citySel" + treenodeidpolyFill);
-    var cityOffset = $(".citySel" + treenodeidpolyFill).offset();
-    $(".menuContent" + c).css({
-        left: cityOffset.left + "px",
-        top: cityOffset.top + cityObj.outerHeight() + "px"
-    }).slideDown("fast");
-    //$("body").bind("mousedown", onBodyDown);
-}
-
-function hideMenu(c) {
-    //console.log("略略略" + idE)            
-    $(".menuContent" + c).fadeOut("fast");
-    //$("body").unbind("mousedown", onBodyDown);
-}
-
+var treenodeidpolyFill;
 var toggle = new Array(10000)
-
 for (var i = 0; i < toggle.length; i++) {
     toggle[i] = false
     toggle['jqg' + i] = false
 }
-
-function toggleMenu(c) {
-    //test = OtoggleMenu(c)
-    if (toggle[c]) {
-        showMenu(c);
-        toggle[c] = false;
-    } else {
-        console.log("我被隐藏了")
-        hideMenu(c);
-        toggle[c] = true;
-    }
-}
-
-var Evtcf = function () {
+//==========================================================
+function Evtcf() {
     this.apiUrl = 'http://localhost:3000/ecqa';
     this.rspaurl = 'http://localhost:3000/rpqa';
     this.ec_edit_post_url = 'http://localhost:3000/ecqa';
     this.ec_add_post_url = 'http://localhost:3000/ecqa';
-    this.evntType = this.getData({
-        type: 'GET',
-        url: this.rspaurl,
-        data: data_user,
-        searchWord: 'inputType'
-    });
-    console.log(this.evntType)
+    // this.evntType = this.getData({
+    //     type: 'GET',
+    //     url: this.rspaurl,
+    //     data: data_user,
+    //     searchWord: 'inputType'
+    // });
+    //console.log(this.evntType)
 }
-
 //type, data, url, searchWord
-
 Evtcf.prototype.getData = function(obj) {
     // axios
     // .post(url)
@@ -96,17 +36,16 @@ Evtcf.prototype.getData = function(obj) {
         url: obj.url,
         data: obj.data || '',
         success: function(response) {
-            console.log(response)
+            //console.log(response)
         },
         error: function(error) {
-            console.log(error)
+            //console.log(error)
         }
     })
 
     //return data
 }
-
-Evtcf.prototype.inputControl = function (seltype, rowid) {
+Evtcf.prototype.inputControl = function(seltype, rowid) {
     var setting;
     var zNodes;
 
@@ -265,7 +204,7 @@ Evtcf.prototype.inputControl = function (seltype, rowid) {
         }]
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         if (seltype != 3 && seltype != 0) {
             $.fn.zTree.init($("#treeDemo" + rowid), setting, zNodes);
         }
@@ -280,23 +219,7 @@ Evtcf.prototype.inputControl = function (seltype, rowid) {
         }
     });
 };
-Evtcf.prototype.showChildGrid = function (parentRowID, parentRowKey) {
-
-    // axios
-    // .get(self.apiUrl)
-    // .then(function (response) {
-    //     console.log(response)
-    //     $("#" + parentRowID)
-    //     .append('<p>溯源SQL</p>')
-    //     .append('<pre>' + response.data[parentRowKey - 1]["tracesql"] + '</pre>')
-    //     .append('<p>聚合SQL</p>')
-    //     .append('<pre>' + response.data[parentRowKey - 1]["assemblesql"] + '</pre>')
-    // })
-    // .catch(function (err) {
-    //     if (err)
-    //         self.errorHandle(err)
-    // })
-
+Evtcf.prototype.showChildGrid = function(parentRowID, parentRowKey) {
     $.ajax({
         method: 'GET',
         url: self.apiUrl,
@@ -304,36 +227,25 @@ Evtcf.prototype.showChildGrid = function (parentRowID, parentRowKey) {
         success: function(response) {
             //console.log(response)
             $("#" + parentRowID)
-            .append('<p>溯源SQL</p>')
-            .append('<pre>' + response[parentRowKey - 1]["tracesql"] + '</pre>')
-            .append('<p>聚合SQL</p>')
-            .append('<pre>' + response[parentRowKey - 1]["assemblesql"] + '</pre>')
+                .append('<p>溯源SQL</p>')
+                .append('<pre>' + response[parentRowKey - 1]["tracesql"] + '</pre>')
+                .append('<p>聚合SQL</p>')
+                .append('<pre>' + response[parentRowKey - 1]["assemblesql"] + '</pre>')
         },
         error: function(error) {
             // if(error)
             //     self.errorHandle(error);
-            console.log(error)                    
+            //console.log(error)
         }
     })
 };
-Evtcf.prototype.createurl = function (elements) {
+Evtcf.prototype.createurl = function(elements) {
     var initepcurl = 'epcqa/search?';
     var temp = '';
     temp += ('evntid=' + $(elements[1]).text())
     self.epcurl = initepcurl + temp;
-
-    // axios
-    // .get(self.epcurl)
-    // .then(function (response) {
-    //     console.log(response.data['rows'].length)
-    // })
-    // .catch(function (err) {
-    //     if (err) {
-    //         self.errorHandle(err)
-    //     }
-    // })
 };
-Evtcf.prototype.fetchRelaEVar = function () {
+Evtcf.prototype.fetchRelaEVar = function() {
 
     var template = '' +
         '<div class="col-md-12" id="paraDetails" style="margin-top: 20px">' +
@@ -355,13 +267,13 @@ Evtcf.prototype.fetchRelaEVar = function () {
             name: 'paraN',
             editable: true,
             editoptions: {
-                value: (function () {
+                value: (function() {
                     return self.paramSelect
                 })(),
                 dataEvents: [{
                     type: 'click',
-                    fn: function (e) {
-                        console.log("11111")
+                    fn: function(e) {
+                        //console.log("11111")
                         treenodeidpolyFill = $(e.target).attr('rowid');
                         var ele = e
                         var selText = $('#' + e.target.id + '>option:selected').text();
@@ -386,7 +298,7 @@ Evtcf.prototype.fetchRelaEVar = function () {
                         var last = '/>'
 
                         // var text = OtoggleMenu($(e.target).attr('rowid'))
-                        // console.log(text)
+                        // //console.log(text)
                         var divtemplate = ''
                         if (seltype == 1 || seltype == 2 || seltype == 4 || seltype == 5) {
                             var rowid = $(e.target).attr('rowid') + ''
@@ -431,15 +343,15 @@ Evtcf.prototype.fetchRelaEVar = function () {
                 }
             }
         }],
-        onSelectRow: function (id, status, e) {
+        onSelectRow: function(id, status, e) {
             var clickeditseltype;
             //console.log($("#" + id))
-            // console.log(id)  
-            // console.log(e)                                      
+            // //console.log(id)  
+            // //console.log(e)                                      
             self.epcRowId = id
-            // console.log("wobeidianjile")
-            //console.log($(e.target))
-            //console.log($(e.target).attr('class'))
+                // //console.log("wobeidianjile")
+                //console.log($(e.target))
+                //console.log($(e.target).attr('class'))
             if (e) {
                 //console.log("EEEEEEE")
                 if ($(e.target).attr('class') == 'glyphicon glyphicon-edit') {
@@ -480,13 +392,24 @@ Evtcf.prototype.fetchRelaEVar = function () {
                     }
                 }
 
-                if( $(e.target).attr('class') == 'glyphicon glyphicon-save') {
-                    console.log("保存!!!!!!")
+                if ($(e.target).attr('class') == 'glyphicon glyphicon-save') {
+                    //console.log("保存!!!!!!")
                     //console.log($("#jqGrid1").jqGrid('getRowData'))
-                    console.log($("#jqGrid1").jqGrid('getGridParam'));
+                    var data = $("#jqGrid1").jqGrid('getRowData');
+                    var temp = {};
+                    var tempA = [];
+                    for (var j = 0; j < data.length; j++) {
+                        temp[data[j]['paraN']] = data[j]['paraV'];
+                        //console.log(temp)
+                        tempA.push(temp);
+                        temp = {};
+                    }
+
+                    //console.log(tempA)
+                    //============================================
                 }
             } else {
-                console.log(self.epcRowId)
+                //console.log(self.epcRowId)
                 //$('#jEditButton_' + self.epcRowId).trigger('click')
                 $('#' + self.epcRowId + '_paraN').trigger('click')
                 $('#jEditButton_' + self.epcRowId).trigger('click')
@@ -497,6 +420,9 @@ Evtcf.prototype.fetchRelaEVar = function () {
         width: 1110,
         height: 350,
         rowNum: 150,
+        loadComplete: function() {
+            //console.log($("#jqGrid1").jqGrid('getRowData'))
+        },
         pager: "#jqGridPager1"
     });
 
@@ -526,7 +452,7 @@ Evtcf.prototype.fetchRelaEVar = function () {
         onClickButton: self.customButtonClicked2
     });
 };
-Evtcf.prototype.paramSelect = function () {
+Evtcf.prototype.paramSelect = function() {
     var temp = ''
     var length = self.rspar.length
 
@@ -560,26 +486,25 @@ Evtcf.prototype.paramSelect = function () {
     ntemp.pop()
     return ntemp.join('')
 }
-Evtcf.prototype.customButtonClicked1 = function () {
+Evtcf.prototype.customButtonClicked1 = function() {
     //console.log("我被执行了");
     //console.log(self.epcParLength)
     //console.log($("#jqGrid1").jqGrid('getRowData'))
     $("#jqGrid1").jqGrid('addRow', {});
 };
-Evtcf.prototype.customButtonClicked2 = function () {
+Evtcf.prototype.customButtonClicked2 = function() {
     $('#trimodalll').trigger('click')
 };
-Evtcf.prototype.errorHandle = function (error) {
+Evtcf.prototype.errorHandle = function(error) {
     if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        //console.log(error.response.data);
+        //console.log(error.response.status);
+        //console.log(error.response.headers);
     } else {
-        console.log('Error', error.message);
+        //console.log('Error', error.message);
     }
 };
-
-Evtcf.prototype.saveRspa = function () {
+Evtcf.prototype.saveRspa = function() {
     var test = ['name', 'chnname', 'inputtype'];
     var ELE = $('.rlpa');
     var par = {};
@@ -587,36 +512,23 @@ Evtcf.prototype.saveRspa = function () {
     for (var k = 0; k < ELE.length; k++) {
         par[test[k]] = $(ELE[k]).val()
     }
-    console.log(par)
-    //console.log($('.rlpa'))
-    axios
-    .post('http://localhost:3000/rpqa', par)
-    .then(function (response) {
-        console.log(resposne)
-    })
-    .catch(function (err) {
-        if (err)
-            self.errorHandle(err)
-    })
+    //console.log(par)
 
     $.ajax({
         method: 'POST',
         url: 'http://localhost:3000/rpqa',
         data: par,
         //data: obj.data || '',
-        success: function(response) {
-        },
-        error: function(error) {            
-            console.log(error)                    
+        success: function(response) {},
+        error: function(error) {
+            //console.log(error)
         }
     })
 }
 
 var self = new Evtcf();
-
-$(document).ready(function () {
-    $('.evtcfaddRspa').click(self.saveRspa)
-
+$(document).ready(function() {
+    $('.evtcfaddRspa').click(self.saveRspa);
     $("#jqGrid").jqGrid({
         url: self.apiUrl,
         datatype: "json",
@@ -654,7 +566,10 @@ $(document).ready(function () {
             name: 'evntcatlog',
             label: '事件大类',
             width: 130,
-            edittype: 'text',
+            edittype: 'select',
+            editoptions: {
+                value: "WW:WW;EE:EE"
+            },
             editable: true,
             formoptions: {
                 colpos: 3,
@@ -665,6 +580,10 @@ $(document).ready(function () {
             name: 'evnttype',
             label: '事件类型',
             width: 130,
+            edittype: 'select',
+            editoptions: {
+                value: "WW:WW;EE:EE"
+            },
             editable: true,
             formoptions: {
                 colpos: 1,
@@ -674,6 +593,10 @@ $(document).ready(function () {
         }, {
             name: 'evntcmpperiod',
             label: '事件计算周期',
+            edittype: 'select',
+            editoptions: {
+                value: "WW:WW;EE:EE"
+            },
             editable: true,
             formoptions: {
                 colpos: 2,
@@ -683,20 +606,24 @@ $(document).ready(function () {
         }, {
             name: 'evntdmtype',
             label: '事件维度类型',
-            editable: true,
-            formoptions: {
-                colpos: 3,
-                rowpos: 2,
-                label: "事件维度类型"
-            }
-        }, {
-            name: 'evntformulades',
-            label: '事件计算公式描述',
-            width: 200,
+            edittype: 'select',
+            editoptions: {
+                value: "WW:WW;EE:EE"
+            },
             editable: true,
             formoptions: {
                 colpos: 1,
                 rowpos: 3,
+                label: "事件维度类型"
+            }
+        }, {
+            name: 'evntformulades',
+            width: 200,
+            label: '事件计算公式描述',
+            editable: true,
+            formoptions: {
+                colpos: 3,
+                rowpos: 2,
                 label: "事件计算公式描述"
             }
         }, {
@@ -730,23 +657,13 @@ $(document).ready(function () {
                 label: "备注"
             }
         }],
-        onSelectRow: function (id) {
+        onSelectRow: function(id) {
             //createurl用来获取事件参数变量的url
             self.evntId = +$($('#' + id).children()[1]).text()
             self.createurl($('#' + id).children());
             self.fetchRelaEVar();
         },
-        loadComplete: function () {
-            // axios
-            //     .get(self.rspaurl)
-            //     .then(function (response) {
-            //         self.rspar = response.data;
-            //         console.log(self.rspar)
-            //     })
-            //     .catch(function (error) {
-            //         self.errorHandle(error);
-            //     });
-
+        loadComplete: function() {
             $.ajax({
                 method: 'GET',
                 url: self.rspaurl,
@@ -757,7 +674,7 @@ $(document).ready(function () {
                 error: function(error) {
                     // if(error)
                     //     self.errorHandle(error);
-                    console.log(error)                    
+                    //console.log(error)
                 }
             })
         },
@@ -788,15 +705,15 @@ $(document).ready(function () {
         //checkOnSubmit: true,     
         //checkOnUpdate: true,
         closeAfterEdit: true,
-        afterShowForm: function () {
+        afterShowForm: function() {
             $($('[rowpos=8]').children()[1]).attr('colspan', 8)
             $($('[rowpos=9]').children()[1]).attr('colspan', 8)
             $($($('[rowpos=8]').children()[1]).children()[0]).attr('cols', 130)
             $($($('[rowpos=9]').children()[1]).children()[0]).attr('cols', 130)
         },
-        afterSubmit: function (res, postdata) {
-            console.log(res.responseText)
-                //return [true, "错误"]                        
+        afterSubmit: function(res, postdata) {
+            //console.log(res.responseText)
+            //return [true, "错误"]                        
             return [false, "错误"]
         }
     }, {
@@ -810,13 +727,12 @@ $(document).ready(function () {
         //checkOnUpdate: true,
         //topinfo: '对事件进行详细配置',    
         closeAfterAdd: true,
-
-        afterSubmit: function (res, postdata) {
-            console.log(res.responseText)
+        afterSubmit: function(res, postdata) {
+            //console.log(res.responseText)
             return [true, "错误"]
                 //return [false, "错误"]
         },
-        afterShowForm: function () {
+        afterShowForm: function() {
             $($('[rowpos=8]').children()[1]).attr('colspan', 8)
             $($('[rowpos=9]').children()[1]).attr('colspan', 8)
             $($($('[rowpos=8]').children()[1]).children()[0]).attr('cols', 130)
@@ -830,10 +746,67 @@ $(document).ready(function () {
         left: 450,
         url: self.ec_edit_post_url + 'delete/' + self.evntId,
         mtype: 'GET',
-        afterSubmit: function (res, postdata) {
-            console.log(res.responseText)
+        afterSubmit: function(res, postdata) {
+            //console.log(res.responseText)
             return [true, "错误"]
                 //return [false, "错误"]
         }
     });
 });
+
+function beforeClick(treeId, treeNode) {
+    //console.log(treeId)
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill);
+    zTree.checkNode(treeNode, !treeNode.checked, null, true);
+    return false;
+}
+
+function onClick(e, treeId, treeNode) {
+    //console.log(treeId)
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill);
+    zTree.checkNode(treeNode, !treeNode.checked, null, true);
+    return false;
+}
+
+function onCheck(e, treeId, treeNode) {
+    //console.log(treeId)
+
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo" + treenodeidpolyFill),
+        nodes = zTree.getCheckedNodes(true),
+        v = "";
+    for (var i = 0, l = nodes.length; i < l; i++) {
+        v += nodes[i].name + ",";
+    }
+    if (v.length > 0) v = v.substring(0, v.length - 1);
+    var cityObj = $(".citySel" + treenodeidpolyFill);
+    cityObj.attr("value", v);
+}
+
+function showMenu(c) {
+    //console.log("啦啦啦" + idE)
+    var cityObj = $(".citySel" + treenodeidpolyFill);
+    var cityOffset = $(".citySel" + treenodeidpolyFill).offset();
+    $(".menuContent" + c).css({
+        left: cityOffset.left + "px",
+        top: cityOffset.top + cityObj.outerHeight() + "px"
+    }).slideDown("fast");
+    //$("body").bind("mousedown", onBodyDown);
+}
+
+function hideMenu(c) {
+    //console.log("略略略" + idE)            
+    $(".menuContent" + c).fadeOut("fast");
+    //$("body").unbind("mousedown", onBodyDown);
+}
+
+function toggleMenu(c) {
+    //test = OtoggleMenu(c)
+    if (toggle[c]) {
+        showMenu(c);
+        toggle[c] = false;
+    } else {
+        //console.log("我被隐藏了")
+        hideMenu(c);
+        toggle[c] = true;
+    }
+}
